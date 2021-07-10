@@ -1,5 +1,3 @@
-## sussy balls
-
 # Data Structures
 
 ## File (object)

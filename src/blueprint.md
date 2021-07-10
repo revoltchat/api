@@ -4,4 +4,5 @@ HOST: https://api.revolt.chat
 # Revolt
 
 :[Users](resources/users.md)
-:[sussy](resources/autumn.md)
+:[Channels](resources/channels.md)
+:[Autumn](resources/autumn.md)
