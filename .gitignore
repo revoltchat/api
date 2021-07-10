@@ -1,3 +1,4 @@
-OpenAPI.json
 node_modules
+*.old
+dist
 out

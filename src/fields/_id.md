@@ -1,1 +1,0 @@
-+ _id: :[ULID](../templates/ulid.md) (string, required)
