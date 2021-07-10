@@ -1,0 +1,11 @@
+{
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": ".md$",
+                "isAsync": true,
+                "cmd": "yarn build"
+            }
+        ]
+    }
+}

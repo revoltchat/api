@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "https://gitlab.insrt.uk/revolt/api.git",
+  "author": "Paul <paulmakles@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "aglio": "^2.3.0",
+    "apib2swagger": "^1.12.0",
+    "hercule": "^5.1.3",
+    "sirv-cli": "^1.0.12"
+  },
+  "scripts": {
+    "generate:apib": "hercule src/blueprint.md -o API.apib",
+    "generate:html": "aglio -i API.apib -o out/index.html",
+    "generate:openapi": "apib2swagger -i API.apib -o OpenAPI.json",
+    "build": "yarn generate:apib && yarn generate:html && yarn generate:openapi",
+    "preview": "sirv out"
+  }
+}
