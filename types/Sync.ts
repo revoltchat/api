@@ -15,3 +15,9 @@ export interface ChannelUnread {
     last_id: string,
     mentions?: string[]
 }
+
+export interface WebPushSubscription {
+    endpoint: String,
+    p256dh: String,
+    auth: String,
+}

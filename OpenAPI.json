@@ -18,54 +18,54 @@
   },
   "tags": [
     {
-      "name": "Server Information",
-      "description": "Query and fetch servers on Revolt"
+      "name": "Invites",
+      "description": "View, join and delete invites"
     },
     {
-      "name": "Server Members",
-      "description": "Find and edit server members"
+      "name": "Sync",
+      "description": "Upload and retrieve any JSON data between clients"
     },
     {
-      "name": "Server Permissions",
-      "description": "Manage permissions for servers"
+      "name": "Web Push",
+      "description": "Subscribe to and receive Revolt push notifications while offline"
     }
   ],
   "x-tagGroups": [
     {
-      "name": "Servers",
+      "name": "Miscellaneous",
       "tags": [
-        "Server Information",
-        "Server Members",
-        "Server Permissions"
+        "Invites",
+        "Sync",
+        "Web Push"
       ]
     }
   ],
   "paths": {
-    "/servers/:server": {
+    "/invites/:invite": {
       "get": {
-        "summary": "Fetch Server",
-        "description": "Retrieve a server.",
+        "summary": "Fetch Invite",
+        "description": "Fetch an invite by its ID.",
         "tags": [
-          "Server Information"
+          "Invites"
         ],
         "parameters": [
           {
-            "name": "server",
+            "name": "invite",
             "in": "path",
             "required": true,
-            "description": "Server ID",
+            "description": "Invite Code",
             "schema": {
-              "$ref": "#/definitions/Id"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Retrieved server.",
+            "description": "Invite",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Server"
+                  "$ref": "#/definitions/RetrievedInvite"
                 }
               }
             }
@@ -78,689 +78,887 @@
           }
         ]
       },
-      "patch": {
-        "summary": "Edit Server",
-        "description": "Edit a server object.",
-        "tags": [
-          "Server Information"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Requested changes to server object.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "description": "Server name",
-                    "minLength": 1,
-                    "maxLength": 32,
-                    "type": "string"
-                  },
-                  "description": {
-                    "description": "Server description",
-                    "minLength": 0,
-                    "maxLength": 1024,
-                    "type": "string"
-                  },
-                  "icon": {
-                    "description": "Autumn file ID, [learn more](https://example.com/TODO).",
-                    "minLength": 1,
-                    "maxLength": 128,
-                    "type": "string"
-                  },
-                  "banner": {
-                    "description": "Autumn file ID, [learn more](https://example.com/TODO).",
-                    "minLength": 1,
-                    "maxLength": 128,
-                    "type": "string"
-                  },
-                  "categories": {
-                    "description": "Server categories",
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "description": "Id",
-                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                          "type": "string"
-                        },
-                        "title": {
-                          "type": "string"
-                        },
-                        "channels": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        }
-                      },
-                      "required": [
-                        "channels",
-                        "id",
-                        "title"
-                      ]
-                    }
-                  },
-                  "system_messages": {
-                    "description": "System message channels",
-                    "type": "object",
-                    "properties": {
-                      "user_joined": {
-                        "description": "Channel ID where user join events should be sent",
-                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                        "type": "string"
-                      },
-                      "user_left": {
-                        "description": "Channel ID where user leave events should be sent",
-                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                        "type": "string"
-                      },
-                      "user_kicked": {
-                        "description": "Channel ID where user kick events should be sent",
-                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                        "type": "string"
-                      },
-                      "user_banned": {
-                        "description": "Channel ID where user ban events should be sent",
-                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "remove": {
-                    "description": "Field to remove from channel object",
-                    "enum": [
-                      "Banner",
-                      "Description",
-                      "Icon"
-                    ],
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Succesfully changed channel object."
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      },
-      "delete": {
-        "summary": "Delete / Leave Server",
-        "description": "Deletes a server if owner otherwise leaves.",
-        "tags": [
-          "Server Information"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Deleted Server"
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/create": {
       "post": {
-        "summary": "Create Server",
-        "description": "Create a new server.",
+        "summary": "Join Invite",
+        "description": "Join an invite by its ID.",
         "tags": [
-          "Server Information"
-        ],
-        "requestBody": {
-          "description": "Server Data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "description": "Group name",
-                    "minLength": 1,
-                    "maxLength": 32,
-                    "type": "string"
-                  },
-                  "description": {
-                    "description": "Group description",
-                    "minLength": 0,
-                    "maxLength": 1024,
-                    "type": "string"
-                  },
-                  "nonce": {
-                    "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-                    "minLength": 1,
-                    "maxLength": 36,
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name",
-                  "nonce"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Server",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/definitions/Server"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/:server/channels": {
-      "post": {
-        "summary": "Create Channel",
-        "description": "Create a new Text or Voice channel.",
-        "tags": [
-          "Server Information"
+          "Invites"
         ],
         "parameters": [
           {
-            "name": "server",
+            "name": "invite",
             "in": "path",
             "required": true,
-            "description": "Server ID",
+            "description": "Invite Code",
             "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Channel Data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "description": "Channel type",
-                    "enum": [
-                      "Text",
-                      "Voice"
-                    ],
-                    "type": "string"
-                  },
-                  "name": {
-                    "description": "Channel name",
-                    "minLength": 1,
-                    "maxLength": 32,
-                    "type": "string"
-                  },
-                  "description": {
-                    "description": "Channel description",
-                    "minLength": 0,
-                    "maxLength": 1024,
-                    "type": "string"
-                  },
-                  "nonce": {
-                    "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-                    "minLength": 1,
-                    "maxLength": 36,
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name",
-                  "nonce",
-                  "type"
-                ]
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/:server/invites": {
-      "get": {
-        "summary": "Fetch Invites",
-        "description": "Fetch all server invites.",
-        "tags": [
-          "Server Information"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/:server/members/:member": {
-      "get": {
-        "summary": "Fetch Member",
-        "description": "Retrieve a member.",
-        "tags": [
-          "Server Members"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          },
-          {
-            "name": "member",
-            "in": "path",
-            "required": true,
-            "description": "Member ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Retrieved member.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/definitions/Member"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      },
-      "patch": {
-        "summary": "Edit Member",
-        "description": "Edit a member object.",
-        "tags": [
-          "Server Members"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Requested changes to server object.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "nickname": {
-                    "description": "Member nickname",
-                    "minLength": 1,
-                    "maxLength": 32,
-                    "type": "string"
-                  },
-                  "avatar": {
-                    "description": "Autumn file ID, [learn more](https://example.com/TODO).",
-                    "minLength": 1,
-                    "maxLength": 128,
-                    "type": "string"
-                  },
-                  "roles": {
-                    "description": "Array of role IDs",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "remove": {
-                    "description": "Field to remove from channel object",
-                    "enum": [
-                      "Avatar",
-                      "Nickname"
-                    ],
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "nickname"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Succesfully changed member object."
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      },
-      "delete": {
-        "summary": "Kick Member",
-        "description": "Removes a member from the server.",
-        "tags": [
-          "Server Members"
-        ],
-        "responses": {
-          "200": {
-            "description": "Removed Member"
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/:server/members": {
-      "get": {
-        "summary": "Fetch Members",
-        "description": "Fetch all server members.",
-        "tags": [
-          "Server Members"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Server Members",
+            "description": "Invite",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "members": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "_id": {
-                            "type": "object",
-                            "properties": {
-                              "server": {
-                                "description": "Id",
-                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                "type": "string"
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Server"
+                      ]
+                    },
+                    "channel": {
+                      "anyOf": [
+                        {
+                          "allOf": [
+                            {
+                              "description": "Saved Messages channel has only one participant, the user who created it.",
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "description": "Channel Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "channel_type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "SavedMessages"
+                                  ]
+                                },
+                                "user": {
+                                  "description": "User Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                }
                               },
-                              "user": {
-                                "description": "Id",
-                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                "type": "string"
-                              }
+                              "required": [
+                                "_id",
+                                "channel_type",
+                                "user"
+                              ]
                             },
-                            "required": [
-                              "server",
-                              "user"
-                            ]
-                          },
-                          "nickname": {
-                            "type": "string"
-                          },
-                          "avatar": {
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "description": "Attachment ID",
-                                "minLength": 1,
-                                "maxLength": 128,
-                                "type": "string"
-                              },
-                              "tag": {
-                                "$ref": "#/definitions/AttachmentTag"
-                              },
-                              "size": {
-                                "description": "File size (in bytes)",
-                                "type": "number"
-                              },
-                              "filename": {
-                                "description": "File name",
-                                "type": "string"
-                              },
-                              "metadata": {
-                                "description": "Metadata",
-                                "anyOf": [
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "File"
-                                        ]
-                                      }
-                                    },
-                                    "required": [
-                                      "type"
-                                    ]
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "Text"
-                                        ]
-                                      }
-                                    },
-                                    "required": [
-                                      "type"
-                                    ]
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "Audio"
-                                        ]
-                                      }
-                                    },
-                                    "required": [
-                                      "type"
-                                    ]
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "Image"
-                                        ]
-                                      },
-                                      "width": {
-                                        "type": "number"
-                                      },
-                                      "height": {
-                                        "type": "number"
-                                      }
-                                    },
-                                    "required": [
-                                      "height",
-                                      "type",
-                                      "width"
-                                    ]
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "Video"
-                                        ]
-                                      },
-                                      "width": {
-                                        "type": "number"
-                                      },
-                                      "height": {
-                                        "type": "number"
-                                      }
-                                    },
-                                    "required": [
-                                      "height",
-                                      "type",
-                                      "width"
-                                    ]
+                            {
+                              "type": "object",
+                              "properties": {
+                                "nonce": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "description": "Channel Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "channel_type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "DirectMessage"
+                                  ]
+                                },
+                                "active": {
+                                  "description": "Whether this DM is active",
+                                  "type": "boolean"
+                                },
+                                "recipients": {
+                                  "description": "List of user IDs who are participating in this DM",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
                                   }
-                                ]
+                                },
+                                "last_message": {
+                                  "description": "Last message sent in channel",
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "description": "Message ID",
+                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                      "type": "string"
+                                    },
+                                    "author": {
+                                      "description": "Author ID",
+                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                      "type": "string"
+                                    },
+                                    "short": {
+                                      "description": "Short content of message",
+                                      "maxLength": 128,
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "_id",
+                                    "author",
+                                    "short"
+                                  ]
+                                }
                               },
-                              "content_type": {
-                                "description": "Content type",
+                              "required": [
+                                "_id",
+                                "active",
+                                "channel_type",
+                                "last_message",
+                                "recipients"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "nonce": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "description": "Channel Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "channel_type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "Group"
+                                  ]
+                                },
+                                "recipients": {
+                                  "description": "List of user IDs who are participating in this group",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "name": {
+                                  "description": "Group name",
+                                  "type": "string"
+                                },
+                                "owner": {
+                                  "description": "User ID of group owner",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "description": "Group description",
+                                  "type": "string"
+                                },
+                                "last_message": {
+                                  "description": "Last message sent in channel",
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "description": "Message ID",
+                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                      "type": "string"
+                                    },
+                                    "author": {
+                                      "description": "Author ID",
+                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                      "type": "string"
+                                    },
+                                    "short": {
+                                      "description": "Short content of message",
+                                      "maxLength": 128,
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "_id",
+                                    "author",
+                                    "short"
+                                  ]
+                                },
+                                "icon": {
+                                  "description": "Group icon",
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "description": "Attachment ID",
+                                      "minLength": 1,
+                                      "maxLength": 128,
+                                      "type": "string"
+                                    },
+                                    "tag": {
+                                      "$ref": "#/definitions/AttachmentTag"
+                                    },
+                                    "size": {
+                                      "description": "File size (in bytes)",
+                                      "type": "number"
+                                    },
+                                    "filename": {
+                                      "description": "File name",
+                                      "type": "string"
+                                    },
+                                    "metadata": {
+                                      "description": "Metadata",
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "File"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Text"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Audio"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Image"
+                                              ]
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "height",
+                                            "type",
+                                            "width"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Video"
+                                              ]
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "height",
+                                            "type",
+                                            "width"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    "content_type": {
+                                      "description": "Content type",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "_id",
+                                    "content_type",
+                                    "filename",
+                                    "metadata",
+                                    "size",
+                                    "tag"
+                                  ]
+                                },
+                                "permissions": {
+                                  "description": "Permissions given to group members",
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "_id",
+                                "channel_type",
+                                "last_message",
+                                "name",
+                                "owner",
+                                "recipients"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "nonce": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "description": "Channel Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "server": {
+                                  "description": "Server Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "Channel name",
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "description": "Channel description",
+                                  "type": "string"
+                                },
+                                "icon": {
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "description": "Attachment ID",
+                                      "minLength": 1,
+                                      "maxLength": 128,
+                                      "type": "string"
+                                    },
+                                    "tag": {
+                                      "$ref": "#/definitions/AttachmentTag"
+                                    },
+                                    "size": {
+                                      "description": "File size (in bytes)",
+                                      "type": "number"
+                                    },
+                                    "filename": {
+                                      "description": "File name",
+                                      "type": "string"
+                                    },
+                                    "metadata": {
+                                      "description": "Metadata",
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "File"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Text"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Audio"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Image"
+                                              ]
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "height",
+                                            "type",
+                                            "width"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Video"
+                                              ]
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "height",
+                                            "type",
+                                            "width"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    "content_type": {
+                                      "description": "Content type",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "_id",
+                                    "content_type",
+                                    "filename",
+                                    "metadata",
+                                    "size",
+                                    "tag"
+                                  ]
+                                },
+                                "default_permissions": {
+                                  "description": "Permissions given to all users",
+                                  "type": "number"
+                                },
+                                "role_permissions": {
+                                  "description": "Permissions given to roles",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "_id",
+                                "description",
+                                "name",
+                                "server"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "channel_type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "TextChannel"
+                                  ]
+                                },
+                                "last_message": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "channel_type",
+                                "last_message"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "nonce": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "description": "Channel Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "server": {
+                                  "description": "Server Id",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "Channel name",
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "description": "Channel description",
+                                  "type": "string"
+                                },
+                                "icon": {
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "description": "Attachment ID",
+                                      "minLength": 1,
+                                      "maxLength": 128,
+                                      "type": "string"
+                                    },
+                                    "tag": {
+                                      "$ref": "#/definitions/AttachmentTag"
+                                    },
+                                    "size": {
+                                      "description": "File size (in bytes)",
+                                      "type": "number"
+                                    },
+                                    "filename": {
+                                      "description": "File name",
+                                      "type": "string"
+                                    },
+                                    "metadata": {
+                                      "description": "Metadata",
+                                      "anyOf": [
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "File"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Text"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Audio"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Image"
+                                              ]
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "height",
+                                            "type",
+                                            "width"
+                                          ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "type": {
+                                              "type": "string",
+                                              "enum": [
+                                                "Video"
+                                              ]
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "height",
+                                            "type",
+                                            "width"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    "content_type": {
+                                      "description": "Content type",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "_id",
+                                    "content_type",
+                                    "filename",
+                                    "metadata",
+                                    "size",
+                                    "tag"
+                                  ]
+                                },
+                                "default_permissions": {
+                                  "description": "Permissions given to all users",
+                                  "type": "number"
+                                },
+                                "role_permissions": {
+                                  "description": "Permissions given to roles",
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "_id",
+                                "description",
+                                "name",
+                                "server"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "channel_type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "VoiceChannel"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "channel_type"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "nonce": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "server": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "Server ID",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "nonce": {
+                          "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
+                          "minLength": 1,
+                          "maxLength": 36,
+                          "type": "string"
+                        },
+                        "owner": {
+                          "description": "User ID of server owner",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "Server name",
+                          "type": "string"
+                        },
+                        "description": {
+                          "description": "Server description",
+                          "type": "string"
+                        },
+                        "channels": {
+                          "description": "Array of server channel IDs",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "categories": {
+                          "description": "Array of server categories",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "description": "Id",
+                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
                                 "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "channels": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               }
                             },
                             "required": [
-                              "_id",
-                              "content_type",
-                              "filename",
-                              "metadata",
-                              "size",
-                              "tag"
+                              "channels",
+                              "id",
+                              "title"
                             ]
-                          },
-                          "roles": {
-                            "type": "array",
-                            "items": {
+                          }
+                        },
+                        "system_messages": {
+                          "description": "System message channels\n\nEach type of system message will be sent into the respective channel ID.",
+                          "type": "object",
+                          "properties": {
+                            "user_joined": {
+                              "description": "Channel ID where user join events should be sent",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "user_left": {
+                              "description": "Channel ID where user leave events should be sent",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "user_kicked": {
+                              "description": "Channel ID where user kick events should be sent",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "user_banned": {
+                              "description": "Channel ID where user ban events should be sent",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
                               "type": "string"
                             }
                           }
                         },
-                        "required": [
-                          "_id"
-                        ]
-                      }
-                    },
-                    "users": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/definitions/User"
-                      }
-                    }
-                  },
-                  "required": [
-                    "members",
-                    "users"
-                  ],
-                  "definitions": {
-                    "AttachmentTag": {
-                      "description": "Attachment tag",
-                      "enum": [
-                        "attachments",
-                        "avatars",
-                        "backgrounds",
-                        "banners",
-                        "icons"
-                      ],
-                      "type": "string"
-                    },
-                    "User": {
-                      "type": "object",
-                      "properties": {
-                        "_id": {
-                          "description": "User ID",
-                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                          "type": "string"
+                        "roles": {
+                          "description": "Server roles",
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "permissions": {
+                                "description": "Tuple consisting of server and channel permissions in that order",
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "number"
+                                  }
+                                ],
+                                "minItems": 2,
+                                "maxItems": 2
+                              },
+                              "colour": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "permissions"
+                            ]
+                          }
                         },
-                        "username": {
-                          "description": "Username",
-                          "minLength": 2,
-                          "maxLength": 32,
-                          "pattern": "^[a-zA-Z0-9_.]+$",
-                          "type": "string"
+                        "default_permissions": {
+                          "description": "Default permissions for all members",
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 2,
+                          "maxItems": 2
                         },
-                        "avatar": {
-                          "description": "User avatar",
+                        "icon": {
+                          "description": "Server icon",
                           "type": "object",
                           "properties": {
                             "_id": {
@@ -885,116 +1083,156 @@
                             "tag"
                           ]
                         },
-                        "relations": {
-                          "description": "Relationships with other known users\nOnly present if fetching self",
-                          "type": "array",
-                          "items": {
-                            "allOf": [
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "status": {
-                                    "$ref": "#/definitions/RelationshipStatus"
-                                  }
-                                },
-                                "required": [
-                                  "status"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "_id": {
-                                    "description": "Other user's ID",
-                                    "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "_id"
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        "badges": {
-                          "description": "Bitfield of user's badges",
-                          "type": "number"
-                        },
-                        "status": {
-                          "description": "User status",
+                        "banner": {
+                          "description": "Server banner",
                           "type": "object",
                           "properties": {
-                            "text": {
-                              "description": "Custom status text",
+                            "_id": {
+                              "description": "Attachment ID",
                               "minLength": 1,
                               "maxLength": 128,
                               "type": "string"
                             },
-                            "presence": {
-                              "$ref": "#/definitions/Presence"
-                            }
-                          }
-                        },
-                        "relationship": {
-                          "description": "Relationship to user",
-                          "allOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "status": {
-                                  "$ref": "#/definitions/RelationshipStatus"
+                            "tag": {
+                              "$ref": "#/definitions/AttachmentTag"
+                            },
+                            "size": {
+                              "description": "File size (in bytes)",
+                              "type": "number"
+                            },
+                            "filename": {
+                              "description": "File name",
+                              "type": "string"
+                            },
+                            "metadata": {
+                              "description": "Metadata",
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "File"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Text"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Audio"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Image"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Video"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
                                 }
-                              },
-                              "required": [
-                                "status"
                               ]
                             },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "_id": {
-                                  "description": "Other user's ID",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "_id"
-                              ]
+                            "content_type": {
+                              "description": "Content type",
+                              "type": "string"
                             }
+                          },
+                          "required": [
+                            "_id",
+                            "content_type",
+                            "filename",
+                            "metadata",
+                            "size",
+                            "tag"
                           ]
-                        },
-                        "online": {
-                          "description": "Whether the user is online",
-                          "type": "boolean"
                         }
                       },
                       "required": [
                         "_id",
-                        "username"
+                        "channels",
+                        "default_permissions",
+                        "name",
+                        "owner"
                       ]
-                    },
-                    "RelationshipStatus": {
-                      "description": "Your relationship with the user",
+                    }
+                  },
+                  "required": [
+                    "channel",
+                    "server",
+                    "type"
+                  ],
+                  "definitions": {
+                    "AttachmentTag": {
+                      "description": "Attachment tag",
                       "enum": [
-                        "Blocked",
-                        "BlockedOther",
-                        "Friend",
-                        "Incoming",
-                        "None",
-                        "Outgoing",
-                        "User"
-                      ],
-                      "type": "string"
-                    },
-                    "Presence": {
-                      "description": "User presence",
-                      "enum": [
-                        "Busy",
-                        "Idle",
-                        "Invisible",
-                        "Online"
+                        "attachments",
+                        "avatars",
+                        "backgrounds",
+                        "banners",
+                        "icons"
                       ],
                       "type": "string"
                     }
@@ -1002,58 +1240,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/servers/:server/bans/:member": {
-      "put": {
-        "summary": "Ban User",
-        "description": "Ban a user by their ID.",
-        "tags": [
-          "Server Members"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          },
-          {
-            "name": "member",
-            "in": "path",
-            "required": true,
-            "description": "Member ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Ban Data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "reason": {
-                    "description": "Ban reason",
-                    "minLength": 1,
-                    "maxLength": 1024,
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Banned user."
           }
         },
         "security": [
@@ -1064,34 +1250,25 @@
         ]
       },
       "delete": {
-        "summary": "Unban User",
-        "description": "Removes a user's ban.",
+        "summary": "Delete Invite",
+        "description": "Delete an invite by its ID.",
         "tags": [
-          "Server Members"
+          "Invites"
         ],
         "parameters": [
           {
-            "name": "server",
+            "name": "invite",
             "in": "path",
             "required": true,
-            "description": "Server ID",
+            "description": "Invite Code",
             "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          },
-          {
-            "name": "member",
-            "in": "path",
-            "required": true,
-            "description": "Member ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Unbanned user."
+            "description": "Deleted invite."
           }
         },
         "security": [
@@ -1102,245 +1279,30 @@
         ]
       }
     },
-    "/servers/:server/bans": {
-      "get": {
-        "summary": "Fetch Bans",
-        "description": "Fetch all bans on server.",
-        "tags": [
-          "Server Members"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Bans",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "_id": {
-                        "type": "object",
-                        "properties": {
-                          "server": {
-                            "description": "Id",
-                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                            "type": "string"
-                          },
-                          "user": {
-                            "description": "Id",
-                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "server",
-                          "user"
-                        ]
-                      },
-                      "reason": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "_id"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/:server/permissions/:role": {
-      "put": {
-        "summary": "Set Role Permission",
-        "description": "Sets permissions for the specified role in this server.",
-        "tags": [
-          "Server Permissions"
-        ],
-        "parameters": [
-          {
-            "name": "channel",
-            "in": "path",
-            "required": true,
-            "description": "Channel ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          },
-          {
-            "name": "role",
-            "in": "path",
-            "required": true,
-            "description": "Role ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Server Permissions",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "permissions": {
-                    "description": "Permission values",
-                    "type": "object",
-                    "properties": {
-                      "server": {
-                        "description": "Server permission",
-                        "type": "number"
-                      },
-                      "channel": {
-                        "description": "Channel permission",
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "channel",
-                      "server"
-                    ]
-                  }
-                },
-                "required": [
-                  "permissions"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successfully updated permissions."
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/:server/permissions/default": {
-      "put": {
-        "summary": "Set Default Permission",
-        "description": "Sets permissions for the default role in this server.",
-        "tags": [
-          "Server Permissions"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Server Permissions",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "permissions": {
-                    "description": "Permission values",
-                    "type": "object",
-                    "properties": {
-                      "server": {
-                        "description": "Server permission",
-                        "type": "number"
-                      },
-                      "channel": {
-                        "description": "Channel permission",
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "channel",
-                      "server"
-                    ]
-                  }
-                },
-                "required": [
-                  "permissions"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successfully updated permissions."
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/servers/:server/roles": {
+    "/sync/settings/fetch": {
       "post": {
-        "summary": "Create Role",
-        "description": "Creates a new server role.",
+        "summary": "Fetch Settings",
+        "description": "Fetch settings from server filtered by keys.\n\nThis will return an object with the requested keys, each value is a tuple of `(timestamp, value)`, the value is the previously uploaded data.",
         "tags": [
-          "Server Permissions"
-        ],
-        "parameters": [
-          {
-            "name": "server",
-            "in": "path",
-            "required": true,
-            "description": "Server ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
+          "Sync"
         ],
         "requestBody": {
-          "description": "Role Data",
+          "description": "Options",
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "description": "Role name",
-                    "minLength": 1,
-                    "maxLength": 32,
-                    "type": "string"
+                  "keys": {
+                    "description": "Keys to fetch",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   }
                 },
                 "required": [
-                  "name"
+                  "keys"
                 ]
               }
             }
@@ -1348,36 +1310,24 @@
         },
         "responses": {
           "200": {
-            "description": "New Role",
+            "description": "Settings Data",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                    "id": {
-                      "description": "Role ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    },
-                    "permissions": {
-                      "description": "Tuple consisting of server and channel permissions in that order",
-                      "type": "array",
-                      "items": [
-                        {
-                          "type": "number"
-                        },
-                        {
-                          "type": "number"
-                        }
-                      ],
-                      "minItems": 2,
-                      "maxItems": 2
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "permissions"
-                  ]
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  }
                 }
               }
             }
@@ -1391,36 +1341,116 @@
         ]
       }
     },
-    "/servers/:server/roles/:role": {
-      "delete": {
-        "summary": "Delete Role",
-        "description": "Deletes a server role by ID.",
+    "/sync/settings/set": {
+      "post": {
+        "summary": "Set Settings",
+        "description": "Upload data to save to settings.",
         "tags": [
-          "Server Permissions"
+          "Sync"
         ],
         "parameters": [
           {
-            "name": "channel",
-            "in": "path",
-            "required": true,
-            "description": "Channel ID",
+            "name": "timestamp",
+            "in": "query",
+            "description": "Timestamp of settings change. Useful to prevent a feedback loop.",
             "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          },
-          {
-            "name": "role",
-            "in": "path",
-            "required": true,
-            "description": "Role ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
+              "type": "number"
             }
           }
         ],
+        "requestBody": {
+          "description": "Settings Data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Successfully deleted role."
+            "description": "Successfully synced data."
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/sync/unreads": {
+      "post": {
+        "summary": "Fetch Unreads",
+        "description": "Fetch information about unread state on channels.",
+        "tags": [
+          "Sync"
+        ],
+        "responses": {
+          "200": {
+            "description": "Unreads Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ChannelUnread"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/push/subscribe": {
+      "post": {
+        "summary": "Subscribe",
+        "description": "Create a new Web Push subscription.\n\nIf an existing subscription exists on this session, it will be removed.",
+        "tags": [
+          "Web Push"
+        ],
+        "requestBody": {
+          "description": "Web Push Subscription",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/WebPushSubscription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscribed successfully."
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/push/unsubscribe": {
+      "post": {
+        "summary": "Unsubscribe",
+        "description": "Remove the Web Push subscription associated with the current session.",
+        "tags": [
+          "Web Push"
+        ],
+        "responses": {
+          "200": {
+            "description": "Unsubscribed successfully."
           }
         },
         "security": [
@@ -6439,6 +6469,56 @@
         }
       }
     },
+    "WebPushSubscription": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "type": "object",
+          "additionalProperties": false,
+          "x-patternProperties": {
+            "^[0-9]+$": {
+              "type": "string"
+            }
+          }
+        },
+        "p256dh": {
+          "type": "object",
+          "additionalProperties": false,
+          "x-patternProperties": {
+            "^[0-9]+$": {
+              "type": "string"
+            }
+          }
+        },
+        "auth": {
+          "type": "object",
+          "additionalProperties": false,
+          "x-patternProperties": {
+            "^[0-9]+$": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "auth",
+        "endpoint",
+        "p256dh"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
     "Username": {
       "description": "Username",
       "minLength": 2,
@@ -7112,6 +7192,48 @@
             "tag"
           ]
         }
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "SetSettingsData": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       },
       "definitions": {
         "AttachmentTag": {

@@ -1,6 +1,6 @@
 import { OpenAPIV3 } from "openapi-types";
 
-export async function success(description: string, json?: Promise<OpenAPIV3.MediaTypeObject> | OpenAPIV3.MediaTypeObject | OpenAPIV3.ReferenceObject): Promise<{ responses: OpenAPIV3.ResponsesObject }> {
+export async function success(description: string, json?: Promise<OpenAPIV3.MediaTypeObject> | OpenAPIV3.MediaTypeObject | OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject): Promise<{ responses: OpenAPIV3.ResponsesObject }> {
     const response: OpenAPIV3.ResponseObject = {
         description
     };
