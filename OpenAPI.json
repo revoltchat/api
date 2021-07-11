@@ -26,6 +26,10 @@
       "description": "After signing up to Revolt, users must pick a unique username."
     },
     {
+      "name": "Auth",
+      "description": "Authenticate with Revolt"
+    },
+    {
       "name": "User Information",
       "description": "Query and fetch users on Revolt"
     },
@@ -92,6 +96,12 @@
       "tags": [
         "Core",
         "Onboarding"
+      ]
+    },
+    {
+      "name": "Auth",
+      "tags": [
+        "Auth"
       ]
     },
     {
@@ -226,7 +236,7 @@
         "summary": "Create Account",
         "description": "Create a new account.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "requestBody": {
           "description": "Create Data",
@@ -269,7 +279,7 @@
         "summary": "Resend Verification",
         "description": "Resend account creation verification email.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "requestBody": {
           "description": "Resend Data",
@@ -306,7 +316,7 @@
         "summary": "Login",
         "description": "Create a new session.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "requestBody": {
           "description": "Login Data",
@@ -351,7 +361,7 @@
         "summary": "Send Password Reset",
         "description": "Send password reset email.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "requestBody": {
           "description": "Reset Data",
@@ -388,7 +398,7 @@
         "summary": "Password Reset",
         "description": "Confirm password reset.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "requestBody": {
           "description": "Reset Data",
@@ -428,7 +438,7 @@
         "summary": "Fetch Account",
         "description": "Fetch account information.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "responses": {
           "200": {
@@ -455,7 +465,7 @@
         "summary": "Check Auth",
         "description": "Check if we are authenticated.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "responses": {
           "200": {
@@ -475,7 +485,7 @@
         "summary": "Change Password",
         "description": "Change account password.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "requestBody": {
           "description": "Change Data",
@@ -523,7 +533,7 @@
         "summary": "Change Email",
         "description": "Change account email.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "requestBody": {
           "description": "Change Data",
@@ -569,7 +579,7 @@
         "summary": "Delete Session",
         "description": "Delete existing session.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "parameters": [
           {
@@ -600,7 +610,7 @@
         "summary": "Fetch Sessions",
         "description": "Fetch all sessions.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "responses": {
           "200": {
@@ -645,7 +655,7 @@
         "summary": "Logout",
         "description": "Delete current session.",
         "tags": [
-          "Onboarding"
+          "Auth"
         ],
         "responses": {
           "200": {
@@ -15790,6 +15800,48 @@
             "tag"
           ]
         }
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "SetSettingsData": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       },
       "definitions": {
         "AttachmentTag": {
