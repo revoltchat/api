@@ -5,6 +5,8 @@ import { schema } from "../typescript.js";
 group("Auth");
 
 //#region Auth
+tag("Auth", "Authenticate with Revolt");
+
 resource('/auth/create', {
     post: route(
         "Create Account",
