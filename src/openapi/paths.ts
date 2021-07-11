@@ -55,8 +55,8 @@ export function routeAuthenticated(summary: string, description: string, obj: Om
         ...route(summary, description, obj),
         security: [
             {
-                userId: [],
-                sessionToken: []
+                'User ID': [],
+                'Session Token': []
             }
         ]
     }

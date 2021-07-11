@@ -34,14 +34,18 @@ resource('/channels/:channel', {
                 import type { Status } from './Users';
                 import type { AutumnId } from './_common';
 
-                interface ${'EditChannels'} {
+                interface ${'EditChannel'} {
                     /**
                      * Channel name
+                     * @minLength 1
+                     * @maxLength 32
                      **/
                     name: string;
 
                     /**
                      * Channel description
+                     * @minLength 0
+                     * @maxLength 1024
                      **/
                     description?: string;
 
@@ -59,7 +63,10 @@ resource('/channels/:channel', {
     delete: routeAuthenticated(
         "Close Channel",
         "Deletes a server channel, leaves a group or closes a DM.",
-        await success("Deleted Channel")
+        {
+            ...channelParams,
+            ...await success("Deleted Channel")
+        }
     )
 });
 //#endregion

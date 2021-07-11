@@ -13,10 +13,12 @@ export default async function() {
 
     let definitions: { [key: string]: TJS.Definition } = {};
     for (let type of types) {
-        const defn = generator?.getSchemaForSymbol(type);
-        if (defn) {
-            definitions[type] = await convert(defn);
-        }
+        try {
+            const defn = generator.getSchemaForSymbol(type);
+            if (defn) {
+                definitions[type] = await convert(defn);
+            }
+        } catch (err) {}
     }
 
     return definitions;

@@ -28,13 +28,13 @@ async function generate(): Promise<Document> {
         ],
         components: {
             securitySchemes: {
-                userId: {
+                'User ID': {
                     type: "apiKey",
                     in: "header",
                     name: "x-user-id",
                     description: "User ID is found when calling `/auth/login`.\n"
                 },
-                sessionToken: {
+                'Session Token': {
                     type: "apiKey",
                     in: "header",
                     name: "x-session-token",
