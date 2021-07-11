@@ -7,14 +7,18 @@ group("Users");
 //#region User Information
 tag("User Information", "Query and fetch users on Revolt");
 
+const userParams = {
+    parameters: [
+        await parameter('user', 'User ID', ref("Id"))
+    ]
+}
+
 resource('/users/:user', {
     get: routeAuthenticated(
         "Fetch User",
         "Retrieve a user's information.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref("Id"))
-            ],
+            ...userParams,
             ...await success(
                 "User information.",
                 ref("User")
@@ -33,27 +37,27 @@ resource('/users/@me', {
                 import type { AutumnId } from './_common';
 
                 interface ${'EditUser'} {
-                    status: Status;
+                    status?: Status;
 
                     /**
                      * User profile data
                      **/
-                    profile: {
+                    profile?: {
                         /**
                          * Text to set as user profile description
                          * @maxLength 2000
                          */
-                        content: string;
+                        content?: string;
 
-                        background: AutumnId;
+                        background?: AutumnId;
                     }
 
-                    avatar: AutumnId;
+                    avatar?: AutumnId;
 
                     /**
                      * Field to remove from user object
                      */
-                    remove: 'ProfileContent' | 'ProfileBackground' | 'StatusText' | 'Avatar';
+                    remove?: 'ProfileContent' | 'ProfileBackground' | 'StatusText' | 'Avatar';
                 }
             `),
             ...await success("Succesfully changed user object.")
@@ -94,9 +98,7 @@ resource('/users/:user/profile', {
         "Fetch User Profile",
         "Retrieve a user's profile data.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref("Id"))
-            ],
+            ...userParams,
             ...await success(
                 "User profile.",
                 ref("Profile")
@@ -110,9 +112,7 @@ resource('/users/:user/default_avatar', {
         "Fetch Default Avatar",
         "This returns a default avatar based on the given id.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref("Id"))
-            ],
+            ...userParams,
             responses: {
                 '200': {
                     description: "Default avatar in PNG format",
@@ -135,9 +135,7 @@ resource('/users/:user/mutual', {
         "Fetch Mutual Friends",
         "Retrieve a list of mutual friends with another user.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref("Id"))
-            ],
+            ...userParams,
             ...await success(
                 "Mutual friends.",
                 schema`
@@ -179,9 +177,7 @@ resource('/users/:user/dm', {
         "Open Direct Message",
         "Open a DM with another user.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref('Id'))
-            ],
+            ...userParams,
             ...await success(
                 "DM channel with user.",
                 ref("DirectMessageChannel")
@@ -213,9 +209,7 @@ resource('/users/:user/relationship', {
         "Fetch Relationship",
         "Fetch your relationship with another other user.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref('Id'))
-            ],
+            ...userParams,
             ...await success(
                 "Your relationship with the user.",
                 ref("RelationshipOnly")
@@ -224,14 +218,18 @@ resource('/users/:user/relationship', {
     )
 });
 
-resource('/users/:user/friend', {
+const friendParams = {
+    parameters: [
+        await parameter('username', 'Username', ref("Username"))
+    ],
+}
+
+resource('/users/:username/friend', {
     put: routeAuthenticated(
         "Send Friend Request / Accept Request",
         "Send a friend request to another user or accept another user's friend request.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref('Id'))
-            ],
+            ...friendParams,
             ...await success(
                 "Sent friend request / added user as friend.",
                 ref("RelationshipOnly")
@@ -242,9 +240,7 @@ resource('/users/:user/friend', {
         "Deny Friend Request / Remove Friend",
         "Denies another user's friend request or removes an existing friend.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref('Id'))
-            ],
+            ...friendParams,
             ...await success(
                 "Deleted friend request / removed user from friends.",
                 ref("RelationshipOnly")
@@ -258,9 +254,7 @@ resource('/users/:user/block', {
         "Block User",
         "Block another user.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref('Id'))
-            ],
+            ...userParams,
             ...await success(
                 "Blocked user.",
                 ref("RelationshipOnly")
@@ -271,9 +265,7 @@ resource('/users/:user/block', {
         "Unblock User",
         "Unblock another user.",
         {
-            parameters: [
-                await parameter('user', 'User ID', ref('Id'))
-            ],
+            ...userParams,
             ...await success(
                 "Unblocked user.",
                 ref("RelationshipOnly")

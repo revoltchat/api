@@ -2,6 +2,14 @@ import type { Attachment } from './Autumn';
 import type { Id } from './_common';
 
 /**
+ * Username
+ * @minLength 2
+ * @maxLength 32
+ * @pattern ^[a-zA-Z0-9_.]+$
+ */
+export type Username = string;
+
+/**
  * Your relationship with the user
  */
 export enum RelationshipStatus {
@@ -64,13 +72,7 @@ export interface User {
      */
     _id: Id
 
-    /**
-     * Username
-     * @minLength 2
-     * @maxLength 32
-     * @pattern ^[a-zA-Z0-9_.]+$
-     */
-    username: string
+    username: Username
 
     /**
      * User avatar

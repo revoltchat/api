@@ -37,6 +37,7 @@ export function tag(name: string, description: string) {
 
 export function resource(path: string, methods: OpenAPIV3.PathItemObject) {
     console.info(`Generating resource ${path}.`);
+    if (resources[path]) throw `Resource ${path} already exists!`;
     resources[path] = methods;
 }
 

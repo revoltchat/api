@@ -1,4 +1,8 @@
 
-                import type { Relationship } from "./Users";
-                type FetchRelationships = Relationship[];
+                interface JoinData {
+                    /**
+                     * Voso Token
+                     */
+                    token: string;
+                }
             
