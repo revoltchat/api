@@ -1,18 +1,23 @@
 {
   "name": "api",
-  "version": "0.0.0",
-  "main": "index.js",
+  "version": "0.5.1-alpha.7",
+  "main": "dist/index.js",
+  "type": "module",
   "repository": "https://gitlab.insrt.uk/revolt/api.git",
   "author": "Paul <paulmakles@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build:generator": "tsc",
-    "start:generator": "node dist",
-    "watch:generator": "tsc-watch --onSuccess \"node dist\"",
-    "preview": "sirv out"
+    "start:generator": "node .",
+    "watch:generator": "tsc-watch",
+    "redoc": "docker run --network host -e SPEC_URL=http://127.0.0.1:5500/OpenAPI.json redocly/redoc",
+    "preview": "sirv . --port 5500 --host",
+    "dev": "concurrently \"yarn redoc\" \"nodemon --exec \\\"yarn build:generator && yarn start:generator && yarn preview\\\"\""
   },
   "devDependencies": {
     "@openapi-contrib/json-schema-to-openapi-schema": "^2.0.0",
+    "concurrently": "^6.2.0",
+    "nodemon": "^2.0.12",
     "openapi-types": "^9.1.0",
     "sirv-cli": "^1.0.12",
     "tsc-watch": "^4.4.0",

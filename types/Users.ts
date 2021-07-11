@@ -14,13 +14,15 @@ export enum RelationshipStatus {
     BlockedOther = "BlockedOther"
 }
 
-export type Relationship = {
+export type RelationshipOnly = {
+    status: RelationshipStatus
+};
+
+export type Relationship = RelationshipOnly & {
     /**
      * Other user's ID
      */
     _id: Id
-
-    status: RelationshipStatus
 };
 
 /**
@@ -33,6 +35,9 @@ export enum Presence {
     Invisible = "Invisible"
 }
 
+/**
+ * User status
+ */
 export type Status = {
     /**
      * Custom status text
@@ -60,12 +65,16 @@ export interface User {
     _id: Id
 
     /**
+     * Username
      * @minLength 2
      * @maxLength 32
      * @pattern ^[a-zA-Z0-9_.]+$
      */
     username: string
 
+    /**
+     * User avatar
+     */
     avatar?: Attachment
 
     /**
@@ -94,10 +103,14 @@ export interface User {
 
 export interface Profile {
     /**
+     * Profile content
      * @minLength 0
      * @maxLength 2000
      */
     content?: string
 
+    /**
+     * Profile background
+     */
     background?: Attachment
 }

@@ -1,25 +1,1060 @@
 {
+  "__comment": "THIS FILE WAS AUTO-GENERATED USING https://gitlab.insrt.uk/revolt/api. DO NOT EDIT.",
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.0.0"
+    "version": "0.5.1-alpha.7",
+    "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
+    "termsOfService": "https://revolt.chat/terms",
+    "contact": {
+      "name": "API Support",
+      "email": "contact@revolt.chat",
+      "url": "https://revolt.chat"
+    },
+    "x-logo": {
+      "url": "https://revolt.chat/header.png",
+      "altText": "Revolt Header"
+    }
   },
+  "tags": [
+    {
+      "name": "Core",
+      "description": "Use in your applications to determine information about the Revolt node."
+    },
+    {
+      "name": "Onboarding",
+      "description": "After signing up to Revolt, users must pick a unique username."
+    },
+    {
+      "name": "User Information",
+      "description": "Query and fetch users on Revolt"
+    },
+    {
+      "name": "Direct Messaging",
+      "description": "Direct message other users on Revolt"
+    },
+    {
+      "name": "Relationships",
+      "description": "Manage your friendships and block list on the platform"
+    }
+  ],
+  "x-tagGroups": [
+    {
+      "name": "Chat Platform",
+      "tags": [
+        "Core",
+        "Onboarding"
+      ]
+    },
+    {
+      "name": "Users",
+      "tags": [
+        "User Information",
+        "Direct Messaging",
+        "Relationships"
+      ]
+    }
+  ],
   "paths": {
     "/": {
       "get": {
-        "summary": "test",
+        "summary": "Query Node",
+        "description": "This returns information about which features are enabled on the remote node.",
+        "tags": [
+          "Core"
+        ],
         "responses": {
           "200": {
-            "description": "bro",
+            "description": "Server node information.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Channel"
+                  "$ref": "#/definitions/RevoltConfiguration"
                 }
               }
             }
           }
         }
+      }
+    },
+    "/onboard/hello": {
+      "get": {
+        "summary": "Check Onboarding Status",
+        "description": "This will tell you whether the current account requires onboarding or whether you can continue to send requests as usual. You may skip calling this if you're restoring an existing session.",
+        "tags": [
+          "Onboarding"
+        ],
+        "responses": {
+          "200": {
+            "description": "Onboarding information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/OnboardingInformation"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/onboard/complete": {
+      "post": {
+        "summary": "Complete Onboarding",
+        "description": "This sets a new username, completes onboarding and allows a user to start using Revolt.",
+        "tags": [
+          "Onboarding"
+        ],
+        "requestBody": {
+          "description": "Data about wanted user information.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "description": "An alphanumeric username which is used to identify the user on the platform.",
+                    "minLength": 2,
+                    "maxLength": 32,
+                    "pattern": "^[a-zA-Z0-9-_]+$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "username"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully set username"
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user": {
+      "get": {
+        "summary": "Fetch User",
+        "description": "Retrieve a user's information.",
+        "tags": [
+          "User Information"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/@me": {
+      "patch": {
+        "summary": "Edit User",
+        "description": "Edit your user object.",
+        "tags": [
+          "User Information"
+        ],
+        "requestBody": {
+          "description": "Requested changes to user object.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "description": "User status",
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "description": "Custom status text",
+                        "minLength": 1,
+                        "maxLength": 128,
+                        "type": "string"
+                      },
+                      "presence": {
+                        "$ref": "#/definitions/Presence"
+                      }
+                    }
+                  },
+                  "profile": {
+                    "description": "User profile data",
+                    "type": "object",
+                    "properties": {
+                      "content": {
+                        "description": "Text to set as user profile description",
+                        "maxLength": 2000,
+                        "type": "string"
+                      },
+                      "background": {
+                        "description": "Autumn file ID, [learn more](https://example.com/TODO).",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "background",
+                      "content"
+                    ]
+                  },
+                  "avatar": {
+                    "description": "Autumn file ID, [learn more](https://example.com/TODO).",
+                    "type": "string"
+                  },
+                  "remove": {
+                    "description": "Field to remove from user object",
+                    "enum": [
+                      "Avatar",
+                      "ProfileBackground",
+                      "ProfileContent",
+                      "StatusText"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "avatar",
+                  "profile",
+                  "remove",
+                  "status"
+                ],
+                "definitions": {
+                  "Presence": {
+                    "description": "User presence",
+                    "enum": [
+                      "Busy",
+                      "Idle",
+                      "Invisible",
+                      "Online"
+                    ],
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfully changed user object."
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/@me/username": {
+      "patch": {
+        "summary": "Change Username",
+        "description": "Change your username.",
+        "tags": [
+          "User Information"
+        ],
+        "requestBody": {
+          "description": "Requested change to username.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "description": "New username",
+                    "minLength": 2,
+                    "maxLength": 32,
+                    "pattern": "^[a-zA-Z0-9_.]+$",
+                    "type": "string"
+                  },
+                  "password": {
+                    "description": "Current account password",
+                    "minLength": 8,
+                    "maxLength": 1024,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "password",
+                  "username"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfully changed user object."
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user/profile": {
+      "get": {
+        "summary": "Fetch User Profile",
+        "description": "Retrieve a user's profile data.",
+        "tags": [
+          "User Information"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Profile"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user/default_avatar": {
+      "get": {
+        "summary": "Fetch Default Avatar",
+        "description": "This returns a default avatar based on the given id.",
+        "tags": [
+          "User Information"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default avatar in PNG format",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user/mutual": {
+      "get": {
+        "summary": "Fetch Mutual Friends",
+        "description": "Retrieve a list of mutual friends with another user.",
+        "tags": [
+          "User Information"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mutual friends.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "description": "Array of user IDs who both you and the other user are friends with.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "users"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/dms": {
+      "get": {
+        "summary": "Fetch Direct Message Channels",
+        "description": "This fetches your direct messages, including any DM and group DM conversations.",
+        "tags": [
+          "Direct Messaging"
+        ],
+        "responses": {
+          "200": {
+            "description": "Your DM conversations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Channel objects.",
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "description": "Channel Id",
+                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                            "type": "string"
+                          },
+                          "channel_type": {
+                            "type": "string",
+                            "enum": [
+                              "DirectMessage"
+                            ]
+                          },
+                          "active": {
+                            "description": "Whether this DM is active",
+                            "type": "boolean"
+                          },
+                          "recipients": {
+                            "description": "List of user IDs who are participating in this DM",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "last_message": {
+                            "description": "Last message sent in channel",
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "description": "Message ID",
+                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                "type": "string"
+                              },
+                              "author": {
+                                "description": "Author ID",
+                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                "type": "string"
+                              },
+                              "short": {
+                                "description": "Short content of message",
+                                "maxLength": 128,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "author",
+                              "short"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "_id",
+                          "active",
+                          "channel_type",
+                          "last_message",
+                          "recipients"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "description": "Channel Id",
+                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                            "type": "string"
+                          },
+                          "channel_type": {
+                            "type": "string",
+                            "enum": [
+                              "Group"
+                            ]
+                          },
+                          "recipients": {
+                            "description": "List of user IDs who are participating in this group",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "name": {
+                            "description": "Group name",
+                            "type": "string"
+                          },
+                          "owner": {
+                            "description": "User ID of group owner",
+                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                            "type": "string"
+                          },
+                          "description": {
+                            "description": "Group description",
+                            "type": "string"
+                          },
+                          "last_message": {
+                            "description": "Last message sent in channel",
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "description": "Message ID",
+                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                "type": "string"
+                              },
+                              "author": {
+                                "description": "Author ID",
+                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                "type": "string"
+                              },
+                              "short": {
+                                "description": "Short content of message",
+                                "maxLength": 128,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "author",
+                              "short"
+                            ]
+                          },
+                          "icon": {
+                            "description": "Group icon",
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "description": "Attachment ID",
+                                "minLength": 1,
+                                "maxLength": 128,
+                                "type": "string"
+                              },
+                              "tag": {
+                                "$ref": "#/definitions/AttachmentTag"
+                              },
+                              "size": {
+                                "description": "File size (in bytes)",
+                                "type": "number"
+                              },
+                              "filename": {
+                                "description": "File name",
+                                "type": "string"
+                              },
+                              "metadata": {
+                                "description": "Metadata",
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "File"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "type"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "Text"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "type"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "Audio"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "type"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "Image"
+                                        ]
+                                      },
+                                      "width": {
+                                        "type": "number"
+                                      },
+                                      "height": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "height",
+                                      "type",
+                                      "width"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "Video"
+                                        ]
+                                      },
+                                      "width": {
+                                        "type": "number"
+                                      },
+                                      "height": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "height",
+                                      "type",
+                                      "width"
+                                    ]
+                                  }
+                                ]
+                              },
+                              "content_type": {
+                                "description": "Content type",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "content_type",
+                              "filename",
+                              "metadata",
+                              "size",
+                              "tag"
+                            ]
+                          },
+                          "permissions": {
+                            "description": "Permissions given to group members",
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "_id",
+                          "channel_type",
+                          "last_message",
+                          "name",
+                          "owner",
+                          "recipients"
+                        ]
+                      }
+                    ]
+                  },
+                  "definitions": {
+                    "AttachmentTag": {
+                      "description": "Attachment tag",
+                      "enum": [
+                        "attachments",
+                        "avatars",
+                        "backgrounds",
+                        "banners",
+                        "icons"
+                      ],
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user/dm": {
+      "get": {
+        "summary": "Open Direct Message",
+        "description": "Open a DM with another user.",
+        "tags": [
+          "Direct Messaging"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DM channel with user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/DirectMessageChannel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/relationships": {
+      "get": {
+        "summary": "Fetch Relationships",
+        "description": "Fetch all of your relationships with other users.",
+        "tags": [
+          "Relationships"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of relationships.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "$ref": "#/definitions/RelationshipStatus"
+                          }
+                        },
+                        "required": [
+                          "status"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "description": "Other user's ID",
+                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "_id"
+                        ]
+                      }
+                    ]
+                  },
+                  "definitions": {
+                    "RelationshipStatus": {
+                      "description": "Your relationship with the user",
+                      "enum": [
+                        "Blocked",
+                        "BlockedOther",
+                        "Friend",
+                        "Incoming",
+                        "None",
+                        "Outgoing",
+                        "User"
+                      ],
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user/relationship": {
+      "get": {
+        "summary": "Fetch Relationship",
+        "description": "Fetch your relationship with another other user.",
+        "tags": [
+          "Relationships"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your relationship with the user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/RelationshipOnly"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user/friend": {
+      "put": {
+        "summary": "Send Friend Request / Accept Request",
+        "description": "Send a friend request to another user or accept another user's friend request.",
+        "tags": [
+          "Relationships"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sent friend request / added user as friend.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/RelationshipOnly"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Deny Friend Request / Remove Friend",
+        "description": "Denies another user's friend request or removes an existing friend.",
+        "tags": [
+          "Relationships"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted friend request / removed user from friends.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/RelationshipOnly"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/users/:user/block": {
+      "put": {
+        "summary": "Block User",
+        "description": "Block another user.",
+        "tags": [
+          "Relationships"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blocked user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/RelationshipOnly"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Unblock User",
+        "description": "Unblock another user.",
+        "tags": [
+          "Relationships"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unblocked user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/RelationshipOnly"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "userId": [],
+            "sessionToken": []
+          }
+        ]
       }
     }
   },
@@ -3065,6 +4100,30 @@
         }
       }
     },
+    "OnboardingInformation": {
+      "type": "object",
+      "properties": {
+        "onboarding": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "onboarding"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
     "ServerInvite": {
       "type": "object",
       "properties": {
@@ -4345,9 +5404,16 @@
     "PermissionTuple": {
       "description": "Tuple consisting of server and channel permissions in that order",
       "type": "array",
-      "items": {
-        "type": "number"
-      },
+      "items": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2,
       "definitions": {
         "AttachmentTag": {
           "description": "Attachment tag",
@@ -4371,9 +5437,16 @@
         "permissions": {
           "description": "Tuple consisting of server and channel permissions in that order",
           "type": "array",
-          "items": {
-            "type": "number"
-          }
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
         },
         "colour": {
           "type": "string"
@@ -4561,9 +5634,16 @@
               "permissions": {
                 "description": "Tuple consisting of server and channel permissions in that order",
                 "type": "array",
-                "items": {
-                  "type": "number"
-                }
+                "items": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "minItems": 2,
+                "maxItems": 2
               },
               "colour": {
                 "type": "string"
@@ -4578,9 +5658,16 @@
         "default_permissions": {
           "description": "Tuple consisting of server and channel permissions in that order",
           "type": "array",
-          "items": {
-            "type": "number"
-          }
+          "items": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
         },
         "icon": {
           "type": "object",
@@ -4991,21 +6078,69 @@
         }
       }
     },
-    "Relationship": {
+    "RelationshipOnly": {
       "type": "object",
       "properties": {
-        "_id": {
-          "description": "Other user's ID",
-          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-          "type": "string"
-        },
         "status": {
           "$ref": "#/definitions/RelationshipStatus"
         }
       },
       "required": [
-        "_id",
         "status"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Relationship": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "$ref": "#/definitions/RelationshipStatus"
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Other user's ID",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id"
+          ]
+        }
       ],
       "definitions": {
         "AttachmentTag": {
@@ -5071,6 +6206,7 @@
       }
     },
     "Status": {
+      "description": "User status",
       "type": "object",
       "properties": {
         "text": {
@@ -5176,12 +6312,14 @@
           "type": "string"
         },
         "username": {
+          "description": "Username",
           "minLength": 2,
           "maxLength": 32,
           "pattern": "^[a-zA-Z0-9_.]+$",
           "type": "string"
         },
         "avatar": {
+          "description": "User avatar",
           "type": "object",
           "properties": {
             "_id": {
@@ -5310,20 +6448,31 @@
           "description": "Relationships with other known users\nOnly present if fetching self",
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "_id": {
-                "description": "Other user's ID",
-                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                "type": "string"
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "$ref": "#/definitions/RelationshipStatus"
+                  }
+                },
+                "required": [
+                  "status"
+                ]
               },
-              "status": {
-                "$ref": "#/definitions/RelationshipStatus"
+              {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "description": "Other user's ID",
+                    "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "_id"
+                ]
               }
-            },
-            "required": [
-              "_id",
-              "status"
             ]
           }
         },
@@ -5332,6 +6481,7 @@
           "type": "number"
         },
         "status": {
+          "description": "User status",
           "type": "object",
           "properties": {
             "text": {
@@ -5347,20 +6497,31 @@
         },
         "relationship": {
           "description": "Relationship to user",
-          "type": "object",
-          "properties": {
-            "_id": {
-              "description": "Other user's ID",
-              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-              "type": "string"
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/RelationshipStatus"
+                }
+              },
+              "required": [
+                "status"
+              ]
             },
-            "status": {
-              "$ref": "#/definitions/RelationshipStatus"
+            {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Other user's ID",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "_id"
+              ]
             }
-          },
-          "required": [
-            "_id",
-            "status"
           ]
         },
         "online": {
@@ -5413,11 +6574,13 @@
       "type": "object",
       "properties": {
         "content": {
+          "description": "Profile content",
           "minLength": 0,
           "maxLength": 2000,
           "type": "string"
         },
         "background": {
+          "description": "Profile background",
           "type": "object",
           "properties": {
             "_id": {
@@ -5580,6 +6743,73 @@
         }
       }
     },
+    "FetchRelationships": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "$ref": "#/definitions/RelationshipStatus"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "description": "Other user's ID",
+                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                "type": "string"
+              }
+            },
+            "required": [
+              "_id"
+            ]
+          }
+        ]
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
     "Id": {
       "description": "Id",
       "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
@@ -5661,6 +6891,68 @@
           ],
           "type": "string"
         }
+      }
+    },
+    "AutumnId": {
+      "description": "Autumn file ID, [learn more](https://example.com/TODO).",
+      "type": "string",
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.revolt.chat",
+      "description": "Production instance of the Revolt API"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "userId": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-user-id",
+        "description": "User ID is found when calling `/auth/login`.\n"
+      },
+      "sessionToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-session-token",
+        "description": "Session is created by calling `/auth/login`.\n"
       }
     }
   }

@@ -1,71 +1,52 @@
-import { resolve } from "path";
-import * as TJS from "typescript-json-schema";
-import { readdirSync, readFileSync, writeFileSync } from "fs";
-import convert from '@openapi-contrib/json-schema-to-openapi-schema';
+import { writeFile } from 'fs/promises';
+import type { OpenAPIV3 } from "openapi-types";
+import type * as TJS from "typescript-json-schema";
 
-const files = readdirSync('types')
-    .map(x => resolve('types', x));
+type Document = OpenAPIV3.Document & { definitions?: TJS.Definition };
 
-const program = TJS.getProgramFromFiles(
-    files,
-    { }
-);
+import info from './openapi/info.js';
+import definitions from './openapi/definitions.js';
+import paths, { group, tags } from './openapi/paths.js';
 
-const generator = TJS.buildGenerator(program, {
-    required: true,
-    // titles: true
-});
+import './routes/index.js';
 
-const TYPE_RE = /(?:type|enum|interface) (\w+)/g
-
-let types: string[] = [];
-for (const path of files) {
-    const f = readFileSync(path).toString();
-    types = types.concat([...f.matchAll(TYPE_RE)].map(x => x[1]));
-}
-
-const pkg = require('../package.json');
-import { OpenAPIV3 } from 'openapi-types';
-
-(async () => {
-let definitions: { [key: string]: TJS.Definition } = {};
-for (let type of types) {
-    const defn = generator?.getSchemaForSymbol(type);
-    if (defn) {
-        definitions[type] = await convert(defn);
-    }
-}
-
-// import { inspect } from 'util';
-// console.log(inspect(definitions, false, 10, true));
-
-const OpenAPI: (OpenAPIV3.Document & { definitions: typeof definitions }) = {
-    openapi: "3.0.0",
-    info: {
-        title: "Revolt API",
-        version: pkg.version
-    },
-    paths: {
-        "/": {
-            get: {
-                summary: "test",
-                responses: {
-                    "200": {
-                        "description": "bro",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    $ref: "#/definitions/Channel"
-                                }
-                            }
-                        }
-                    }
+async function generate(): Promise<Document> {
+    return {
+        ['__comment' as any]: "THIS FILE WAS AUTO-GENERATED USING https://gitlab.insrt.uk/revolt/api. DO NOT EDIT.",
+        openapi: "3.0.0",
+        info: await info(),
+        tags,
+        // Redoc tag groups
+        ['x-tagGroups' as any]: group(),
+        paths: await paths(),
+        definitions: await definitions(),
+        servers: [
+            {
+                "url": "https://api.revolt.chat",
+                "description": "Production instance of the Revolt API"
+            }
+        ],
+        components: {
+            securitySchemes: {
+                userId: {
+                    type: "apiKey",
+                    in: "header",
+                    name: "x-user-id",
+                    description: "User ID is found when calling `/auth/login`.\n"
+                },
+                sessionToken: {
+                    type: "apiKey",
+                    in: "header",
+                    name: "x-session-token",
+                    description: "Session is created by calling `/auth/login`.\n"
                 }
             }
         }
-    },
-    definitions
-};
+    }
+}
 
-writeFileSync('OpenAPI.json', JSON.stringify(OpenAPI, undefined, 2));
-})();
+generate()
+.then(v =>
+    writeFile('OpenAPI.json', JSON.stringify(v, undefined, 2))
+    );
+    

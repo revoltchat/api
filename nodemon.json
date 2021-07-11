@@ -1,0 +1,10 @@
+{
+    "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/nodemon.json",
+    "watch": [
+        "**/*.ts"
+    ],
+    "ext": "ts",
+    "ignore": [
+        "__temp.ts"
+    ]
+}

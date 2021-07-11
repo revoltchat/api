@@ -104,3 +104,7 @@ export interface RevoltConfiguration {
      */
     vapid: string
 }
+
+export interface OnboardingInformation {
+    onboarding: boolean
+}

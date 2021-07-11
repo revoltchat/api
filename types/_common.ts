@@ -10,3 +10,8 @@ export type Id = string;
  * @maxLength 36
  */
 export type Nonce = string;
+
+/**
+ * Autumn file ID, [learn more](https://example.com/TODO).
+ */
+export type AutumnId = string;
