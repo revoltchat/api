@@ -41,5 +41,30 @@ export type Attachment = {
     /**
      * Content type
      */
-    content_type: string,
-};
+    content_type: string
+}
+
+/**
+ * File serving parameters
+ */
+export interface SizeOptions {
+    /**
+     * Width of resized image
+     */
+    width?: number
+
+    /**
+     * Height of resized image
+     */
+    height?: number
+
+    /**
+     * Width and height of resized image
+     */
+    size?: number
+
+    /**
+     * Maximum resized image side length
+     */
+    max_side?: number
+}

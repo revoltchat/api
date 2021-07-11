@@ -1,0 +1,5667 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Revolt API",
+    "version": "0.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "test",
+        "responses": {
+          "200": {
+            "description": "bro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Channel"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Session": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Session ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "user_id": {
+          "description": "User ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "session_token": {
+          "maxLength": 64,
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_token",
+        "user_id"
+      ]
+    },
+    "AttachmentId": {
+      "description": "Attachment ID",
+      "minLength": 1,
+      "maxLength": 128,
+      "type": "string"
+    },
+    "AttachmentMetadata": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "File"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Text"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Audio"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Image"
+              ]
+            },
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "height",
+            "type",
+            "width"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Video"
+              ]
+            },
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "height",
+            "type",
+            "width"
+          ]
+        }
+      ]
+    },
+    "AttachmentTag": {
+      "description": "Attachment tag",
+      "enum": [
+        "attachments",
+        "avatars",
+        "backgrounds",
+        "banners",
+        "icons"
+      ],
+      "type": "string"
+    },
+    "Attachment": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Attachment ID",
+          "minLength": 1,
+          "maxLength": 128,
+          "type": "string"
+        },
+        "tag": {
+          "$ref": "#/definitions/AttachmentTag"
+        },
+        "size": {
+          "description": "File size (in bytes)",
+          "type": "number"
+        },
+        "filename": {
+          "description": "File name",
+          "type": "string"
+        },
+        "metadata": {
+          "description": "Metadata",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "File"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Text"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Audio"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Image"
+                  ]
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "height",
+                "type",
+                "width"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Video"
+                  ]
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "height",
+                "type",
+                "width"
+              ]
+            }
+          ]
+        },
+        "content_type": {
+          "description": "Content type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "content_type",
+        "filename",
+        "metadata",
+        "size",
+        "tag"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "SizeOptions": {
+      "description": "File serving parameters",
+      "type": "object",
+      "properties": {
+        "width": {
+          "description": "Width of resized image",
+          "type": "number"
+        },
+        "height": {
+          "description": "Height of resized image",
+          "type": "number"
+        },
+        "size": {
+          "description": "Width and height of resized image",
+          "type": "number"
+        },
+        "max_side": {
+          "description": "Maximum resized image side length",
+          "type": "number"
+        }
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "LastMessage": {
+      "description": "Last message sent in channel",
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Message ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "author": {
+          "description": "Author ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "short": {
+          "description": "Short content of message",
+          "maxLength": 128,
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "author",
+        "short"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "SavedMessagesChannel": {
+      "description": "Saved Messages channel has only one participant, the user who created it.",
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Channel Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "channel_type": {
+          "type": "string",
+          "enum": [
+            "SavedMessages"
+          ]
+        },
+        "user": {
+          "description": "User Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "channel_type",
+        "user"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "DirectMessageChannel": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Channel Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "channel_type": {
+          "type": "string",
+          "enum": [
+            "DirectMessage"
+          ]
+        },
+        "active": {
+          "description": "Whether this DM is active",
+          "type": "boolean"
+        },
+        "recipients": {
+          "description": "List of user IDs who are participating in this DM",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "last_message": {
+          "description": "Last message sent in channel",
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Message ID",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "author": {
+              "description": "Author ID",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "short": {
+              "description": "Short content of message",
+              "maxLength": 128,
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "author",
+            "short"
+          ]
+        }
+      },
+      "required": [
+        "_id",
+        "active",
+        "channel_type",
+        "last_message",
+        "recipients"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "GroupChannel": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Channel Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "channel_type": {
+          "type": "string",
+          "enum": [
+            "Group"
+          ]
+        },
+        "recipients": {
+          "description": "List of user IDs who are participating in this group",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "owner": {
+          "description": "User ID of group owner",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "description": {
+          "description": "Group description",
+          "type": "string"
+        },
+        "last_message": {
+          "description": "Last message sent in channel",
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Message ID",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "author": {
+              "description": "Author ID",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "short": {
+              "description": "Short content of message",
+              "maxLength": 128,
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "author",
+            "short"
+          ]
+        },
+        "icon": {
+          "description": "Group icon",
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "permissions": {
+          "description": "Permissions given to group members",
+          "type": "number"
+        }
+      },
+      "required": [
+        "_id",
+        "channel_type",
+        "last_message",
+        "name",
+        "owner",
+        "recipients"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "ServerChannel": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Channel Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "server": {
+          "description": "Server Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "name": {
+          "description": "Channel name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Channel description",
+          "type": "string"
+        },
+        "icon": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "default_permissions": {
+          "description": "Permissions given to all users",
+          "type": "number"
+        },
+        "role_permissions": {
+          "description": "Permissions given to roles",
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      },
+      "required": [
+        "_id",
+        "description",
+        "name",
+        "server"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "TextChannel": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Channel Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "server": {
+              "description": "Server Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "name": {
+              "description": "Channel name",
+              "type": "string"
+            },
+            "description": {
+              "description": "Channel description",
+              "type": "string"
+            },
+            "icon": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Attachment ID",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "tag": {
+                  "$ref": "#/definitions/AttachmentTag"
+                },
+                "size": {
+                  "description": "File size (in bytes)",
+                  "type": "number"
+                },
+                "filename": {
+                  "description": "File name",
+                  "type": "string"
+                },
+                "metadata": {
+                  "description": "Metadata",
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "File"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Text"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Audio"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Image"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Video"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    }
+                  ]
+                },
+                "content_type": {
+                  "description": "Content type",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "_id",
+                "content_type",
+                "filename",
+                "metadata",
+                "size",
+                "tag"
+              ]
+            },
+            "default_permissions": {
+              "description": "Permissions given to all users",
+              "type": "number"
+            },
+            "role_permissions": {
+              "description": "Permissions given to roles",
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "_id",
+            "description",
+            "name",
+            "server"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "channel_type": {
+              "type": "string",
+              "enum": [
+                "TextChannel"
+              ]
+            },
+            "last_message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "channel_type",
+            "last_message"
+          ]
+        }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "VoiceChannel": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Channel Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "server": {
+              "description": "Server Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "name": {
+              "description": "Channel name",
+              "type": "string"
+            },
+            "description": {
+              "description": "Channel description",
+              "type": "string"
+            },
+            "icon": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Attachment ID",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "tag": {
+                  "$ref": "#/definitions/AttachmentTag"
+                },
+                "size": {
+                  "description": "File size (in bytes)",
+                  "type": "number"
+                },
+                "filename": {
+                  "description": "File name",
+                  "type": "string"
+                },
+                "metadata": {
+                  "description": "Metadata",
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "File"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Text"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Audio"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Image"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Video"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    }
+                  ]
+                },
+                "content_type": {
+                  "description": "Content type",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "_id",
+                "content_type",
+                "filename",
+                "metadata",
+                "size",
+                "tag"
+              ]
+            },
+            "default_permissions": {
+              "description": "Permissions given to all users",
+              "type": "number"
+            },
+            "role_permissions": {
+              "description": "Permissions given to roles",
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "_id",
+            "description",
+            "name",
+            "server"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "channel_type": {
+              "type": "string",
+              "enum": [
+                "VoiceChannel"
+              ]
+            }
+          },
+          "required": [
+            "channel_type"
+          ]
+        }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Channel": {
+      "anyOf": [
+        {
+          "allOf": [
+            {
+              "description": "Saved Messages channel has only one participant, the user who created it.",
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Channel Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "channel_type": {
+                  "type": "string",
+                  "enum": [
+                    "SavedMessages"
+                  ]
+                },
+                "user": {
+                  "description": "User Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "_id",
+                "channel_type",
+                "user"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "nonce": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Channel Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "channel_type": {
+                  "type": "string",
+                  "enum": [
+                    "DirectMessage"
+                  ]
+                },
+                "active": {
+                  "description": "Whether this DM is active",
+                  "type": "boolean"
+                },
+                "recipients": {
+                  "description": "List of user IDs who are participating in this DM",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "last_message": {
+                  "description": "Last message sent in channel",
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "Message ID",
+                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                      "type": "string"
+                    },
+                    "author": {
+                      "description": "Author ID",
+                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                      "type": "string"
+                    },
+                    "short": {
+                      "description": "Short content of message",
+                      "maxLength": 128,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "author",
+                    "short"
+                  ]
+                }
+              },
+              "required": [
+                "_id",
+                "active",
+                "channel_type",
+                "last_message",
+                "recipients"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "nonce": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Channel Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "channel_type": {
+                  "type": "string",
+                  "enum": [
+                    "Group"
+                  ]
+                },
+                "recipients": {
+                  "description": "List of user IDs who are participating in this group",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "name": {
+                  "description": "Group name",
+                  "type": "string"
+                },
+                "owner": {
+                  "description": "User ID of group owner",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Group description",
+                  "type": "string"
+                },
+                "last_message": {
+                  "description": "Last message sent in channel",
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "Message ID",
+                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                      "type": "string"
+                    },
+                    "author": {
+                      "description": "Author ID",
+                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                      "type": "string"
+                    },
+                    "short": {
+                      "description": "Short content of message",
+                      "maxLength": 128,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "author",
+                    "short"
+                  ]
+                },
+                "icon": {
+                  "description": "Group icon",
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "Attachment ID",
+                      "minLength": 1,
+                      "maxLength": 128,
+                      "type": "string"
+                    },
+                    "tag": {
+                      "$ref": "#/definitions/AttachmentTag"
+                    },
+                    "size": {
+                      "description": "File size (in bytes)",
+                      "type": "number"
+                    },
+                    "filename": {
+                      "description": "File name",
+                      "type": "string"
+                    },
+                    "metadata": {
+                      "description": "Metadata",
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "File"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Text"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Audio"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Image"
+                              ]
+                            },
+                            "width": {
+                              "type": "number"
+                            },
+                            "height": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "height",
+                            "type",
+                            "width"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Video"
+                              ]
+                            },
+                            "width": {
+                              "type": "number"
+                            },
+                            "height": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "height",
+                            "type",
+                            "width"
+                          ]
+                        }
+                      ]
+                    },
+                    "content_type": {
+                      "description": "Content type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "content_type",
+                    "filename",
+                    "metadata",
+                    "size",
+                    "tag"
+                  ]
+                },
+                "permissions": {
+                  "description": "Permissions given to group members",
+                  "type": "number"
+                }
+              },
+              "required": [
+                "_id",
+                "channel_type",
+                "last_message",
+                "name",
+                "owner",
+                "recipients"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "nonce": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Channel Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "server": {
+                  "description": "Server Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Channel name",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Channel description",
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "Attachment ID",
+                      "minLength": 1,
+                      "maxLength": 128,
+                      "type": "string"
+                    },
+                    "tag": {
+                      "$ref": "#/definitions/AttachmentTag"
+                    },
+                    "size": {
+                      "description": "File size (in bytes)",
+                      "type": "number"
+                    },
+                    "filename": {
+                      "description": "File name",
+                      "type": "string"
+                    },
+                    "metadata": {
+                      "description": "Metadata",
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "File"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Text"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Audio"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Image"
+                              ]
+                            },
+                            "width": {
+                              "type": "number"
+                            },
+                            "height": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "height",
+                            "type",
+                            "width"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Video"
+                              ]
+                            },
+                            "width": {
+                              "type": "number"
+                            },
+                            "height": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "height",
+                            "type",
+                            "width"
+                          ]
+                        }
+                      ]
+                    },
+                    "content_type": {
+                      "description": "Content type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "content_type",
+                    "filename",
+                    "metadata",
+                    "size",
+                    "tag"
+                  ]
+                },
+                "default_permissions": {
+                  "description": "Permissions given to all users",
+                  "type": "number"
+                },
+                "role_permissions": {
+                  "description": "Permissions given to roles",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "number"
+                  }
+                }
+              },
+              "required": [
+                "_id",
+                "description",
+                "name",
+                "server"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel_type": {
+                  "type": "string",
+                  "enum": [
+                    "TextChannel"
+                  ]
+                },
+                "last_message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel_type",
+                "last_message"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "nonce": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Channel Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "server": {
+                  "description": "Server Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Channel name",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Channel description",
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "description": "Attachment ID",
+                      "minLength": 1,
+                      "maxLength": 128,
+                      "type": "string"
+                    },
+                    "tag": {
+                      "$ref": "#/definitions/AttachmentTag"
+                    },
+                    "size": {
+                      "description": "File size (in bytes)",
+                      "type": "number"
+                    },
+                    "filename": {
+                      "description": "File name",
+                      "type": "string"
+                    },
+                    "metadata": {
+                      "description": "Metadata",
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "File"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Text"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Audio"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Image"
+                              ]
+                            },
+                            "width": {
+                              "type": "number"
+                            },
+                            "height": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "height",
+                            "type",
+                            "width"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Video"
+                              ]
+                            },
+                            "width": {
+                              "type": "number"
+                            },
+                            "height": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "height",
+                            "type",
+                            "width"
+                          ]
+                        }
+                      ]
+                    },
+                    "content_type": {
+                      "description": "Content type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "content_type",
+                    "filename",
+                    "metadata",
+                    "size",
+                    "tag"
+                  ]
+                },
+                "default_permissions": {
+                  "description": "Permissions given to all users",
+                  "type": "number"
+                },
+                "role_permissions": {
+                  "description": "Permissions given to roles",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "number"
+                  }
+                }
+              },
+              "required": [
+                "_id",
+                "description",
+                "name",
+                "server"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel_type": {
+                  "type": "string",
+                  "enum": [
+                    "VoiceChannel"
+                  ]
+                }
+              },
+              "required": [
+                "channel_type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "nonce": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Message Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "nonce": {
+          "description": "Nonce value, prefer to use ULIDs here for better feature support.",
+          "minLength": 1,
+          "maxLength": 36,
+          "type": "string"
+        },
+        "channel": {
+          "description": "Channel Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "author": {
+          "description": "Author Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "content": {
+          "description": "Message content, can be an object *only* if sent by the system user.",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "text"
+                  ]
+                },
+                "content": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user_added"
+                  ]
+                },
+                "id": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "by": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "by",
+                "id",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user_remove"
+                  ]
+                },
+                "id": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "by": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "by",
+                "id",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user_joined"
+                  ]
+                },
+                "id": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user_left"
+                  ]
+                },
+                "id": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user_kicked"
+                  ]
+                },
+                "id": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "user_banned"
+                  ]
+                },
+                "id": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "channel_renamed"
+                  ]
+                },
+                "name": {
+                  "type": "string"
+                },
+                "by": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "by",
+                "name",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "channel_description_changed"
+                  ]
+                },
+                "by": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "by",
+                "type"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "channel_icon_changed"
+                  ]
+                },
+                "by": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "by",
+                "type"
+              ]
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "attachments": {
+          "description": "Message attachments",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "description": "Attachment ID",
+                "minLength": 1,
+                "maxLength": 128,
+                "type": "string"
+              },
+              "tag": {
+                "$ref": "#/definitions/AttachmentTag"
+              },
+              "size": {
+                "description": "File size (in bytes)",
+                "type": "number"
+              },
+              "filename": {
+                "description": "File name",
+                "type": "string"
+              },
+              "metadata": {
+                "description": "Metadata",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "File"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Text"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Audio"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Image"
+                        ]
+                      },
+                      "width": {
+                        "type": "number"
+                      },
+                      "height": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "height",
+                      "type",
+                      "width"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Video"
+                        ]
+                      },
+                      "width": {
+                        "type": "number"
+                      },
+                      "height": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "height",
+                      "type",
+                      "width"
+                    ]
+                  }
+                ]
+              },
+              "content_type": {
+                "description": "Content type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "_id",
+              "content_type",
+              "filename",
+              "metadata",
+              "size",
+              "tag"
+            ]
+          }
+        },
+        "edited": {
+          "description": "Unix timestamp of when message was last edited",
+          "type": "object",
+          "properties": {
+            "$date": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "$date"
+          ]
+        },
+        "embeds": {
+          "description": "Message link embeds",
+          "type": "array",
+          "items": {
+            "description": "Message embed",
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "None"
+                    ]
+                  }
+                },
+                "required": [
+                  "type"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "Website"
+                    ]
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "special": {
+                    "description": "A special 3rd party embed",
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "None"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "YouTube"
+                            ]
+                          },
+                          "id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "Twitch"
+                            ]
+                          },
+                          "content_type": {
+                            "enum": [
+                              "Channel",
+                              "Clip",
+                              "Video"
+                            ],
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "content_type",
+                          "id",
+                          "type"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "Spotify"
+                            ]
+                          },
+                          "content_type": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "content_type",
+                          "id",
+                          "type"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "Soundcloud"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "Bandcamp"
+                            ]
+                          },
+                          "content_type": {
+                            "enum": [
+                              "Album",
+                              "Track"
+                            ],
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "content_type",
+                          "id",
+                          "type"
+                        ]
+                      }
+                    ]
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "description": "An embedded image",
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "width": {
+                        "type": "number"
+                      },
+                      "height": {
+                        "type": "number"
+                      },
+                      "size": {
+                        "enum": [
+                          "Large",
+                          "Preview"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "height",
+                      "size",
+                      "url",
+                      "width"
+                    ]
+                  },
+                  "video": {
+                    "description": "An embedded video",
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "width": {
+                        "type": "number"
+                      },
+                      "height": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "height",
+                      "url",
+                      "width"
+                    ]
+                  },
+                  "site_name": {
+                    "type": "string"
+                  },
+                  "icon_url": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type"
+                ]
+              },
+              {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "Image"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  {
+                    "description": "An embedded image",
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "width": {
+                        "type": "number"
+                      },
+                      "height": {
+                        "type": "number"
+                      },
+                      "size": {
+                        "enum": [
+                          "Large",
+                          "Preview"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "height",
+                      "size",
+                      "url",
+                      "width"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "mentions": {
+          "description": "Array of user IDs mentioned in message",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "replies": {
+          "description": "Array of message IDs replied to",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "_id",
+        "author",
+        "channel",
+        "content"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "SystemMessage": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "text"
+              ]
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "content",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "user_added"
+              ]
+            },
+            "id": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "by": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "by",
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "user_remove"
+              ]
+            },
+            "id": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "by": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "by",
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "user_joined"
+              ]
+            },
+            "id": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "user_left"
+              ]
+            },
+            "id": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "user_kicked"
+              ]
+            },
+            "id": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "user_banned"
+              ]
+            },
+            "id": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "channel_renamed"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "by": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "by",
+            "name",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "channel_description_changed"
+              ]
+            },
+            "by": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "by",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "channel_icon_changed"
+              ]
+            },
+            "by": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "by",
+            "type"
+          ]
+        }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "RevoltConfiguration": {
+      "type": "object",
+      "properties": {
+        "revolt": {
+          "description": "Revolt API version string",
+          "type": "string"
+        },
+        "features": {
+          "description": "Available features exposed by the API",
+          "type": "object",
+          "properties": {
+            "registration": {
+              "description": "Whether users can register",
+              "type": "boolean"
+            },
+            "captcha": {
+              "description": "hCaptcha options",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "Whether hCaptcha is enabled",
+                  "type": "boolean"
+                },
+                "key": {
+                  "description": "hCaptcha site key",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "enabled",
+                "key"
+              ]
+            },
+            "email": {
+              "description": "Whether email verification is enabled",
+              "type": "boolean"
+            },
+            "invite_only": {
+              "description": "Whether an invite code is required to register",
+              "type": "string"
+            },
+            "autumn": {
+              "description": "Autumn (file server) options",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "Whether file uploads are enabled",
+                  "type": "boolean"
+                },
+                "url": {
+                  "description": "Autumn API URL",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "enabled",
+                "url"
+              ]
+            },
+            "january": {
+              "description": "January (proxy server) options",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "Whether link embeds are enabled",
+                  "type": "boolean"
+                },
+                "url": {
+                  "description": "January API URL",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "enabled",
+                "url"
+              ]
+            },
+            "voso": {
+              "description": "Legacy voice server options",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "Whether voice is available (using voso)",
+                  "type": "boolean"
+                },
+                "url": {
+                  "description": "Voso API URL",
+                  "type": "string"
+                },
+                "ws": {
+                  "description": "Voso WebSocket URL",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "enabled",
+                "url",
+                "ws"
+              ]
+            }
+          },
+          "required": [
+            "autumn",
+            "captcha",
+            "email",
+            "invite_only",
+            "january",
+            "registration",
+            "voso"
+          ]
+        },
+        "ws": {
+          "description": "WebSocket URL",
+          "type": "string"
+        },
+        "app": {
+          "description": "URL to web app associated with this instance",
+          "type": "string"
+        },
+        "vapid": {
+          "description": "Web Push VAPID key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "app",
+        "features",
+        "revolt",
+        "vapid",
+        "ws"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "ServerInvite": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Server"
+          ]
+        },
+        "_id": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "server": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "creator": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "channel": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "channel",
+        "creator",
+        "server",
+        "type"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Invite": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Server"
+          ]
+        },
+        "_id": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "server": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "creator": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "channel": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "channel",
+        "creator",
+        "server",
+        "type"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "RetrievedInvite": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Server"
+          ]
+        },
+        "server_id": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "server_name": {
+          "type": "string"
+        },
+        "server_icon": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "server_banner": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "channel_id": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "channel_name": {
+          "type": "string"
+        },
+        "channel_description": {
+          "type": "string"
+        },
+        "user_name": {
+          "type": "string"
+        },
+        "user_avatar": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        }
+      },
+      "required": [
+        "channel_id",
+        "channel_name",
+        "server_id",
+        "server_name",
+        "type",
+        "user_name"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "EmbedImage": {
+      "description": "An embedded image",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "size": {
+          "enum": [
+            "Large",
+            "Preview"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "height",
+        "size",
+        "url",
+        "width"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "EmbedVideo": {
+      "description": "An embedded video",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "height",
+        "url",
+        "width"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "EmbedSpecial": {
+      "description": "A special 3rd party embed",
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "None"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "YouTube"
+              ]
+            },
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Twitch"
+              ]
+            },
+            "content_type": {
+              "enum": [
+                "Channel",
+                "Clip",
+                "Video"
+              ],
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "content_type",
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Spotify"
+              ]
+            },
+            "content_type": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "content_type",
+            "id",
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Soundcloud"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Bandcamp"
+              ]
+            },
+            "content_type": {
+              "enum": [
+                "Album",
+                "Track"
+              ],
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "content_type",
+            "id",
+            "type"
+          ]
+        }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Embed": {
+      "description": "Message embed",
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "None"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Website"
+              ]
+            },
+            "url": {
+              "type": "string"
+            },
+            "special": {
+              "description": "A special 3rd party embed",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "None"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "YouTube"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Twitch"
+                      ]
+                    },
+                    "content_type": {
+                      "enum": [
+                        "Channel",
+                        "Clip",
+                        "Video"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content_type",
+                    "id",
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Spotify"
+                      ]
+                    },
+                    "content_type": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content_type",
+                    "id",
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Soundcloud"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Bandcamp"
+                      ]
+                    },
+                    "content_type": {
+                      "enum": [
+                        "Album",
+                        "Track"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content_type",
+                    "id",
+                    "type"
+                  ]
+                }
+              ]
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "image": {
+              "description": "An embedded image",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "size": {
+                  "enum": [
+                    "Large",
+                    "Preview"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "height",
+                "size",
+                "url",
+                "width"
+              ]
+            },
+            "video": {
+              "description": "An embedded video",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "height",
+                "url",
+                "width"
+              ]
+            },
+            "site_name": {
+              "type": "string"
+            },
+            "icon_url": {
+              "type": "string"
+            },
+            "color": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Image"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            {
+              "description": "An embedded image",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "size": {
+                  "enum": [
+                    "Large",
+                    "Preview"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "height",
+                "size",
+                "url",
+                "width"
+              ]
+            }
+          ]
+        }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "MemberCompositeKey": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "user": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        }
+      },
+      "required": [
+        "server",
+        "user"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Member": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "object",
+          "properties": {
+            "server": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "user": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "server",
+            "user"
+          ]
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "_id"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Ban": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "object",
+          "properties": {
+            "server": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "user": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "server",
+            "user"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "PermissionTuple": {
+      "description": "Tuple consisting of server and channel permissions in that order",
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Role": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "permissions": {
+          "description": "Tuple consisting of server and channel permissions in that order",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "colour": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "permissions"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "channels",
+        "id",
+        "title"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "SystemMessageChannels": {
+      "type": "object",
+      "properties": {
+        "user_joined": {
+          "description": "Channel ID where user join events should be sent",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "user_left": {
+          "description": "Channel ID where user leave events should be sent",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "user_kicked": {
+          "description": "Channel ID where user kick events should be sent",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "user_banned": {
+          "description": "Channel ID where user ban events should be sent",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        }
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Server": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Server ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "nonce": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Id",
+                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "channels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "channels",
+              "id",
+              "title"
+            ]
+          }
+        },
+        "system_messages": {
+          "type": "object",
+          "properties": {
+            "user_joined": {
+              "description": "Channel ID where user join events should be sent",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "user_left": {
+              "description": "Channel ID where user leave events should be sent",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "user_kicked": {
+              "description": "Channel ID where user kick events should be sent",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "user_banned": {
+              "description": "Channel ID where user ban events should be sent",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          }
+        },
+        "roles": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "permissions": {
+                "description": "Tuple consisting of server and channel permissions in that order",
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "colour": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "permissions"
+            ]
+          }
+        },
+        "default_permissions": {
+          "description": "Tuple consisting of server and channel permissions in that order",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "icon": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "banner": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        }
+      },
+      "required": [
+        "_id",
+        "channels",
+        "default_permissions",
+        "name",
+        "owner"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "UserSettings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "ChannelCompositeKey": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "user": {
+          "description": "Id",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        }
+      },
+      "required": [
+        "channel",
+        "user"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "ChannelUnread": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "user": {
+              "description": "Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "channel",
+            "user"
+          ]
+        },
+        "last_id": {
+          "type": "string"
+        },
+        "mentions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "_id",
+        "last_id"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "RelationshipStatus": {
+      "description": "Your relationship with the user",
+      "enum": [
+        "Blocked",
+        "BlockedOther",
+        "Friend",
+        "Incoming",
+        "None",
+        "Outgoing",
+        "User"
+      ],
+      "type": "string",
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Relationship": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Other user's ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/RelationshipStatus"
+        }
+      },
+      "required": [
+        "_id",
+        "status"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Presence": {
+      "description": "User presence",
+      "enum": [
+        "Busy",
+        "Idle",
+        "Invisible",
+        "Online"
+      ],
+      "type": "string",
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "description": "Custom status text",
+          "minLength": 1,
+          "maxLength": 128,
+          "type": "string"
+        },
+        "presence": {
+          "$ref": "#/definitions/Presence"
+        }
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Badges": {
+      "enum": [
+        1,
+        16,
+        2,
+        256,
+        4,
+        8
+      ],
+      "type": "number",
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "User ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "username": {
+          "minLength": 2,
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_.]+$",
+          "type": "string"
+        },
+        "avatar": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "relations": {
+          "description": "Relationships with other known users\nOnly present if fetching self",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "description": "Other user's ID",
+                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                "type": "string"
+              },
+              "status": {
+                "$ref": "#/definitions/RelationshipStatus"
+              }
+            },
+            "required": [
+              "_id",
+              "status"
+            ]
+          }
+        },
+        "badges": {
+          "description": "Bitfield of user's badges",
+          "type": "number"
+        },
+        "status": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "description": "Custom status text",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "presence": {
+              "$ref": "#/definitions/Presence"
+            }
+          }
+        },
+        "relationship": {
+          "description": "Relationship to user",
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Other user's ID",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "status": {
+              "$ref": "#/definitions/RelationshipStatus"
+            }
+          },
+          "required": [
+            "_id",
+            "status"
+          ]
+        },
+        "online": {
+          "description": "Whether the user is online",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "_id",
+        "username"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Profile": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "minLength": 0,
+          "maxLength": 2000,
+          "type": "string"
+        },
+        "background": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        }
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Id": {
+      "description": "Id",
+      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+      "type": "string",
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Nonce": {
+      "description": "Nonce value, prefer to use ULIDs here for better feature support.",
+      "minLength": 1,
+      "maxLength": 36,
+      "type": "string",
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    }
+  }
+}

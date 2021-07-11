@@ -20,7 +20,7 @@ export type Relationship = {
      */
     _id: Id
 
-    status: Relationship
+    status: RelationshipStatus
 };
 
 /**
