@@ -1,18 +1,30 @@
 import type { Id } from "./_common";
 
+export interface Account {
+    /**
+     * User ID
+     */
+    id: Id;
+
+    /**
+     * User Email
+     */
+    email: string;
+}
+
 export interface Session {
     /**
      * Session ID
      */
-    id?: Id,
+    id?: Id;
 
     /**
      * User ID
      */
-    user_id: Id,
+    user_id: Id;
 
     /**
      * @maxLength 64
      */
-    session_token: string
+    session_token: string;
 }
