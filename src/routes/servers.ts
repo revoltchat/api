@@ -40,7 +40,7 @@ resource('/servers/:server', {
                      * @minLength 1
                      * @maxLength 32
                      **/
-                    name: string;
+                    name?: string;
 
                     /**
                      * Server description
@@ -208,7 +208,7 @@ resource('/servers/:server/members/:member', {
         "Edit a member object.",
         {
             ...serverParams,
-            ...await body("Requested changes to server object.", schema`
+            ...await body("Requested changes to member object.", schema`
                 import type { AutumnId, Id } from './_common';
 
                 interface ${'EditMember'} {
@@ -217,7 +217,7 @@ resource('/servers/:server/members/:member', {
                      * @minLength 1
                      * @maxLength 32
                      **/
-                    nickname: string;
+                    nickname?: string;
 
                     avatar?: AutumnId;
 
@@ -395,6 +395,35 @@ resource('/servers/:server/roles', {
 });
 
 resource('/servers/:server/roles/:role', {
+    patch: routeAuthenticated(
+        "Edit Role",
+        "Edit a role object.",
+        {
+            ...roleParams,
+            ...await body("Requested changes to role object.", schema`
+                import type { PermissionTuple, Colour } from './Servers';
+
+                interface ${'EditRole'} {
+                    /**
+                     * Role name
+                     * @minLength 1
+                     * @maxLength 32
+                     **/
+                    name?: string;
+
+                    permissions?: PermissionTuple;
+
+                    colour?: Colour;
+
+                    /**
+                     * Field to remove from role object
+                     */
+                    remove?: 'Colour';
+                }
+            `),
+            ...await success("Succesfully changed role object.")
+        }
+    ),
     delete: routeAuthenticated(
         "Delete Role",
         "Deletes a server role by ID.",

@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.1-alpha.7",
+    "version": "0.5.1-alpha.8",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -271,6 +271,28 @@
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Created account.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "description": "User ID",
+                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "user_id"
+                  ]
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -350,6 +372,39 @@
                   "email",
                   "password"
                 ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "Session ID",
+                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "description": "User ID",
+                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                      "type": "string"
+                    },
+                    "session_token": {
+                      "description": "Session Token",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "session_token",
+                    "user_id"
+                  ]
+                }
               }
             }
           }
@@ -917,13 +972,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          }
-        ]
+        }
       }
     },
     "/users/:user/mutual": {
@@ -8592,6 +8641,92 @@
       }
     },
     "/servers/:server/roles/:role": {
+      "patch": {
+        "summary": "Edit Role",
+        "description": "Edit a role object.",
+        "tags": [
+          "Server Permissions"
+        ],
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "path",
+            "required": true,
+            "description": "Channel ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          },
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "description": "Role ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Requested changes to role object.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Role name",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "type": "string"
+                  },
+                  "permissions": {
+                    "description": "Tuple consisting of server and channel permissions in that order",
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "colour": {
+                    "description": "Valid HTML colour\n\nWarning: This is untrusted input, do not simply insert this anywhere.\n\n**Example usage:**\n```js\ndocument.body.style.color = role.colour;\n```",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "type": "string"
+                  },
+                  "remove": {
+                    "description": "Field to remove from role object",
+                    "type": "string",
+                    "enum": [
+                      "Colour"
+                    ]
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfully changed role object."
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          }
+        ]
+      },
       "delete": {
         "summary": "Delete Role",
         "description": "Deletes a server role by ID.",
@@ -9524,6 +9659,9 @@
                                 "maxItems": 2
                               },
                               "colour": {
+                                "description": "Valid HTML colour\n\nWarning: This is untrusted input, do not simply insert this anywhere.\n\n**Example usage:**\n```js\ndocument.body.style.color = role.colour;\n```",
+                                "minLength": 1,
+                                "maxLength": 32,
                                 "type": "string"
                               }
                             },
@@ -14440,6 +14578,25 @@
         }
       }
     },
+    "Colour": {
+      "description": "Valid HTML colour\n\nWarning: This is untrusted input, do not simply insert this anywhere.\n\n**Example usage:**\n```js\ndocument.body.style.color = role.colour;\n```",
+      "minLength": 1,
+      "maxLength": 32,
+      "type": "string",
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
     "Role": {
       "type": "object",
       "properties": {
@@ -14461,6 +14618,9 @@
           "maxItems": 2
         },
         "colour": {
+          "description": "Valid HTML colour\n\nWarning: This is untrusted input, do not simply insert this anywhere.\n\n**Example usage:**\n```js\ndocument.body.style.color = role.colour;\n```",
+          "minLength": 1,
+          "maxLength": 32,
           "type": "string"
         }
       },
@@ -14669,6 +14829,9 @@
                 "maxItems": 2
               },
               "colour": {
+                "description": "Valid HTML colour\n\nWarning: This is untrusted input, do not simply insert this anywhere.\n\n**Example usage:**\n```js\ndocument.body.style.color = role.colour;\n```",
+                "minLength": 1,
+                "maxLength": 32,
                 "type": "string"
               }
             },

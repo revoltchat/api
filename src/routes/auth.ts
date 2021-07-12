@@ -37,7 +37,7 @@ resource('/auth/create', {
                     captcha?: string;
                 }
             `),
-            ...success("Created account.", schema`
+            ...await success("Created account.", schema`
                 import { Id } from './_common';
 
                 interface ${'CreateResponse'} {
@@ -106,7 +106,7 @@ resource('/auth/login', {
                     captcha?: string;
                 }
             `),
-            ...success("Logged in.", schema`
+            ...await success("Logged in.", schema`
                 import { Id } from './_common';
 
                 interface ${'LoginResponse'} {

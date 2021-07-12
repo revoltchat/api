@@ -30,12 +30,28 @@ export type PermissionTuple = [
     number
 ]
 
+
+/**
+ * Valid HTML colour
+ * 
+ * Warning: This is untrusted input, do not simply insert this anywhere.
+ * 
+ * **Example usage:**
+ * ```js
+ * document.body.style.color = role.colour;
+ * ```
+ * 
+ * @minLength 1
+ * @maxLength 32
+ */
+export type Colour = string;
+
 export type Role = {
     name: string
 
     permissions: PermissionTuple
 
-    colour?: string
+    colour?: Colour
 }
 
 export type Category = {

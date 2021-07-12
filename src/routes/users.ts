@@ -1,5 +1,5 @@
 import { body, parameter, ref, success } from "../openapi/generators.js";
-import { group, resource, routeAuthenticated, tag } from "../openapi/paths.js";
+import { group, resource, route, routeAuthenticated, tag } from "../openapi/paths.js";
 import { schema } from "../typescript.js";
 
 group("Users");
@@ -108,7 +108,7 @@ resource('/users/:user/profile', {
 });
 
 resource('/users/:user/default_avatar', {
-    get: routeAuthenticated(
+    get: route(
         "Fetch Default Avatar",
         "This returns a default avatar based on the given id.",
         {

@@ -40,7 +40,7 @@ resource('/channels/:channel', {
                      * @minLength 1
                      * @maxLength 32
                      **/
-                    name: string;
+                    name?: string;
 
                     /**
                      * Channel description
