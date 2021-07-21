@@ -370,9 +370,9 @@ resource('/channels/:channel/messages/search', {
                     after?: Id;
 
                     /**
-                     * Message sort direction
+                     * Message sort direction, by default it will be sorted by relevance.
                      */
-                    sort: 'Relevance' | 'Latest' | 'Oldest';
+                    sort?: 'Relevance' | 'Latest' | 'Oldest';
 
                     /**
                      * Whether to include user (and member, if server channel) objects.

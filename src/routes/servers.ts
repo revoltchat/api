@@ -411,8 +411,6 @@ resource('/servers/:server/roles/:role', {
                      **/
                     name?: string;
 
-                    permissions?: PermissionTuple;
-
                     colour?: Colour;
 
                     /**

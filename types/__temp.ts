@@ -1,5 +1,8 @@
 
-                interface SetSettingsData {
-                    [key: string]: string
+                interface FetchSettingsOptions {
+                    /**
+                     * Keys to fetch
+                     */
+                    keys: string[]
                 }
             
