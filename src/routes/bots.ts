@@ -30,6 +30,19 @@ resource('/bots/create', {
     )
 });
 
+resource('/bots/@me', {
+    get: routeAuthenticated(
+        "Fetch Owned Bots",
+        "Fetch all of your bots.",
+        {
+            ...await success("Array of bot objects.", schema`
+                import type { Bot } from './Bots';
+                type ${'MyBots'} = Bot[];
+            `)
+        }
+    )
+});
+
 const botParams = {
     parameters: [
         await parameter('bot', 'Bot ID', ref("Id"))
