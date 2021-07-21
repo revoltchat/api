@@ -57,6 +57,9 @@ export function routeAuthenticated(summary: string, description: string, obj: Om
             {
                 'User ID': [],
                 'Session Token': []
+            },
+            {
+                'Bot Token': []
             }
         ]
     }

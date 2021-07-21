@@ -39,6 +39,12 @@ async function generate(): Promise<Document> {
                     in: "header",
                     name: "x-session-token",
                     description: "Session is created by calling `/auth/login`.\n"
+                },
+                'Bot Token': {
+                    type: "apiKey",
+                    in: "header",
+                    name: "x-bot-token",
+                    description: "Bot tokens can be found by fetching `/bots/:id`.\n"
                 }
             }
         }
