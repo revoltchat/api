@@ -301,24 +301,15 @@ resource('/servers/:server/bans', {
             ...serverParams,
             ...await success("Bans", schema`
                 import type { Id } from './_common';
+                import type { User } from './Users';
                 import type { Ban } from './Servers';
-                import type { Username } from './Users';
                 import type { Attachment } from './Autumn';
 
                 type ${'ServerBans'} = {
                     /**
                      * Just enough user information to list bans.
                      */
-                    users: {
-                        /**
-                         * User Id
-                         */
-                        _id: Id;
-
-                        username: Username;
-
-                        avatar?: Attachment;
-                    }[]
+                    users: Pick<User, '_id' | 'username' | 'avatar'>[]
 
                     /**
                      * Ban List
