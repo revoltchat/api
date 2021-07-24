@@ -1,4 +1,4 @@
-src/types/__temp.ts
+__temp.ts
 node_modules
 *.old
 dist

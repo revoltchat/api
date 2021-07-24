@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.1-alpha.8",
+    "version": "0.5.1-alpha.10",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -1711,10 +1711,7 @@
                     ],
                     "type": "string"
                   }
-                },
-                "required": [
-                  "name"
-                ]
+                }
               }
             }
           }
@@ -4879,7 +4876,7 @@
                     "type": "string"
                   },
                   "sort": {
-                    "description": "Message sort direction",
+                    "description": "Message sort direction, by default it will be sorted by relevance.",
                     "enum": [
                       "Latest",
                       "Oldest",
@@ -4893,8 +4890,7 @@
                   }
                 },
                 "required": [
-                  "query",
-                  "sort"
+                  "query"
                 ]
               }
             }
@@ -7438,10 +7434,7 @@
                     ],
                     "type": "string"
                   }
-                },
-                "required": [
-                  "name"
-                ]
+                }
               }
             }
           }
@@ -7708,7 +7701,7 @@
           }
         ],
         "requestBody": {
-          "description": "Requested changes to server object.",
+          "description": "Requested changes to member object.",
           "content": {
             "application/json": {
               "schema": {
@@ -7741,10 +7734,7 @@
                     ],
                     "type": "string"
                   }
-                },
-                "required": [
-                  "nickname"
-                ]
+                }
               }
             }
           }
@@ -8375,36 +8365,213 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "_id": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "description": "Just enough user information to list bans.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/Pick<User,\"_id\"|\"username\"|\"avatar\">"
+                      }
+                    },
+                    "bans": {
+                      "description": "Ban List",
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "server": {
-                            "description": "Id",
-                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                            "type": "string"
+                          "_id": {
+                            "type": "object",
+                            "properties": {
+                              "server": {
+                                "description": "Id",
+                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                "type": "string"
+                              },
+                              "user": {
+                                "description": "Id",
+                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "server",
+                              "user"
+                            ]
                           },
-                          "user": {
-                            "description": "Id",
-                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "reason": {
                             "type": "string"
                           }
                         },
                         "required": [
-                          "server",
-                          "user"
+                          "_id"
                         ]
-                      },
-                      "reason": {
-                        "type": "string"
                       }
+                    }
+                  },
+                  "required": [
+                    "bans",
+                    "users"
+                  ],
+                  "definitions": {
+                    "Pick<User,\"_id\"|\"username\"|\"avatar\">": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "User ID",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "username": {
+                          "description": "Username",
+                          "minLength": 2,
+                          "maxLength": 32,
+                          "pattern": "^[a-zA-Z0-9_.]+$",
+                          "type": "string"
+                        },
+                        "avatar": {
+                          "description": "User avatar",
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "description": "Attachment ID",
+                              "minLength": 1,
+                              "maxLength": 128,
+                              "type": "string"
+                            },
+                            "tag": {
+                              "$ref": "#/definitions/AttachmentTag"
+                            },
+                            "size": {
+                              "description": "File size (in bytes)",
+                              "type": "number"
+                            },
+                            "filename": {
+                              "description": "File name",
+                              "type": "string"
+                            },
+                            "metadata": {
+                              "description": "Metadata",
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "File"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Text"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Audio"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Image"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Video"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
+                                }
+                              ]
+                            },
+                            "content_type": {
+                              "description": "Content type",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "_id",
+                            "content_type",
+                            "filename",
+                            "metadata",
+                            "size",
+                            "tag"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "username"
+                      ]
                     },
-                    "required": [
-                      "_id"
-                    ]
+                    "AttachmentTag": {
+                      "description": "Attachment tag",
+                      "enum": [
+                        "attachments",
+                        "avatars",
+                        "backgrounds",
+                        "banners",
+                        "icons"
+                      ],
+                      "type": "string"
+                    }
                   }
                 }
               }
@@ -8680,20 +8847,6 @@
                     "maxLength": 32,
                     "type": "string"
                   },
-                  "permissions": {
-                    "description": "Tuple consisting of server and channel permissions in that order",
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "number"
-                      },
-                      {
-                        "type": "number"
-                      }
-                    ],
-                    "minItems": 2,
-                    "maxItems": 2
-                  },
                   "colour": {
                     "description": "Valid HTML colour\n\nWarning: This is untrusted input, do not simply insert this anywhere.\n\n**Example usage:**\n```js\ndocument.body.style.color = role.colour;\n```",
                     "minLength": 1,
@@ -8707,10 +8860,7 @@
                       "Colour"
                     ]
                   }
-                },
-                "required": [
-                  "name"
-                ]
+                }
               }
             }
           }
@@ -15963,48 +16113,6 @@
             "tag"
           ]
         }
-      },
-      "definitions": {
-        "AttachmentTag": {
-          "description": "Attachment tag",
-          "enum": [
-            "attachments",
-            "avatars",
-            "backgrounds",
-            "banners",
-            "icons"
-          ],
-          "type": "string"
-        },
-        "RelationshipStatus": {
-          "description": "Your relationship with the user",
-          "enum": [
-            "Blocked",
-            "BlockedOther",
-            "Friend",
-            "Incoming",
-            "None",
-            "Outgoing",
-            "User"
-          ],
-          "type": "string"
-        },
-        "Presence": {
-          "description": "User presence",
-          "enum": [
-            "Busy",
-            "Idle",
-            "Invisible",
-            "Online"
-          ],
-          "type": "string"
-        }
-      }
-    },
-    "SetSettingsData": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
       },
       "definitions": {
         "AttachmentTag": {
