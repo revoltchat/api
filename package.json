@@ -1,10 +1,12 @@
 {
-  "name": "api",
+  "name": "revolt-api",
   "version": "0.5.1-alpha.10",
+  "description": "Revolt API typings",
   "main": "dist/index.js",
   "type": "module",
+  "homepage": "https://developers.revolt.chat",
   "repository": "https://gitlab.insrt.uk/revolt/api.git",
-  "author": "Paul <paulmakles@gmail.com>",
+  "author": "Paul Makles <insrt.uk>",
   "license": "MIT",
   "scripts": {
     "build:generator": "tsc",
