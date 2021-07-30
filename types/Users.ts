@@ -95,7 +95,7 @@ export interface User {
     /**
      * Relationship to user
      */
-    relationship?: Relationship
+    relationship?: RelationshipStatus
 
     /**
      * Whether the user is online
