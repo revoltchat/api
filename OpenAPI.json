@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.1-alpha.10",
+    "version": "0.5.1-alpha.10-patch.0",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -3834,33 +3834,8 @@
                           }
                         },
                         "relationship": {
-                          "description": "Relationship to user",
-                          "allOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "status": {
-                                  "$ref": "#/definitions/RelationshipStatus"
-                                }
-                              },
-                              "required": [
-                                "status"
-                              ]
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "_id": {
-                                  "description": "Other user's ID",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "_id"
-                              ]
-                            }
-                          ]
+                          "$ref": "#/definitions/RelationshipStatus",
+                          "description": "Relationship to user"
                         },
                         "online": {
                           "description": "Whether the user is online",
@@ -6662,33 +6637,8 @@
                           }
                         },
                         "relationship": {
-                          "description": "Relationship to user",
-                          "allOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "status": {
-                                  "$ref": "#/definitions/RelationshipStatus"
-                                }
-                              },
-                              "required": [
-                                "status"
-                              ]
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "_id": {
-                                  "description": "Other user's ID",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "_id"
-                              ]
-                            }
-                          ]
+                          "$ref": "#/definitions/RelationshipStatus",
+                          "description": "Relationship to user"
                         },
                         "online": {
                           "description": "Whether the user is online",
@@ -7077,33 +7027,8 @@
                           }
                         },
                         "relationship": {
-                          "description": "Relationship to user",
-                          "allOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "status": {
-                                  "$ref": "#/definitions/RelationshipStatus"
-                                }
-                              },
-                              "required": [
-                                "status"
-                              ]
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "_id": {
-                                  "description": "Other user's ID",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "_id"
-                              ]
-                            }
-                          ]
+                          "$ref": "#/definitions/RelationshipStatus",
+                          "description": "Relationship to user"
                         },
                         "online": {
                           "description": "Whether the user is online",
@@ -7629,6 +7554,37 @@
             }
           }
         ],
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/servers/:server/ack": {
+      "put": {
+        "summary": "Mark Server As Read",
+        "description": "Mark all channels in a server as read.",
+        "tags": [
+          "Server Information"
+        ],
+        "parameters": [
+          {
+            "name": "server",
+            "in": "path",
+            "required": true,
+            "description": "Server ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Marked as read."
+          }
+        },
         "security": [
           {
             "User ID": [],
@@ -8176,33 +8132,8 @@
                           }
                         },
                         "relationship": {
-                          "description": "Relationship to user",
-                          "allOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "status": {
-                                  "$ref": "#/definitions/RelationshipStatus"
-                                }
-                              },
-                              "required": [
-                                "status"
-                              ]
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "_id": {
-                                  "description": "Other user's ID",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "_id"
-                              ]
-                            }
-                          ]
+                          "$ref": "#/definitions/RelationshipStatus",
+                          "description": "Relationship to user"
                         },
                         "online": {
                           "description": "Whether the user is online",
@@ -13927,11 +13858,15 @@
             "size",
             "tag"
           ]
+        },
+        "member_count": {
+          "type": "number"
         }
       },
       "required": [
         "channel_id",
         "channel_name",
+        "member_count",
         "server_id",
         "server_name",
         "type",
@@ -15900,33 +15835,8 @@
           }
         },
         "relationship": {
-          "description": "Relationship to user",
-          "allOf": [
-            {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "$ref": "#/definitions/RelationshipStatus"
-                }
-              },
-              "required": [
-                "status"
-              ]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "description": "Other user's ID",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "_id"
-              ]
-            }
-          ]
+          "$ref": "#/definitions/RelationshipStatus",
+          "description": "Relationship to user"
         },
         "online": {
           "description": "Whether the user is online",
@@ -16109,48 +16019,6 @@
             "tag"
           ]
         }
-      },
-      "definitions": {
-        "AttachmentTag": {
-          "description": "Attachment tag",
-          "enum": [
-            "attachments",
-            "avatars",
-            "backgrounds",
-            "banners",
-            "icons"
-          ],
-          "type": "string"
-        },
-        "RelationshipStatus": {
-          "description": "Your relationship with the user",
-          "enum": [
-            "Blocked",
-            "BlockedOther",
-            "Friend",
-            "Incoming",
-            "None",
-            "Outgoing",
-            "User"
-          ],
-          "type": "string"
-        },
-        "Presence": {
-          "description": "User presence",
-          "enum": [
-            "Busy",
-            "Idle",
-            "Invisible",
-            "Online"
-          ],
-          "type": "string"
-        }
-      }
-    },
-    "SetSettingsData": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
       },
       "definitions": {
         "AttachmentTag": {
