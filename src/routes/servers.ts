@@ -179,6 +179,17 @@ resource('/servers/:server/invites', {
         }
     )
 });
+
+resource('/servers/:server/ack', {
+    put: routeAuthenticated(
+        "Mark Server As Read",
+        "Mark all channels in a server as read.",
+        {
+            ...serverParams,
+            ...await success("Marked as read.")
+        }
+    ),
+});
 //#endregion
 
 //#region Server Members
