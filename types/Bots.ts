@@ -48,4 +48,9 @@ export interface PublicBot {
      * Bot avatar
      */
     avatar?: Attachment
+
+    /**
+     * Bot description, taken from profile text
+     */
+    description?: string
 }
