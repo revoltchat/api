@@ -66,6 +66,16 @@ export enum Badges {
     EarlyAdopter = 256,
 }
 
+/**
+ * Bot information
+ */
+export interface BotInformation {
+    /**
+     * The User ID of the owner of this bot
+     */
+    owner: Id
+}
+
 export interface User {
     /**
      * User ID
@@ -101,6 +111,20 @@ export interface User {
      * Whether the user is online
      */
     online?: boolean
+
+    /**
+     * User flags
+     * 
+     * `0x1`: Account is suspended
+     * `0x2`: Account was deleted
+     * `0x4`: Account is banned
+     */
+    flags?: number
+
+    /**
+     * Bot information, present if user is a bot.
+     */
+    bot?: BotInformation
 }
 
 export interface Profile {
