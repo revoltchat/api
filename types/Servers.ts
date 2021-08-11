@@ -30,7 +30,6 @@ export type PermissionTuple = [
     number
 ]
 
-
 /**
  * Valid HTML colour
  * 
@@ -47,12 +46,31 @@ export type PermissionTuple = [
 export type Colour = string;
 
 export type Role = {
+    /**
+     * Role name
+     * @minLength 1
+     * @maxLength 32
+     **/
     name: string
 
     permissions: PermissionTuple
 
     colour?: Colour
+
+    /**
+     * Whether to display this role separately on the members list
+     */
+    hoist?: boolean
+
+    /**
+     * Role ranking
+     * 
+     * A role with a smaller number will have permissions over roles with larger numbers.
+     */
+    rank?: number
 }
+
+export type RoleInformation = Pick<Role, 'name' | 'colour' | 'hoist' | 'rank'>
 
 export type Category = {
     id: Id

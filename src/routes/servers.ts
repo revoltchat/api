@@ -430,18 +430,9 @@ resource('/servers/:server/roles/:role', {
         {
             ...roleParams,
             ...await body("Requested changes to role object.", schema`
-                import type { PermissionTuple, Colour } from './Servers';
+                import type { RoleInformation, Colour } from './Servers';
 
-                interface ${'EditRole'} {
-                    /**
-                     * Role name
-                     * @minLength 1
-                     * @maxLength 32
-                     **/
-                    name?: string;
-
-                    colour?: Colour;
-
+                type ${'EditRole'} = RoleInformation & {
                     /**
                      * Field to remove from role object
                      */
