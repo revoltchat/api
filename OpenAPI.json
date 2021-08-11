@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.1-alpha.24",
+    "version": "0.5.2-alpha.0",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -78,6 +78,10 @@
       "description": "Manage permissions for servers"
     },
     {
+      "name": "Bots",
+      "description": "Create and edit bots."
+    },
+    {
       "name": "Invites",
       "description": "View, join and delete invites"
     },
@@ -129,6 +133,12 @@
         "Server Information",
         "Server Members",
         "Server Permissions"
+      ]
+    },
+    {
+      "name": "Bots",
+      "tags": [
+        "Bots"
       ]
     },
     {
@@ -185,6 +195,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -227,6 +240,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -511,6 +527,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -531,6 +550,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -579,6 +601,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -625,6 +650,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -656,6 +684,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -701,6 +732,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -721,6 +755,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -759,6 +796,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -851,6 +891,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -900,6 +943,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -938,6 +984,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1021,6 +1070,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1326,6 +1378,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1364,6 +1419,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1434,6 +1492,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1472,6 +1533,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1510,6 +1574,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -1546,6 +1613,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1584,6 +1654,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -1620,6 +1693,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1658,6 +1734,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -1725,6 +1804,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -1754,6 +1836,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1801,6 +1886,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1859,6 +1947,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -1908,6 +1999,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -2000,6 +2094,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -3840,6 +3937,14 @@
                         "online": {
                           "description": "Whether the user is online",
                           "type": "boolean"
+                        },
+                        "flags": {
+                          "description": "User flags\n\n`0x1`: Account is suspended\n`0x2`: Account was deleted\n`0x4`: Account is banned",
+                          "type": "number"
+                        },
+                        "bot": {
+                          "$ref": "#/definitions/BotInformation",
+                          "description": "Bot information, present if user is a bot."
                         }
                       },
                       "required": [
@@ -3869,6 +3974,20 @@
                         "Online"
                       ],
                       "type": "string"
+                    },
+                    "BotInformation": {
+                      "description": "Bot information",
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "description": "The User ID of the owner of this bot",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "owner"
+                      ]
                     }
                   }
                 }
@@ -3880,6 +3999,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -3927,6 +4049,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -3986,6 +4111,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -4024,6 +4152,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -4799,6 +4930,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -6643,6 +6777,14 @@
                         "online": {
                           "description": "Whether the user is online",
                           "type": "boolean"
+                        },
+                        "flags": {
+                          "description": "User flags\n\n`0x1`: Account is suspended\n`0x2`: Account was deleted\n`0x4`: Account is banned",
+                          "type": "number"
+                        },
+                        "bot": {
+                          "$ref": "#/definitions/BotInformation",
+                          "description": "Bot information, present if user is a bot."
                         }
                       },
                       "required": [
@@ -6672,6 +6814,20 @@
                         "Online"
                       ],
                       "type": "string"
+                    },
+                    "BotInformation": {
+                      "description": "Bot information",
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "description": "The User ID of the owner of this bot",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "owner"
+                      ]
                     }
                   }
                 }
@@ -6683,6 +6839,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -6723,6 +6882,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -6792,6 +6954,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7033,6 +7198,14 @@
                         "online": {
                           "description": "Whether the user is online",
                           "type": "boolean"
+                        },
+                        "flags": {
+                          "description": "User flags\n\n`0x1`: Account is suspended\n`0x2`: Account was deleted\n`0x4`: Account is banned",
+                          "type": "number"
+                        },
+                        "bot": {
+                          "$ref": "#/definitions/BotInformation",
+                          "description": "Bot information, present if user is a bot."
                         }
                       },
                       "required": [
@@ -7073,6 +7246,20 @@
                         "Online"
                       ],
                       "type": "string"
+                    },
+                    "BotInformation": {
+                      "description": "Bot information",
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "description": "The User ID of the owner of this bot",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "owner"
+                      ]
                     }
                   }
                 }
@@ -7084,6 +7271,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -7122,6 +7312,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -7160,6 +7353,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7207,6 +7403,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7245,6 +7444,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -7373,6 +7575,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -7402,6 +7607,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7463,6 +7671,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7532,6 +7743,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7558,6 +7772,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7589,6 +7806,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -7636,6 +7856,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -7704,6 +7927,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -7722,6 +7948,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -8138,6 +8367,14 @@
                         "online": {
                           "description": "Whether the user is online",
                           "type": "boolean"
+                        },
+                        "flags": {
+                          "description": "User flags\n\n`0x1`: Account is suspended\n`0x2`: Account was deleted\n`0x4`: Account is banned",
+                          "type": "number"
+                        },
+                        "bot": {
+                          "$ref": "#/definitions/BotInformation",
+                          "description": "Bot information, present if user is a bot."
                         }
                       },
                       "required": [
@@ -8167,6 +8404,20 @@
                         "Online"
                       ],
                       "type": "string"
+                    },
+                    "BotInformation": {
+                      "description": "Bot information",
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "description": "The User ID of the owner of this bot",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "owner"
+                      ]
                     }
                   }
                 }
@@ -8230,6 +8481,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -8268,6 +8522,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -8509,6 +8766,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -8582,6 +8842,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -8646,6 +8909,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -8730,6 +8996,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -8826,6 +9095,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -8864,6 +9136,368 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
+      }
+    },
+    "/bots/create": {
+      "post": {
+        "summary": "Create Bot",
+        "description": "Create a new Revolt bot.",
+        "tags": [
+          "Bots"
+        ],
+        "requestBody": {
+          "description": "Bot Details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Bot name",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfully created a new bot.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Bot"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
+      }
+    },
+    "/bots/@me": {
+      "get": {
+        "summary": "Fetch Owned Bots",
+        "description": "Fetch all of your bots.",
+        "tags": [
+          "Bots"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of bot objects.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Bot"
+                  },
+                  "definitions": {
+                    "Bot": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "Bot ID\n\nThis matches the bot's User ID.",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "owner": {
+                          "description": "Bot owner's User ID",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "token": {
+                          "description": "Bot authentication token",
+                          "type": "string"
+                        },
+                        "public": {
+                          "description": "Whether the bot can be added by anyone",
+                          "type": "boolean"
+                        },
+                        "interactionsURL": {
+                          "description": "Interactions endpoint URL\n\nRequired for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "interactionsURL",
+                        "owner",
+                        "public",
+                        "token"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
+      }
+    },
+    "/bots/:bot": {
+      "get": {
+        "summary": "Fetch Bot",
+        "description": "Fetch details of an owned bot.",
+        "tags": [
+          "Bots"
+        ],
+        "parameters": [
+          {
+            "name": "bot",
+            "in": "path",
+            "required": true,
+            "description": "Bot ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Bot"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Edit Bot",
+        "description": "Edit bot details.",
+        "tags": [
+          "Bots"
+        ],
+        "requestBody": {
+          "description": "Requested changes to bot object.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Channel name",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "type": "string"
+                  },
+                  "public": {
+                    "description": "Whether the bot can be added by anyone",
+                    "type": "boolean"
+                  },
+                  "interactionsURL": {
+                    "description": "Interactions URL",
+                    "minLength": 1,
+                    "maxLength": 2048,
+                    "type": "string"
+                  },
+                  "remove": {
+                    "description": "Field to remove from bot object",
+                    "type": "string",
+                    "enum": [
+                      "InteractionsURL"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfully changed bot object."
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Bot",
+        "description": "Delete a bot.",
+        "tags": [
+          "Bots"
+        ],
+        "parameters": [
+          {
+            "name": "bot",
+            "in": "path",
+            "required": true,
+            "description": "Bot ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted bot."
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
+      }
+    },
+    "/bots/:bot/invite": {
+      "get": {
+        "summary": "Fetch Public Bot",
+        "description": "Fetch details of a public (or owned) bot.",
+        "tags": [
+          "Bots"
+        ],
+        "parameters": [
+          {
+            "name": "bot",
+            "in": "path",
+            "required": true,
+            "description": "Bot ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public Bot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/PublicBot"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Invite Public Bot",
+        "description": "Invite a bot to a server or group.",
+        "tags": [
+          "Bots"
+        ],
+        "parameters": [
+          {
+            "name": "bot",
+            "in": "path",
+            "required": true,
+            "description": "Bot ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information about where to invite the bot.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "server": {
+                        "description": "Server ID to add the bot to.",
+                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "server"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "group": {
+                        "description": "Group channel ID to add the bot to.",
+                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "group"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added bot to server / group."
+          }
+        },
+        "security": [
+          {
+            "User ID": [],
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -8902,6 +9536,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -10087,6 +10724,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       },
@@ -10116,6 +10756,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -10178,6 +10821,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -10221,6 +10867,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -10248,6 +10897,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -10278,6 +10930,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -10298,6 +10953,9 @@
           {
             "User ID": [],
             "Session Token": []
+          },
+          {
+            "Bot Token": []
           }
         ]
       }
@@ -10611,6 +11269,217 @@
           "type": "number"
         }
       },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Bot": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Bot ID\n\nThis matches the bot's User ID.",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "owner": {
+          "description": "Bot owner's User ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "token": {
+          "description": "Bot authentication token",
+          "type": "string"
+        },
+        "public": {
+          "description": "Whether the bot can be added by anyone",
+          "type": "boolean"
+        },
+        "interactionsURL": {
+          "description": "Interactions endpoint URL\n\nRequired for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "interactionsURL",
+        "owner",
+        "public",
+        "token"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "PublicBot": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Bot ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "username": {
+          "description": "Bot username",
+          "minLength": 2,
+          "maxLength": 32,
+          "pattern": "^[a-zA-Z0-9_.]+$",
+          "type": "string"
+        },
+        "avatar": {
+          "description": "Bot avatar",
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "description": {
+          "description": "Bot description, taken from profile text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "_id",
+        "username"
+      ],
       "definitions": {
         "AttachmentTag": {
           "description": "Attachment tag",
@@ -15741,6 +16610,56 @@
         }
       }
     },
+    "BotInformation": {
+      "description": "Bot information",
+      "type": "object",
+      "properties": {
+        "owner": {
+          "description": "The User ID of the owner of this bot",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        }
+      },
+      "required": [
+        "owner"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -15940,6 +16859,14 @@
         "online": {
           "description": "Whether the user is online",
           "type": "boolean"
+        },
+        "flags": {
+          "description": "User flags\n\n`0x1`: Account is suspended\n`0x2`: Account was deleted\n`0x4`: Account is banned",
+          "type": "number"
+        },
+        "bot": {
+          "$ref": "#/definitions/BotInformation",
+          "description": "Bot information, present if user is a bot."
         }
       },
       "required": [
@@ -15980,6 +16907,20 @@
             "Online"
           ],
           "type": "string"
+        },
+        "BotInformation": {
+          "description": "Bot information",
+          "type": "object",
+          "properties": {
+            "owner": {
+              "description": "The User ID of the owner of this bot",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "owner"
+          ]
         }
       }
     },
@@ -16153,6 +17094,76 @@
             "Online"
           ],
           "type": "string"
+        },
+        "BotInformation": {
+          "description": "Bot information",
+          "type": "object",
+          "properties": {
+            "owner": {
+              "description": "The User ID of the owner of this bot",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "owner"
+          ]
+        }
+      }
+    },
+    "SetSettingsData": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        },
+        "RelationshipStatus": {
+          "description": "Your relationship with the user",
+          "enum": [
+            "Blocked",
+            "BlockedOther",
+            "Friend",
+            "Incoming",
+            "None",
+            "Outgoing",
+            "User"
+          ],
+          "type": "string"
+        },
+        "Presence": {
+          "description": "User presence",
+          "enum": [
+            "Busy",
+            "Idle",
+            "Invisible",
+            "Online"
+          ],
+          "type": "string"
+        },
+        "BotInformation": {
+          "description": "Bot information",
+          "type": "object",
+          "properties": {
+            "owner": {
+              "description": "The User ID of the owner of this bot",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "owner"
+          ]
         }
       }
     },
@@ -16194,6 +17205,20 @@
             "Online"
           ],
           "type": "string"
+        },
+        "BotInformation": {
+          "description": "Bot information",
+          "type": "object",
+          "properties": {
+            "owner": {
+              "description": "The User ID of the owner of this bot",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "owner"
+          ]
         }
       }
     },
@@ -16236,6 +17261,20 @@
             "Online"
           ],
           "type": "string"
+        },
+        "BotInformation": {
+          "description": "Bot information",
+          "type": "object",
+          "properties": {
+            "owner": {
+              "description": "The User ID of the owner of this bot",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "owner"
+          ]
         }
       }
     },
@@ -16278,6 +17317,20 @@
             "Online"
           ],
           "type": "string"
+        },
+        "BotInformation": {
+          "description": "Bot information",
+          "type": "object",
+          "properties": {
+            "owner": {
+              "description": "The User ID of the owner of this bot",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            }
+          },
+          "required": [
+            "owner"
+          ]
         }
       }
     }
@@ -16301,6 +17354,12 @@
         "in": "header",
         "name": "x-session-token",
         "description": "Session is created by calling `/auth/login`.\n"
+      },
+      "Bot Token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-bot-token",
+        "description": "Bot tokens can be found by fetching `/bots/:id`.\n"
       }
     }
   }
