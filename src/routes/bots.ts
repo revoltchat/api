@@ -13,13 +13,13 @@ resource('/bots/create', {
         "Create a new Revolt bot.",
         {
             ...await body("Bot Details", schema`
+                import type { Username } from './Users';
+
                 interface ${'BotDetails'} {
                     /**
-                     * Bot name
-                     * @minLength 1
-                     * @maxLength 32
+                     * Bot username
                      **/
-                    name: string;
+                    name: Username;
                 }
             `),
             ...await success(
@@ -63,13 +63,13 @@ resource('/bots/:bot', {
         "Edit bot details.",
         {
             ...await body("Requested changes to bot object.", schema`
+                import type { Username } from './Users';
+
                 interface ${'EditBot'} {
                     /**
-                     * Channel name
-                     * @minLength 1
-                     * @maxLength 32
-                     **/
-                    name?: string;
+                     * Bot username
+                     */
+                    name?: Username;
 
                     /**
                      * Whether the bot can be added by anyone
