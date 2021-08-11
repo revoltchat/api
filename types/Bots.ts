@@ -30,7 +30,7 @@ export interface Bot {
      * 
      * Required for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.
      */
-    interactionsURL: string
+    interactions_url?: string
 }
 
 export interface PublicBot {

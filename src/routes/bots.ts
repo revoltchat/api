@@ -81,7 +81,7 @@ resource('/bots/:bot', {
                      * @minLength 1
                      * @maxLength 2048
                      **/
-                    interactionsURL?: string;
+                    interactions_url?: string;
 
                     /**
                      * Field to remove from bot object
