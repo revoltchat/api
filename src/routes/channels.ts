@@ -198,7 +198,7 @@ resource('/channels/:channel/messages', {
                          * Whether this reply should mention the message's author.
                          */
                         mention: boolean;
-                    }
+                    }[]
                 }
             `),
             ...await success(
