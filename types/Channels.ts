@@ -100,6 +100,11 @@ export type GroupChannel = {
      * Permissions given to group members
      */
     permissions?: number
+
+    /**
+     * Whether this channel is marked as not safe for work
+     */
+    nsfw?: boolean
 }
 
 export type ServerChannel = {
@@ -136,6 +141,11 @@ export type ServerChannel = {
     role_permissions?: {
         [key: string]: number
     }
+
+    /**
+     * Whether this channel is marked as not safe for work
+     */
+    nsfw?: boolean
 }
 
 export type TextChannel = ServerChannel & {

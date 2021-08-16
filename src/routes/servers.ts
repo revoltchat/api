@@ -64,6 +64,11 @@ resource('/servers/:server', {
                     system_messages?: SystemMessageChannels;
 
                     /**
+                     * Whether this server is not safe for work
+                     */
+                    nsfw?: boolean;
+
+                    /**
                      * Field to remove from channel object
                      */
                     remove?: 'Icon' | 'Banner' | 'Description';
@@ -92,18 +97,23 @@ resource('/servers/create', {
 
                 interface ${'ServerData'} {
                     /**
-                     * Group name
+                     * Server name
                      * @minLength 1
                      * @maxLength 32
                      */
                     name: string;
 
                     /**
-                     * Group description
+                     * Server description
                      * @minLength 0
                      * @maxLength 1024
                      */
                     description?: string;
+
+                    /**
+                     * Whether this server is not safe for work
+                     */
+                    nsfw?: boolean;
 
                     nonce: Nonce;
                 }
@@ -141,6 +151,11 @@ resource('/servers/:server/channels', {
                      * @maxLength 1024
                      */
                     description?: string;
+
+                    /**
+                     * Whether this channel is not safe for work
+                     */
+                    nsfw?: boolean;
 
                     nonce: Nonce;
                 }

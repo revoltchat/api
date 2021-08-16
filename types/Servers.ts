@@ -150,4 +150,9 @@ export type Server = {
      * Server banner
      */
     banner?: Attachment
+
+    /**
+     * Whether this server is marked as not safe for work
+     */
+    nsfw?: boolean
 }

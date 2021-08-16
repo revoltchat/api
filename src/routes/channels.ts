@@ -52,6 +52,11 @@ resource('/channels/:channel', {
                     icon?: AutumnId;
 
                     /**
+                     * Whether this channel is not safe for work
+                     */
+                    nsfw?: boolean;
+
+                    /**
                      * Field to remove from channel object
                      */
                     remove?: 'Icon' | 'Description';
@@ -433,6 +438,11 @@ resource('/channels/create', {
                      * @maxItems 49
                      */
                     users?: string[];
+
+                    /**
+                     * Whether this group is not safe for work
+                     */
+                    nsfw?: boolean;
                 }
             `),
             ...await success('Group', ref("GroupChannel"))
