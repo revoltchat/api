@@ -1,4 +1,4 @@
-import { body, parameter, ref, success } from "../openapi/generators.js";
+import { body, noContent, parameter, ref, success } from "../openapi/generators.js";
 import { group, resource, route, routeAuthenticated, tag } from "../openapi/paths.js";
 import { schema } from "../typescript.js";
 
@@ -44,7 +44,7 @@ resource('/invites/:invite', {
         "Delete an invite by its ID.",
         {
             ...inviteParams,
-            ...await success("Deleted invite.")
+            ...await noContent("Deleted invite.")
         }
     ),
 });
@@ -93,7 +93,7 @@ resource('/sync/settings/set', {
                     [key: string]: string
                 }
             `),
-            ...await success("Successfully synced data.")
+            ...await noContent("Successfully synced data.")
         }
     )
 });
@@ -116,7 +116,7 @@ resource('/push/subscribe', {
         "Create a new Web Push subscription.\n\nIf an existing subscription exists on this session, it will be removed.",
         {
             ...await body("Web Push Subscription", ref("WebPushSubscription")),
-            ...await success("Subscribed successfully.")
+            ...await noContent("Subscribed successfully.")
         }
     )
 });
@@ -125,7 +125,7 @@ resource('/push/unsubscribe', {
     post: routeAuthenticated(
         "Unsubscribe",
         "Remove the Web Push subscription associated with the current session.",
-        await success("Unsubscribed successfully.")
+        await noContent("Unsubscribed successfully.")
     )
 });
 //#endregion

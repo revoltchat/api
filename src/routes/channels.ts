@@ -1,4 +1,4 @@
-import { body, parameter, ref, success } from "../openapi/generators.js";
+import { body, noContent, parameter, ref, success } from "../openapi/generators.js";
 import { group, resource, routeAuthenticated, tag } from "../openapi/paths.js";
 import { schema } from "../typescript.js";
 
@@ -57,7 +57,7 @@ resource('/channels/:channel', {
                     remove?: 'Icon' | 'Description';
                 }
             `),
-            ...await success("Succesfully changed channel object.")
+            ...await noContent("Succesfully changed channel object.")
         }
     ),
     delete: routeAuthenticated(
@@ -65,7 +65,7 @@ resource('/channels/:channel', {
         "Deletes a server channel, leaves a group or closes a DM.",
         {
             ...channelParams,
-            ...await success("Deleted Channel")
+            ...await noContent("Deleted Channel")
         }
     )
 });
@@ -116,7 +116,7 @@ resource('/channels/:channel/permissions/:role', {
         {
             ...roleParams,
             ...channelPermissions,
-            ...await success("Successfully updated permissions.")
+            ...await noContent("Successfully updated permissions.")
         }
     )
 });
@@ -128,7 +128,7 @@ resource('/channels/:channel/permissions/default', {
         {
             ...channelParams,
             ...channelPermissions,
-            ...await success("Successfully updated permissions.")
+            ...await noContent("Successfully updated permissions.")
         }
     )
 });
@@ -281,7 +281,7 @@ resource('/channels/:channel/messages/:message', {
                     content: string;
                 }
             `),
-            ...await success("Message was changed.")
+            ...await noContent("Message was changed.")
         }
     ),
     delete: routeAuthenticated(
@@ -289,7 +289,7 @@ resource('/channels/:channel/messages/:message', {
         "Delete a message you've sent or one you have permission to delete.",
         {
             ...messageParams,
-            ...await success("Message was deleted.")
+            ...await noContent("Message was deleted.")
         }
     )
 });
@@ -391,7 +391,7 @@ resource('/channels/:channel/ack/:message', {
         "Lets the server and all other clients know that we've seen this message id in this channel.",
         {
             ...messageParams,
-            ...await success("Acknowledged message.")
+            ...await noContent("Acknowledged message.")
         }
     )
 });
@@ -457,7 +457,7 @@ resource('/channels/:channel/members', {
         "Adds another user to the group.",
         {
             ...messageParams,
-            ...await success("User was added to the group.")
+            ...await noContent("User was added to the group.")
         }
     ),
     delete: routeAuthenticated(
@@ -465,7 +465,7 @@ resource('/channels/:channel/members', {
         "Removes a user from the group.",
         {
             ...messageParams,
-            ...await success("User was removed from the group.")
+            ...await noContent("User was removed from the group.")
         }
     )
 });

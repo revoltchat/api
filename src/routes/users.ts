@@ -1,4 +1,4 @@
-import { body, parameter, ref, success } from "../openapi/generators.js";
+import { body, noContent, parameter, ref, success } from "../openapi/generators.js";
 import { group, resource, route, routeAuthenticated, tag } from "../openapi/paths.js";
 import { schema } from "../typescript.js";
 
@@ -60,7 +60,7 @@ resource('/users/@me', {
                     remove?: 'ProfileContent' | 'ProfileBackground' | 'StatusText' | 'Avatar';
                 }
             `),
-            ...await success("Succesfully changed user object.")
+            ...await noContent("Succesfully changed user object.")
         }
     )
 });
@@ -88,7 +88,7 @@ resource('/users/@me/username', {
                     password: string;
                 }
             `),
-            ...await success("Succesfully changed user object.")
+            ...await noContent("Succesfully changed user object.")
         }
     )
 });

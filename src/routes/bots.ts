@@ -1,4 +1,4 @@
-import { body, parameter, ref, success } from "../openapi/generators.js";
+import { body, noContent, parameter, ref, success } from "../openapi/generators.js";
 import { group, resource, routeAuthenticated, tag } from "../openapi/paths.js";
 import { schema } from "../typescript.js";
 
@@ -37,7 +37,11 @@ resource('/bots/@me', {
         {
             ...await success("Array of bot objects.", schema`
                 import type { Bot } from './Bots';
-                type ${'MyBots'} = Bot[];
+                import type { User } from './Users';
+                type ${'MyBots'} = {
+                    bots: Bot[],
+                    users: User[]
+                };
             `)
         }
     )
@@ -55,7 +59,14 @@ resource('/bots/:bot', {
         "Fetch details of an owned bot.",
         {
             ...botParams,
-            ...await success("Bot", ref("Bot"))
+            ...await success("Bot", schema`
+                import type { Bot } from './Bots';
+                import type { User } from './Users';
+                type ${'MyBot'} = {
+                    bot: Bot,
+                    user: User
+                };
+            `)
         }
     ),
     patch: routeAuthenticated(
@@ -89,7 +100,7 @@ resource('/bots/:bot', {
                     remove?: 'InteractionsURL';
                 }
             `),
-            ...await success("Succesfully changed bot object.")
+            ...await noContent("Succesfully changed bot object.")
         }
     ),
     delete: routeAuthenticated(
@@ -97,7 +108,7 @@ resource('/bots/:bot', {
         "Delete a bot.",
         {
             ...botParams,
-            ...await success("Deleted bot.")
+            ...await noContent("Deleted bot.")
         }
     )
 });
@@ -134,7 +145,7 @@ resource('/bots/:bot/invite', {
                     }
                 )
             `),
-            ...await success("Added bot to server / group.")
+            ...await noContent("Added bot to server / group.")
         }
     )
 });

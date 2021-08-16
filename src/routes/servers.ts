@@ -1,4 +1,4 @@
-import { body, parameter, ref, success } from "../openapi/generators.js";
+import { body, noContent, parameter, ref, success } from "../openapi/generators.js";
 import { group, resource, route, routeAuthenticated, tag } from "../openapi/paths.js";
 import { schema } from "../typescript.js";
 
@@ -69,7 +69,7 @@ resource('/servers/:server', {
                     remove?: 'Icon' | 'Banner' | 'Description';
                 }
             `),
-            ...await success("Succesfully changed channel object.")
+            ...await noContent("Succesfully changed channel object.")
         }
     ),
     delete: routeAuthenticated(
@@ -77,7 +77,7 @@ resource('/servers/:server', {
         "Deletes a server if owner otherwise leaves.",
         {
             ...serverParams,
-            ...await success("Deleted Server")
+            ...await noContent("Deleted Server")
         }
     )
 });
@@ -186,7 +186,7 @@ resource('/servers/:server/ack', {
         "Mark all channels in a server as read.",
         {
             ...serverParams,
-            ...await success("Marked as read.")
+            ...await noContent("Marked as read.")
         }
     ),
 });
@@ -243,13 +243,13 @@ resource('/servers/:server/members/:member', {
                     remove?: 'Nickname' | 'Avatar';
                 }
             `),
-            ...await success("Succesfully changed member object.")
+            ...await noContent("Succesfully changed member object.")
         }
     ),
     delete: routeAuthenticated(
         "Kick Member",
         "Removes a member from the server.",
-        await success("Removed Member")
+        await noContent("Removed Member")
     )
 });
 
@@ -291,7 +291,7 @@ resource('/servers/:server/bans/:member', {
                     reason?: string
                 }
             `),
-            ...await success("Banned user.")
+            ...await noContent("Banned user.")
         }
     ),
     delete: routeAuthenticated(
@@ -299,7 +299,7 @@ resource('/servers/:server/bans/:member', {
         "Removes a user's ban.",
         {
             ...memberParams,
-            ...await success("Unbanned user.")
+            ...await noContent("Unbanned user.")
         }
     )
 });
@@ -373,7 +373,7 @@ resource('/servers/:server/permissions/:role', {
         {
             ...roleParams,
             ...serverPermissions,
-            ...await success("Successfully updated permissions.")
+            ...await noContent("Successfully updated permissions.")
         }
     )
 });
@@ -385,7 +385,7 @@ resource('/servers/:server/permissions/default', {
         {
             ...serverParams,
             ...serverPermissions,
-            ...await success("Successfully updated permissions.")
+            ...await noContent("Successfully updated permissions.")
         }
     )
 });
@@ -439,7 +439,7 @@ resource('/servers/:server/roles/:role', {
                     remove?: 'Colour';
                 }
             `),
-            ...await success("Succesfully changed role object.")
+            ...await noContent("Succesfully changed role object.")
         }
     ),
     delete: routeAuthenticated(
@@ -447,7 +447,7 @@ resource('/servers/:server/roles/:role', {
         "Deletes a server role by ID.",
         {
             ...roleParams,
-            ...await success("Successfully deleted role.")
+            ...await noContent("Successfully deleted role.")
         }
     )
 });

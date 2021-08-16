@@ -16,6 +16,14 @@ export async function success(description: string, json?: Promise<OpenAPIV3.Medi
     return { responses: { "200": response } };
 }
 
+export async function noContent(description: string): Promise<{ responses: OpenAPIV3.ResponsesObject }> {
+    const response: OpenAPIV3.ResponseObject = {
+        description
+    };
+
+    return { responses: { "204": response } };
+}
+
 export async function body(description: string, json: Promise<OpenAPIV3.MediaTypeObject> | OpenAPIV3.MediaTypeObject | OpenAPIV3.ReferenceObject): Promise<{ requestBody: OpenAPIV3.RequestBodyObject }> {
     return {
         requestBody: {

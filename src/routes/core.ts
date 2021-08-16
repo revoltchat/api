@@ -1,5 +1,5 @@
 import { group, resource, route, routeAuthenticated, tag } from "../openapi/paths.js";
-import { body, ref, success } from "../openapi/generators.js";
+import { body, noContent, ref, success } from "../openapi/generators.js";
 import { schema } from "../typescript.js";
 
 group("Chat Platform");
@@ -47,7 +47,7 @@ resource('/onboard/complete', {
                     username: string;
                 }
             `),
-            ...await success("Successfully set username")
+            ...await noContent("Successfully set username")
         }
     )
 });
