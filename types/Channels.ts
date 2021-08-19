@@ -126,7 +126,7 @@ export type ServerChannel = {
     /**
      * Channel description
      */
-    description: string
+    description?: string
 
     icon?: Attachment
 
