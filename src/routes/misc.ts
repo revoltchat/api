@@ -102,7 +102,13 @@ resource('/sync/unreads', {
     post: routeAuthenticated(
         "Fetch Unreads",
         "Fetch information about unread state on channels.",
-        await success("Unreads Data", ref("ChannelUnread"))
+        await success(
+            "Array of Unreads Data",
+            schema`
+                import type { ChannelUnread } from "./Sync";
+                type ${'FetchUnreads'} = ChannelUnread[];
+            `
+        )
     )
 });
 //#endregion
