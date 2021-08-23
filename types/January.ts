@@ -59,7 +59,7 @@ export type Embed = (
 
         icon_url?: string
 
-        color?: string
+        colour?: string
     } | ({
         type: 'Image'
     } & EmbedImage)
