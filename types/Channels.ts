@@ -58,7 +58,7 @@ export type DirectMessageChannel = {
      */
     recipients: Id[]
 
-    last_message: LastMessage
+    last_message?: LastMessage
 }
 
 export type GroupChannel = {
@@ -89,7 +89,7 @@ export type GroupChannel = {
      */
     description?: string,
 
-    last_message: LastMessage,
+    last_message?: LastMessage,
 
     /**
      * Group icon
@@ -126,7 +126,7 @@ export type ServerChannel = {
     /**
      * Channel description
      */
-    description: string
+    description?: string
 
     icon?: Attachment
 
@@ -151,7 +151,7 @@ export type ServerChannel = {
 export type TextChannel = ServerChannel & {
     channel_type: 'TextChannel'
 
-    last_message: string
+    last_message?: string
 }
 
 export type VoiceChannel = ServerChannel & {
