@@ -138,6 +138,8 @@ export type Server = {
 
     /**
      * Default permissions for all members
+     *
+     * This is a tuple consisting of server and channel permissions in that order.
      */
     default_permissions: PermissionTuple
 
