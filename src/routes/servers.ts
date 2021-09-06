@@ -357,7 +357,7 @@ tag("Server Permissions", "Manage permissions for servers");
 
 const roleParams = {
     parameters: [
-        await parameter('channel', 'Channel ID', ref("Id")),
+        await parameter('server', 'Server ID', ref("Id")),
         await parameter('role', 'Role ID', ref("Id"))
     ]
 }
