@@ -27,7 +27,7 @@ export type EmbedVideo = {
  */
 export type EmbedSpecial = (
     { type: 'None' } |
-    { type: 'YouTube', id: string } |
+    { type: 'YouTube', id: string, timestamp?: string } |
     { type: 'Twitch', content_type: 'Channel' | 'Video' | 'Clip', id: string } |
     { type: 'Spotify', content_type: string, id: string } |
     { type: 'Soundcloud' } |
