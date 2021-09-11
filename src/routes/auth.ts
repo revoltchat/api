@@ -233,7 +233,7 @@ resource('/session/login', {
 });
 
 resource('/session/logout', {
-    delete: routeAuthenticated(
+    post: routeAuthenticated(
         "Logout",
         "Close current session.",
         {
