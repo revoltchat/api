@@ -43,7 +43,7 @@ export interface SessionInfo {
     /**
      * Session ID
      */
-    _id?: Id;
+    _id: Id;
 
     /**
      * Device name
