@@ -236,12 +236,7 @@ resource('/session/logout', {
     post: routeAuthenticated(
         "Logout",
         "Close current session.",
-        {
-            parameters: [
-                await parameter("session", "Session ID", ref("Id"))
-            ],
-            ...await noContent("Logged out.")
-        },
+        await noContent("Logged out."),
         true
     )
 });
