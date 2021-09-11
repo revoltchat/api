@@ -1,13 +1,22 @@
-import { body, parameter, ref, success } from "../openapi/generators.js";
+import { body, noContent, parameter, ref, success } from "../openapi/generators.js";
 import { group, resource, route, routeAuthenticated, tag } from "../openapi/paths.js";
 import { schema } from "../typescript.js";
 
 group("Auth");
 
-//#region Auth
-tag("Auth", "Authenticate with Revolt");
+//#region Account
+tag("Account", "Manage your account.");
 
-resource('/auth/create', {
+resource('/account', {
+    get: routeAuthenticated(
+        "Fetch Account",
+        "Fetch account information.",
+        await success("Account Information", ref("Account")),
+        true
+    )
+});
+
+resource('/account/create', {
     post: route(
         "Create Account",
         "Create a new account.",
@@ -37,21 +46,12 @@ resource('/auth/create', {
                     captcha?: string;
                 }
             `),
-            ...await success("Created account.", schema`
-                import { Id } from './_common';
-
-                interface ${'CreateResponse'} {
-                    /**
-                     * User ID
-                     */
-                    user_id: Id;
-                }
-            `)
+            ...await noContent("Created account.")
         }
     )
 });
 
-resource('/auth/resend', {
+resource('/account/reverify', {
     post: route(
         "Resend Verification",
         "Resend account creation verification email.",
@@ -69,68 +69,25 @@ resource('/auth/resend', {
                     captcha?: string;
                 }
             `),
-            ...await success("Resent verification.")
+            ...await noContent("Resent verification.")
         }
     )
 });
 
-resource('/auth/login', {
+resource('/account/verify/:code', {
     post: route(
-        "Login",
-        "Create a new session.",
+        "Verify Email",
+        "Verifies an email with code.",
         {
-            ...await body("Login Data", schema`
-                interface ${'LoginData'} {
-                    /**
-                     * Valid email address
-                     */
-                    email: string;
-
-                    /**
-                     * Password
-                     * @minLength 8
-                     * @maxLength 1024
-                     */
-                    password: string;
-
-                    /**
-                     * Device Name
-                     * @minLength 0
-                     * @maxLength 72
-                     */
-                    device_name?: string;
-
-                    /**
-                     * Captcha verification code
-                     */
-                    captcha?: string;
-                }
-            `),
-            ...await success("Logged in.", schema`
-                import { Id } from './_common';
-
-                interface ${'LoginResponse'} {
-                    /**
-                     * Session ID
-                     */
-                    id: Id;
-
-                    /**
-                     * User ID
-                     */
-                    user_id: Id;
-
-                    /**
-                     * Session Token
-                     */
-                    session_token: string;
-                }
-            `)
+            parameters: [
+                await parameter("code", "Verification Code", ref("Id"))
+            ],
+            ...await noContent("Verified email.")
         }
     )
 });
 
-resource('/auth/send_reset', {
+resource('/account/reset_password', {
     post: route(
         "Send Password Reset",
         "Send password reset email.",
@@ -148,13 +105,10 @@ resource('/auth/send_reset', {
                     captcha?: string;
                 }
             `),
-            ...await success("Sent password reset.")
+            ...await noContent("Sent password reset.")
         }
-    )
-});
-
-resource('/auth/reset', {
-    post: route(
+    ),
+    patch: route(
         "Password Reset",
         "Confirm password reset.",
         {
@@ -173,28 +127,12 @@ resource('/auth/reset', {
                     token: string;
                 }
             `),
-            ...await success("Password was reset.")
+            ...await noContent("Password was changed.")
         }
     )
 });
 
-resource('/auth/user', {
-    get: routeAuthenticated(
-        "Fetch Account",
-        "Fetch account information.",
-        await success("Account Information", ref("Account"))
-    )
-});
-
-resource('/auth/check', {
-    get: routeAuthenticated(
-        "Check Auth",
-        "Check if we are authenticated.",
-        await success("User is authenticated.")
-    )
-});
-
-resource('/auth/change/password', {
+resource('/account/change/password', {
     post: routeAuthenticated(
         "Change Password",
         "Change account password.",
@@ -209,19 +147,20 @@ resource('/auth/change/password', {
                     password: string;
 
                     /**
-                     * Password
+                     * Current Password
                      * @minLength 8
                      * @maxLength 1024
                      */
-                    new_password: string;
+                    current_password: string;
                 }
             `),
-            ...await success("Password changed.")
-        }
+            ...await noContent("Password changed.")
+        },
+        true
     )
 });
 
-resource('/auth/change/email', {
+resource('/account/change/email', {
     post: routeAuthenticated(
         "Change Email",
         "Change account email.",
@@ -229,63 +168,148 @@ resource('/auth/change/email', {
             ...await body("Change Data", schema`
                 interface ${'ChangeData'} {
                     /**
-                     * Password
+                     * Current Password
                      * @minLength 8
                      * @maxLength 1024
                      */
-                    password: string;
+                    current_password: string;
 
                     /**
                      * Valid email
                      */
-                    new_email: string;
+                    email: string;
                 }
             `),
-            ...await success("Email changed.")
+            ...await noContent("Email changed.")
+        },
+        true
+    )
+});
+//#endregion
+
+//#region Session
+tag("Session", "Create and manage sessions.");
+
+resource('/session/login', {
+    post: route(
+        "Login",
+        "Login to an account.",
+        {
+            ...await body("Login Data", schema`
+                interface ${'LoginData'} {
+                    /**
+                     * Valid email address
+                     */
+                    email: string;
+
+                    /**
+                     * Password
+                     * @minLength 8
+                     * @maxLength 1024
+                     */
+                    password?: string;
+
+                    /**
+                     * Security Key Challenge
+                     */
+                    challenge?: string;
+
+                    /**
+                     * Session Friendly Name
+                     * @minLength 0
+                     * @maxLength 72
+                     */
+                    friendly_name?: string;
+
+                    /**
+                     * Captcha verification code
+                     */
+                    captcha?: string;
+                }
+            `),
+            ...await success("Logged in.", ref("Session"))
         }
     )
 });
 
-resource('/auth/sessions/:session', {
+resource('/session/logout', {
     delete: routeAuthenticated(
-        "Delete Session",
-        "Delete existing session.",
+        "Logout",
+        "Close current session.",
         {
             parameters: [
                 await parameter("session", "Session ID", ref("Id"))
             ],
-            ...await success("Deleted session.")
-        }
+            ...await noContent("Logged out.")
+        },
+        true
     )
 });
 
-resource('/auth/sessions', {
+resource('/session/:session', {
+    patch: routeAuthenticated(
+        "Edit Session",
+        "Edit session information.",
+        {
+            parameters: [
+                await parameter("session", "Session ID", ref("Id"))
+            ],
+            ...await body("Edit Data", schema`
+                interface ${'SessionEditData'} {
+                    /**
+                     * Session Friendly Name
+                     * @minLength 0
+                     * @maxLength 72
+                     */
+                    friendly_name: string;
+                }
+            `),
+            ...await noContent("Edited session.")
+        },
+        true
+    ),
+    delete: routeAuthenticated(
+        "Delete Session",
+        "Delete a specific session.",
+        {
+            parameters: [
+                await parameter("session", "Session ID", ref("Id"))
+            ],
+            ...await noContent("Deleted session.")
+        },
+        true
+    )
+});
+
+resource('/session/all', {
     get: routeAuthenticated(
         "Fetch Sessions",
         "Fetch all sessions.",
         await success("Sessions", schema`
-            import { Id } from './_common';
+            import type { Id } from './_common';
+            import type { SessionInfo } from './Auth';
 
-            type ${'Sessions'} = {
-                /**
-                 * Session ID
-                 */
-                id: Id
-
-                /**
-                 * Session device name
-                 */
-                friendly_name: string
-            }[];
-        `)
-    )
-});
-
-resource('/auth/logout', {
-    get: routeAuthenticated(
-        "Logout",
-        "Delete current session.",
-        await success("Logged out.")
+            type ${'Sessions'} = SessionInfo[];
+        `),
+        true
+    ),
+    delete: routeAuthenticated(
+        "Delete All Sessions",
+        "Delete all active sesssions.",
+        {
+            parameters: [
+                {
+                    name: 'revoke_self',
+                    in: 'query',
+                    description: "Whether to revoke current session too.",
+                    schema: {
+                        type: 'boolean'
+                    }
+                }
+            ],
+            ...await noContent("Deleted session.")
+        },
+        true
     )
 });
 //#endregion

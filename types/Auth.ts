@@ -4,7 +4,7 @@ export interface Account {
     /**
      * User ID
      */
-    id: Id;
+    _id: Id;
 
     /**
      * User Email
@@ -16,7 +16,7 @@ export interface Session {
     /**
      * Session ID
      */
-    id?: Id;
+    _id?: Id;
 
     /**
      * User ID
@@ -26,5 +26,27 @@ export interface Session {
     /**
      * @maxLength 64
      */
-    session_token: string;
+    token: string;
+
+    /**
+     * Device name
+     */
+    name: string;
+
+    /**
+     * Web Push subscription
+     */
+    subscription?: string;
+}
+
+export interface SessionInfo {
+    /**
+     * Session ID
+     */
+    _id?: Id;
+
+    /**
+     * Device name
+     */
+    name: string;
 }

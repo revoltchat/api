@@ -89,7 +89,8 @@ resource('/users/@me/username', {
                 }
             `),
             ...await noContent("Succesfully changed user object.")
-        }
+        },
+        true
     )
 });
 
@@ -200,7 +201,8 @@ resource('/users/relationships', {
                 import type { Relationship } from "./Users";
                 type ${'FetchRelationships'} = Relationship[];
             `
-        )
+        ),
+        true
     )
 });
 
@@ -214,7 +216,8 @@ resource('/users/:user/relationship', {
                 "Your relationship with the user.",
                 ref("RelationshipOnly")
             )
-        }
+        },
+        true
     )
 });
 
@@ -234,7 +237,8 @@ resource('/users/:username/friend', {
                 "Sent friend request / added user as friend.",
                 ref("RelationshipOnly")
             )
-        }
+        },
+        true
     ),
     delete: routeAuthenticated(
         "Deny Friend Request / Remove Friend",
@@ -245,7 +249,8 @@ resource('/users/:username/friend', {
                 "Deleted friend request / removed user from friends.",
                 ref("RelationshipOnly")
             )
-        }
+        },
+        true
     )
 });
 
@@ -259,7 +264,8 @@ resource('/users/:user/block', {
                 "Blocked user.",
                 ref("RelationshipOnly")
             )
-        }
+        },
+        true
     ),
     delete: routeAuthenticated(
         "Unblock User",
@@ -270,7 +276,8 @@ resource('/users/:user/block', {
                 "Unblocked user.",
                 ref("RelationshipOnly")
             )
-        }
+        },
+        true
     )
 });
 //#endregion

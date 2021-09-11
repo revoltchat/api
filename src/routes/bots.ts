@@ -26,7 +26,8 @@ resource('/bots/create', {
                 "Succesfully created a new bot.",
                 ref("Bot")
             )
-        }
+        },
+        true
     )
 });
 
@@ -43,7 +44,8 @@ resource('/bots/@me', {
                     users: User[]
                 };
             `)
-        }
+        },
+        true
     )
 });
 
@@ -67,7 +69,8 @@ resource('/bots/:bot', {
                     user: User
                 };
             `)
-        }
+        },
+        true
     ),
     patch: routeAuthenticated(
         "Edit Bot",
@@ -101,7 +104,8 @@ resource('/bots/:bot', {
                 }
             `),
             ...await noContent("Succesfully changed bot object.")
-        }
+        },
+        true
     ),
     delete: routeAuthenticated(
         "Delete Bot",
@@ -109,7 +113,8 @@ resource('/bots/:bot', {
         {
             ...botParams,
             ...await noContent("Deleted bot.")
-        }
+        },
+        true
     )
 });
 
@@ -120,7 +125,8 @@ resource('/bots/:bot/invite', {
         {
             ...botParams,
             ...await success("Public Bot", ref('PublicBot'))
-        }
+        },
+        true
     ),
     post: routeAuthenticated(
         "Invite Public Bot",
@@ -146,7 +152,8 @@ resource('/bots/:bot/invite', {
                 )
             `),
             ...await noContent("Added bot to server / group.")
-        }
+        },
+        true
     )
 });
 //#endregion

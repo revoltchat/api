@@ -50,12 +50,15 @@ export function route(summary: string, description: string, obj: Omit<OpenAPIV3.
     }
 }
 
-export function routeAuthenticated(summary: string, description: string, obj: Omit<OpenAPIV3.OperationObject, 'summary' | 'tags'>): OpenAPIV3.OperationObject {
+export function routeAuthenticated(summary: string, description: string, obj: Omit<OpenAPIV3.OperationObject, 'summary' | 'tags'>, disallowBots?: boolean): OpenAPIV3.OperationObject {
     return {
         ...route(summary, description, obj),
-        security: [
+        security: disallowBots ? [
             {
-                'User ID': [],
+                'Session Token': []
+            }
+        ] : [
+            {
                 'Session Token': []
             },
             {

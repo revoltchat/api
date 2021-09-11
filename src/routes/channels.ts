@@ -397,7 +397,8 @@ resource('/channels/:channel/ack/:message', {
         {
             ...messageParams,
             ...await noContent("Acknowledged message.")
-        }
+        },
+        true
     )
 });
 //#endregion
@@ -446,7 +447,8 @@ resource('/channels/create', {
                 }
             `),
             ...await success('Group', ref("GroupChannel"))
-        }
+        },
+        true
     )
 });
 
@@ -468,7 +470,8 @@ resource('/channels/:channel/members', {
         {
             ...messageParams,
             ...await noContent("User was added to the group.")
-        }
+        },
+        true
     ),
     delete: routeAuthenticated(
         "Remove Group Member",
@@ -476,7 +479,8 @@ resource('/channels/:channel/members', {
         {
             ...messageParams,
             ...await noContent("User was removed from the group.")
-        }
+        },
+        true
     )
 });
 //#endregion

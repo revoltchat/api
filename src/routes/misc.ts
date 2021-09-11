@@ -37,7 +37,8 @@ resource('/invites/:invite', {
                     server: Server
                 }
             `)
-        }
+        },
+        true
     ),
     delete: routeAuthenticated(
         "Delete Invite",
@@ -69,7 +70,8 @@ resource('/sync/settings/fetch', {
             ...await success("Settings Data", schema`
                 type ${'SettingsData'} = { [key: string]: [ number, string ] };
             `)
-        }
+        },
+        true
     )
 });
 
@@ -94,7 +96,8 @@ resource('/sync/settings/set', {
                 }
             `),
             ...await noContent("Successfully synced data.")
-        }
+        },
+        true
     )
 });
 
@@ -108,7 +111,8 @@ resource('/sync/unreads', {
                 import type { ChannelUnread } from "./Sync";
                 type ${'FetchUnreads'} = ChannelUnread[];
             `
-        )
+        ),
+        true
     )
 });
 //#endregion
@@ -123,7 +127,8 @@ resource('/push/subscribe', {
         {
             ...await body("Web Push Subscription", ref("WebPushSubscription")),
             ...await noContent("Subscribed successfully.")
-        }
+        },
+        true
     )
 });
 
@@ -131,7 +136,8 @@ resource('/push/unsubscribe', {
     post: routeAuthenticated(
         "Unsubscribe",
         "Remove the Web Push subscription associated with the current session.",
-        await noContent("Unsubscribed successfully.")
+        await noContent("Unsubscribed successfully."),
+        true
     )
 });
 //#endregion

@@ -1,9 +1,9 @@
 {
-  "__comment": "THIS FILE WAS AUTO-GENERATED USING https://gitlab.insrt.uk/revolt/api. DO NOT EDIT.",
+  "__comment": "THIS FILE WAS AUTO-GENERATED USING https://github.com/revoltchat/api. DO NOT EDIT.",
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.2-alpha.0",
+    "version": "0.5.3-alpha.0",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -26,8 +26,12 @@
       "description": "After signing up to Revolt, users must pick a unique username."
     },
     {
-      "name": "Auth",
-      "description": "Authenticate with Revolt"
+      "name": "Account",
+      "description": "Manage your account."
+    },
+    {
+      "name": "Session",
+      "description": "Create and manage sessions."
     },
     {
       "name": "User Information",
@@ -105,7 +109,8 @@
     {
       "name": "Auth",
       "tags": [
-        "Auth"
+        "Account",
+        "Session"
       ]
     },
     {
@@ -193,11 +198,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -232,27 +233,49 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Successfully set username"
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
     },
-    "/auth/create": {
+    "/account": {
+      "get": {
+        "summary": "Fetch Account",
+        "description": "Fetch account information.",
+        "tags": [
+          "Account"
+        ],
+        "responses": {
+          "200": {
+            "description": "Account Information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Account"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/account/create": {
       "post": {
         "summary": "Create Account",
         "description": "Create a new account.",
         "tags": [
-          "Auth"
+          "Account"
         ],
         "requestBody": {
           "description": "Create Data",
@@ -289,35 +312,18 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Created account.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "user_id": {
-                      "description": "User ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "user_id"
-                  ]
-                }
-              }
-            }
+          "204": {
+            "description": "Created account."
           }
         }
       }
     },
-    "/auth/resend": {
+    "/account/reverify": {
       "post": {
         "summary": "Resend Verification",
         "description": "Resend account creation verification email.",
         "tags": [
-          "Auth"
+          "Account"
         ],
         "requestBody": {
           "description": "Resend Data",
@@ -343,96 +349,43 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Resent verification."
           }
         }
       }
     },
-    "/auth/login": {
+    "/account/verify/:code": {
       "post": {
-        "summary": "Login",
-        "description": "Create a new session.",
+        "summary": "Verify Email",
+        "description": "Verifies an email with code.",
         "tags": [
-          "Auth"
+          "Account"
         ],
-        "requestBody": {
-          "description": "Login Data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "description": "Valid email address",
-                    "type": "string"
-                  },
-                  "password": {
-                    "description": "Password",
-                    "minLength": 8,
-                    "maxLength": 1024,
-                    "type": "string"
-                  },
-                  "device_name": {
-                    "description": "Device Name",
-                    "minLength": 0,
-                    "maxLength": 72,
-                    "type": "string"
-                  },
-                  "captcha": {
-                    "description": "Captcha verification code",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "email",
-                  "password"
-                ]
-              }
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "description": "Verification Code",
+            "schema": {
+              "$ref": "#/definitions/Id"
             }
           }
-        },
+        ],
         "responses": {
-          "200": {
-            "description": "Logged in.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "description": "Session ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    },
-                    "user_id": {
-                      "description": "User ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    },
-                    "session_token": {
-                      "description": "Session Token",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "session_token",
-                    "user_id"
-                  ]
-                }
-              }
-            }
+          "204": {
+            "description": "Verified email."
           }
         }
       }
     },
-    "/auth/send_reset": {
+    "/account/reset_password": {
       "post": {
         "summary": "Send Password Reset",
         "description": "Send password reset email.",
         "tags": [
-          "Auth"
+          "Account"
         ],
         "requestBody": {
           "description": "Reset Data",
@@ -458,18 +411,16 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Sent password reset."
           }
         }
-      }
-    },
-    "/auth/reset": {
-      "post": {
+      },
+      "patch": {
         "summary": "Password Reset",
         "description": "Confirm password reset.",
         "tags": [
-          "Auth"
+          "Account"
         ],
         "requestBody": {
           "description": "Reset Data",
@@ -498,71 +449,18 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Password was reset."
+          "204": {
+            "description": "Password was changed."
           }
         }
       }
     },
-    "/auth/user": {
-      "get": {
-        "summary": "Fetch Account",
-        "description": "Fetch account information.",
-        "tags": [
-          "Auth"
-        ],
-        "responses": {
-          "200": {
-            "description": "Account Information",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/definitions/Account"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          },
-          {
-            "Bot Token": []
-          }
-        ]
-      }
-    },
-    "/auth/check": {
-      "get": {
-        "summary": "Check Auth",
-        "description": "Check if we are authenticated.",
-        "tags": [
-          "Auth"
-        ],
-        "responses": {
-          "200": {
-            "description": "User is authenticated."
-          }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          },
-          {
-            "Bot Token": []
-          }
-        ]
-      }
-    },
-    "/auth/change/password": {
+    "/account/change/password": {
       "post": {
         "summary": "Change Password",
         "description": "Change account password.",
         "tags": [
-          "Auth"
+          "Account"
         ],
         "requestBody": {
           "description": "Change Data",
@@ -577,15 +475,15 @@
                     "maxLength": 1024,
                     "type": "string"
                   },
-                  "new_password": {
-                    "description": "Password",
+                  "current_password": {
+                    "description": "Current Password",
                     "minLength": 8,
                     "maxLength": 1024,
                     "type": "string"
                   }
                 },
                 "required": [
-                  "new_password",
+                  "current_password",
                   "password"
                 ]
               }
@@ -593,27 +491,23 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Password changed."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
     },
-    "/auth/change/email": {
+    "/account/change/email": {
       "post": {
         "summary": "Change Email",
         "description": "Change account email.",
         "tags": [
-          "Auth"
+          "Account"
         ],
         "requestBody": {
           "description": "Change Data",
@@ -622,20 +516,78 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "current_password": {
+                    "description": "Current Password",
+                    "minLength": 8,
+                    "maxLength": 1024,
+                    "type": "string"
+                  },
+                  "email": {
+                    "description": "Valid email",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "current_password",
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Email changed."
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/session/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Login to an account.",
+        "tags": [
+          "Session"
+        ],
+        "requestBody": {
+          "description": "Login Data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "description": "Valid email address",
+                    "type": "string"
+                  },
                   "password": {
                     "description": "Password",
                     "minLength": 8,
                     "maxLength": 1024,
                     "type": "string"
                   },
-                  "new_email": {
-                    "description": "Valid email",
+                  "challenge": {
+                    "description": "Security Key Challenge",
+                    "type": "string"
+                  },
+                  "friendly_name": {
+                    "description": "Session Friendly Name",
+                    "minLength": 0,
+                    "maxLength": 72,
+                    "type": "string"
+                  },
+                  "captcha": {
+                    "description": "Captcha verification code",
                     "type": "string"
                   }
                 },
                 "required": [
-                  "new_email",
-                  "password"
+                  "email"
                 ]
               }
             }
@@ -643,26 +595,24 @@
         },
         "responses": {
           "200": {
-            "description": "Email changed."
+            "description": "Logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Session"
+                }
+              }
+            }
           }
-        },
-        "security": [
-          {
-            "User ID": [],
-            "Session Token": []
-          },
-          {
-            "Bot Token": []
-          }
-        ]
+        }
       }
     },
-    "/auth/sessions/:session": {
+    "/session/logout": {
       "delete": {
-        "summary": "Delete Session",
-        "description": "Delete existing session.",
+        "summary": "Logout",
+        "description": "Close current session.",
         "tags": [
-          "Auth"
+          "Session"
         ],
         "parameters": [
           {
@@ -676,27 +626,102 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
+            "description": "Logged out."
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/session/:session": {
+      "patch": {
+        "summary": "Edit Session",
+        "description": "Edit session information.",
+        "tags": [
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "session",
+            "in": "path",
+            "required": true,
+            "description": "Session ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Edit Data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "friendly_name": {
+                    "description": "Session Friendly Name",
+                    "minLength": 0,
+                    "maxLength": 72,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "friendly_name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Edited session."
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Session",
+        "description": "Delete a specific session.",
+        "tags": [
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "session",
+            "in": "path",
+            "required": true,
+            "description": "Session ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
             "description": "Deleted session."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
     },
-    "/auth/sessions": {
+    "/session/all": {
       "get": {
         "summary": "Fetch Sessions",
         "description": "Fetch all sessions.",
         "tags": [
-          "Auth"
+          "Session"
         ],
         "responses": {
           "200": {
@@ -706,22 +731,26 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "description": "Session ID",
-                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                        "type": "string"
+                    "$ref": "#/definitions/SessionInfo"
+                  },
+                  "definitions": {
+                    "SessionInfo": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "Session ID",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "Device name",
+                          "type": "string"
+                        }
                       },
-                      "friendly_name": {
-                        "description": "Session device name",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "friendly_name",
-                      "id"
-                    ]
+                      "required": [
+                        "name"
+                      ]
+                    }
                   }
                 }
               }
@@ -730,34 +759,34 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
-      }
-    },
-    "/auth/logout": {
-      "get": {
-        "summary": "Logout",
-        "description": "Delete current session.",
+      },
+      "delete": {
+        "summary": "Delete All Sessions",
+        "description": "Delete all active sesssions.",
         "tags": [
-          "Auth"
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "revoke_self",
+            "in": "query",
+            "description": "Whether to revoke current session too.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
         ],
         "responses": {
-          "200": {
-            "description": "Logged out."
+          "204": {
+            "description": "Deleted session."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -794,7 +823,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -883,13 +911,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Succesfully changed user object."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -935,17 +962,13 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Succesfully changed user object."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -982,7 +1005,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1068,7 +1090,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1150,7 +1171,6 @@
                           "_id",
                           "active",
                           "channel_type",
-                          "last_message",
                           "recipients"
                         ]
                       },
@@ -1343,12 +1363,15 @@
                           "permissions": {
                             "description": "Permissions given to group members",
                             "type": "number"
+                          },
+                          "nsfw": {
+                            "description": "Whether this channel is marked as not safe for work",
+                            "type": "boolean"
                           }
                         },
                         "required": [
                           "_id",
                           "channel_type",
-                          "last_message",
                           "name",
                           "owner",
                           "recipients"
@@ -1376,7 +1399,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1417,7 +1439,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1490,11 +1511,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -1531,11 +1548,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -1572,11 +1585,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       },
@@ -1611,11 +1620,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -1652,11 +1657,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       },
@@ -1691,11 +1692,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -1732,7 +1729,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1782,6 +1778,10 @@
                     "maxLength": 128,
                     "type": "string"
                   },
+                  "nsfw": {
+                    "description": "Whether this channel is not safe for work",
+                    "type": "boolean"
+                  },
                   "remove": {
                     "description": "Field to remove from channel object",
                     "enum": [
@@ -1796,13 +1796,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Succesfully changed channel object."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1828,13 +1827,12 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Deleted Channel"
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1884,7 +1882,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1939,13 +1936,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Successfully updated permissions."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -1991,13 +1987,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Successfully updated permissions."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -2052,22 +2047,25 @@
                   },
                   "replies": {
                     "description": "Messages to reply to.",
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "description": "Message Id",
-                        "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                        "type": "string"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "description": "Message Id",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "mention": {
+                          "description": "Whether this reply should mention the message's author.",
+                          "type": "boolean"
+                        }
                       },
-                      "mention": {
-                        "description": "Whether this reply should mention the message's author.",
-                        "type": "boolean"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "mention"
-                    ]
+                      "required": [
+                        "id",
+                        "mention"
+                      ]
+                    }
                   }
                 },
                 "required": [
@@ -2092,7 +2090,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -2621,6 +2618,9 @@
                                             },
                                             "id": {
                                               "type": "string"
+                                            },
+                                            "timestamp": {
+                                              "type": "string"
                                             }
                                           },
                                           "required": [
@@ -2779,7 +2779,7 @@
                                     "icon_url": {
                                       "type": "string"
                                     },
-                                    "color": {
+                                    "colour": {
                                       "type": "string"
                                     }
                                   },
@@ -3311,6 +3311,9 @@
                                                 },
                                                 "id": {
                                                   "type": "string"
+                                                },
+                                                "timestamp": {
+                                                  "type": "string"
                                                 }
                                               },
                                               "required": [
@@ -3469,7 +3472,7 @@
                                         "icon_url": {
                                           "type": "string"
                                         },
-                                        "color": {
+                                        "colour": {
                                           "type": "string"
                                         }
                                       },
@@ -3997,7 +4000,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -4047,7 +4049,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -4103,13 +4104,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Message was changed."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -4144,13 +4144,12 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Message was deleted."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -4658,6 +4657,9 @@
                                             },
                                             "id": {
                                               "type": "string"
+                                            },
+                                            "timestamp": {
+                                              "type": "string"
                                             }
                                           },
                                           "required": [
@@ -4816,7 +4818,7 @@
                                     "icon_url": {
                                       "type": "string"
                                     },
-                                    "color": {
+                                    "colour": {
                                       "type": "string"
                                     }
                                   },
@@ -4928,7 +4930,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -5461,6 +5462,9 @@
                                             },
                                             "id": {
                                               "type": "string"
+                                            },
+                                            "timestamp": {
+                                              "type": "string"
                                             }
                                           },
                                           "required": [
@@ -5619,7 +5623,7 @@
                                     "icon_url": {
                                       "type": "string"
                                     },
-                                    "color": {
+                                    "colour": {
                                       "type": "string"
                                     }
                                   },
@@ -6151,6 +6155,9 @@
                                                 },
                                                 "id": {
                                                   "type": "string"
+                                                },
+                                                "timestamp": {
+                                                  "type": "string"
                                                 }
                                               },
                                               "required": [
@@ -6309,7 +6316,7 @@
                                         "icon_url": {
                                           "type": "string"
                                         },
-                                        "color": {
+                                        "colour": {
                                           "type": "string"
                                         }
                                       },
@@ -6837,7 +6844,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -6874,17 +6880,13 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Acknowledged message."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -6928,6 +6930,10 @@
                     "items": {
                       "type": "string"
                     }
+                  },
+                  "nsfw": {
+                    "description": "Whether this group is not safe for work",
+                    "type": "boolean"
                   }
                 },
                 "required": [
@@ -6952,11 +6958,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -7269,7 +7271,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7304,17 +7305,13 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "User was added to the group."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       },
@@ -7345,17 +7342,13 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "User was removed from the group."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -7401,7 +7394,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7442,7 +7434,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7552,6 +7543,10 @@
                       }
                     }
                   },
+                  "nsfw": {
+                    "description": "Whether this server is not safe for work",
+                    "type": "boolean"
+                  },
                   "remove": {
                     "description": "Field to remove from channel object",
                     "enum": [
@@ -7567,13 +7562,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Succesfully changed channel object."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7599,13 +7593,12 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Deleted Server"
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7629,16 +7622,20 @@
                 "type": "object",
                 "properties": {
                   "name": {
-                    "description": "Group name",
+                    "description": "Server name",
                     "minLength": 1,
                     "maxLength": 32,
                     "type": "string"
                   },
                   "description": {
-                    "description": "Group description",
+                    "description": "Server description",
                     "minLength": 0,
                     "maxLength": 1024,
                     "type": "string"
+                  },
+                  "nsfw": {
+                    "description": "Whether this server is not safe for work",
+                    "type": "boolean"
                   },
                   "nonce": {
                     "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
@@ -7669,11 +7666,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -7723,6 +7716,10 @@
                     "maxLength": 1024,
                     "type": "string"
                   },
+                  "nsfw": {
+                    "description": "Whether this channel is not safe for work",
+                    "type": "boolean"
+                  },
                   "nonce": {
                     "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
                     "minLength": 1,
@@ -7741,7 +7738,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7770,7 +7766,6 @@
         ],
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7798,17 +7793,13 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Marked as read."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -7854,7 +7845,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7919,13 +7909,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Succesfully changed member object."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -7940,13 +7929,12 @@
           "Server Members"
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Removed Member"
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -8473,13 +8461,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Banned user."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -8514,13 +8501,12 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Unbanned user."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -8764,7 +8750,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -8782,10 +8767,10 @@
         ],
         "parameters": [
           {
-            "name": "channel",
+            "name": "server",
             "in": "path",
             "required": true,
-            "description": "Channel ID",
+            "description": "Server ID",
             "schema": {
               "$ref": "#/definitions/Id"
             }
@@ -8834,13 +8819,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Successfully updated permissions."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -8901,13 +8885,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Successfully updated permissions."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -8994,7 +8977,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -9012,10 +8994,10 @@
         ],
         "parameters": [
           {
-            "name": "channel",
+            "name": "server",
             "in": "path",
             "required": true,
-            "description": "Channel ID",
+            "description": "Server ID",
             "schema": {
               "$ref": "#/definitions/Id"
             }
@@ -9087,13 +9069,12 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Succesfully changed role object."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -9109,10 +9090,10 @@
         ],
         "parameters": [
           {
-            "name": "channel",
+            "name": "server",
             "in": "path",
             "required": true,
-            "description": "Channel ID",
+            "description": "Server ID",
             "schema": {
               "$ref": "#/definitions/Id"
             }
@@ -9128,13 +9109,12 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Successfully deleted role."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -9158,9 +9138,10 @@
                 "type": "object",
                 "properties": {
                   "name": {
-                    "description": "Bot name",
-                    "minLength": 1,
+                    "description": "Bot username",
+                    "minLength": 2,
                     "maxLength": 32,
+                    "pattern": "^[a-zA-Z0-9_.]+$",
                     "type": "string"
                   }
                 },
@@ -9185,11 +9166,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -9207,10 +9184,25 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Bot"
+                  "type": "object",
+                  "properties": {
+                    "bots": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/Bot"
+                      }
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/User"
+                      }
+                    }
                   },
+                  "required": [
+                    "bots",
+                    "users"
+                  ],
                   "definitions": {
                     "Bot": {
                       "type": "object",
@@ -9233,17 +9225,278 @@
                           "description": "Whether the bot can be added by anyone",
                           "type": "boolean"
                         },
-                        "interactionsURL": {
+                        "interactions_url": {
                           "description": "Interactions endpoint URL\n\nRequired for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.",
                           "type": "string"
                         }
                       },
                       "required": [
                         "_id",
-                        "interactionsURL",
                         "owner",
                         "public",
                         "token"
+                      ]
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "User ID",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "username": {
+                          "description": "Username",
+                          "minLength": 2,
+                          "maxLength": 32,
+                          "pattern": "^[a-zA-Z0-9_.]+$",
+                          "type": "string"
+                        },
+                        "avatar": {
+                          "description": "User avatar",
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "description": "Attachment ID",
+                              "minLength": 1,
+                              "maxLength": 128,
+                              "type": "string"
+                            },
+                            "tag": {
+                              "$ref": "#/definitions/AttachmentTag"
+                            },
+                            "size": {
+                              "description": "File size (in bytes)",
+                              "type": "number"
+                            },
+                            "filename": {
+                              "description": "File name",
+                              "type": "string"
+                            },
+                            "metadata": {
+                              "description": "Metadata",
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "File"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Text"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Audio"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Image"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Video"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
+                                }
+                              ]
+                            },
+                            "content_type": {
+                              "description": "Content type",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "_id",
+                            "content_type",
+                            "filename",
+                            "metadata",
+                            "size",
+                            "tag"
+                          ]
+                        },
+                        "relations": {
+                          "description": "Relationships with other known users\nOnly present if fetching self",
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "status": {
+                                    "$ref": "#/definitions/RelationshipStatus"
+                                  }
+                                },
+                                "required": [
+                                  "status"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "description": "Other user's ID",
+                                    "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "_id"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "badges": {
+                          "description": "Bitfield of user's badges",
+                          "type": "number"
+                        },
+                        "status": {
+                          "description": "User status",
+                          "type": "object",
+                          "properties": {
+                            "text": {
+                              "description": "Custom status text",
+                              "minLength": 1,
+                              "maxLength": 128,
+                              "type": "string"
+                            },
+                            "presence": {
+                              "$ref": "#/definitions/Presence"
+                            }
+                          }
+                        },
+                        "relationship": {
+                          "$ref": "#/definitions/RelationshipStatus",
+                          "description": "Relationship to user"
+                        },
+                        "online": {
+                          "description": "Whether the user is online",
+                          "type": "boolean"
+                        },
+                        "flags": {
+                          "description": "User flags\n\n`0x1`: Account is suspended\n`0x2`: Account was deleted\n`0x4`: Account is banned",
+                          "type": "number"
+                        },
+                        "bot": {
+                          "$ref": "#/definitions/BotInformation",
+                          "description": "Bot information, present if user is a bot."
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "username"
+                      ]
+                    },
+                    "AttachmentTag": {
+                      "description": "Attachment tag",
+                      "enum": [
+                        "attachments",
+                        "avatars",
+                        "backgrounds",
+                        "banners",
+                        "icons"
+                      ],
+                      "type": "string"
+                    },
+                    "RelationshipStatus": {
+                      "description": "Your relationship with the user",
+                      "enum": [
+                        "Blocked",
+                        "BlockedOther",
+                        "Friend",
+                        "Incoming",
+                        "None",
+                        "Outgoing",
+                        "User"
+                      ],
+                      "type": "string"
+                    },
+                    "Presence": {
+                      "description": "User presence",
+                      "enum": [
+                        "Busy",
+                        "Idle",
+                        "Invisible",
+                        "Online"
+                      ],
+                      "type": "string"
+                    },
+                    "BotInformation": {
+                      "description": "Bot information",
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "description": "The User ID of the owner of this bot",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "owner"
                       ]
                     }
                   }
@@ -9254,11 +9507,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -9287,7 +9536,316 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Bot"
+                  "type": "object",
+                  "properties": {
+                    "bot": {
+                      "$ref": "#/definitions/Bot"
+                    },
+                    "user": {
+                      "$ref": "#/definitions/User"
+                    }
+                  },
+                  "required": [
+                    "bot",
+                    "user"
+                  ],
+                  "definitions": {
+                    "Bot": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "Bot ID\n\nThis matches the bot's User ID.",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "owner": {
+                          "description": "Bot owner's User ID",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "token": {
+                          "description": "Bot authentication token",
+                          "type": "string"
+                        },
+                        "public": {
+                          "description": "Whether the bot can be added by anyone",
+                          "type": "boolean"
+                        },
+                        "interactions_url": {
+                          "description": "Interactions endpoint URL\n\nRequired for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "owner",
+                        "public",
+                        "token"
+                      ]
+                    },
+                    "User": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "description": "User ID",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        },
+                        "username": {
+                          "description": "Username",
+                          "minLength": 2,
+                          "maxLength": 32,
+                          "pattern": "^[a-zA-Z0-9_.]+$",
+                          "type": "string"
+                        },
+                        "avatar": {
+                          "description": "User avatar",
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "description": "Attachment ID",
+                              "minLength": 1,
+                              "maxLength": 128,
+                              "type": "string"
+                            },
+                            "tag": {
+                              "$ref": "#/definitions/AttachmentTag"
+                            },
+                            "size": {
+                              "description": "File size (in bytes)",
+                              "type": "number"
+                            },
+                            "filename": {
+                              "description": "File name",
+                              "type": "string"
+                            },
+                            "metadata": {
+                              "description": "Metadata",
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "File"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Text"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Audio"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Image"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Video"
+                                      ]
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "height",
+                                    "type",
+                                    "width"
+                                  ]
+                                }
+                              ]
+                            },
+                            "content_type": {
+                              "description": "Content type",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "_id",
+                            "content_type",
+                            "filename",
+                            "metadata",
+                            "size",
+                            "tag"
+                          ]
+                        },
+                        "relations": {
+                          "description": "Relationships with other known users\nOnly present if fetching self",
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "status": {
+                                    "$ref": "#/definitions/RelationshipStatus"
+                                  }
+                                },
+                                "required": [
+                                  "status"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "description": "Other user's ID",
+                                    "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "_id"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "badges": {
+                          "description": "Bitfield of user's badges",
+                          "type": "number"
+                        },
+                        "status": {
+                          "description": "User status",
+                          "type": "object",
+                          "properties": {
+                            "text": {
+                              "description": "Custom status text",
+                              "minLength": 1,
+                              "maxLength": 128,
+                              "type": "string"
+                            },
+                            "presence": {
+                              "$ref": "#/definitions/Presence"
+                            }
+                          }
+                        },
+                        "relationship": {
+                          "$ref": "#/definitions/RelationshipStatus",
+                          "description": "Relationship to user"
+                        },
+                        "online": {
+                          "description": "Whether the user is online",
+                          "type": "boolean"
+                        },
+                        "flags": {
+                          "description": "User flags\n\n`0x1`: Account is suspended\n`0x2`: Account was deleted\n`0x4`: Account is banned",
+                          "type": "number"
+                        },
+                        "bot": {
+                          "$ref": "#/definitions/BotInformation",
+                          "description": "Bot information, present if user is a bot."
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "username"
+                      ]
+                    },
+                    "AttachmentTag": {
+                      "description": "Attachment tag",
+                      "enum": [
+                        "attachments",
+                        "avatars",
+                        "backgrounds",
+                        "banners",
+                        "icons"
+                      ],
+                      "type": "string"
+                    },
+                    "RelationshipStatus": {
+                      "description": "Your relationship with the user",
+                      "enum": [
+                        "Blocked",
+                        "BlockedOther",
+                        "Friend",
+                        "Incoming",
+                        "None",
+                        "Outgoing",
+                        "User"
+                      ],
+                      "type": "string"
+                    },
+                    "Presence": {
+                      "description": "User presence",
+                      "enum": [
+                        "Busy",
+                        "Idle",
+                        "Invisible",
+                        "Online"
+                      ],
+                      "type": "string"
+                    },
+                    "BotInformation": {
+                      "description": "Bot information",
+                      "type": "object",
+                      "properties": {
+                        "owner": {
+                          "description": "The User ID of the owner of this bot",
+                          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "owner"
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -9295,11 +9853,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       },
@@ -9317,16 +9871,17 @@
                 "type": "object",
                 "properties": {
                   "name": {
-                    "description": "Channel name",
-                    "minLength": 1,
+                    "description": "Bot username",
+                    "minLength": 2,
                     "maxLength": 32,
+                    "pattern": "^[a-zA-Z0-9_.]+$",
                     "type": "string"
                   },
                   "public": {
                     "description": "Whether the bot can be added by anyone",
                     "type": "boolean"
                   },
-                  "interactionsURL": {
+                  "interactions_url": {
                     "description": "Interactions URL",
                     "minLength": 1,
                     "maxLength": 2048,
@@ -9345,17 +9900,13 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Succesfully changed bot object."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       },
@@ -9377,17 +9928,13 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Deleted bot."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -9424,11 +9971,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       },
@@ -9487,17 +10030,13 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Added bot to server / group."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -9534,7 +10073,6 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -9672,7 +10210,6 @@
                                 "_id",
                                 "active",
                                 "channel_type",
-                                "last_message",
                                 "recipients"
                               ]
                             },
@@ -9877,12 +10414,15 @@
                                 "permissions": {
                                   "description": "Permissions given to group members",
                                   "type": "number"
+                                },
+                                "nsfw": {
+                                  "description": "Whether this channel is marked as not safe for work",
+                                  "type": "boolean"
                                 }
                               },
                               "required": [
                                 "_id",
                                 "channel_type",
-                                "last_message",
                                 "name",
                                 "owner",
                                 "recipients"
@@ -10056,11 +10596,14 @@
                                   "additionalProperties": {
                                     "type": "number"
                                   }
+                                },
+                                "nsfw": {
+                                  "description": "Whether this channel is marked as not safe for work",
+                                  "type": "boolean"
                                 }
                               },
                               "required": [
                                 "_id",
-                                "description",
                                 "name",
                                 "server"
                               ]
@@ -10079,8 +10622,7 @@
                                 }
                               },
                               "required": [
-                                "channel_type",
-                                "last_message"
+                                "channel_type"
                               ]
                             },
                             {
@@ -10251,11 +10793,14 @@
                                   "additionalProperties": {
                                     "type": "number"
                                   }
+                                },
+                                "nsfw": {
+                                  "description": "Whether this channel is marked as not safe for work",
+                                  "type": "boolean"
                                 }
                               },
                               "required": [
                                 "_id",
-                                "description",
                                 "name",
                                 "server"
                               ]
@@ -10422,7 +10967,7 @@
                           }
                         },
                         "default_permissions": {
-                          "description": "Default permissions for all members",
+                          "description": "Default permissions for all members\n\nThis is a tuple consisting of server and channel permissions in that order.",
                           "type": "array",
                           "items": [
                             {
@@ -10686,6 +11231,10 @@
                             "size",
                             "tag"
                           ]
+                        },
+                        "nsfw": {
+                          "description": "Whether this server is marked as not safe for work",
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -10722,11 +11271,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       },
@@ -10748,13 +11293,12 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Deleted invite."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
           },
           {
@@ -10819,11 +11363,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -10859,17 +11399,13 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Successfully synced data."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -10883,11 +11419,53 @@
         ],
         "responses": {
           "200": {
-            "description": "Unreads Data",
+            "description": "Array of Unreads Data",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/ChannelUnread"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ChannelUnread"
+                  },
+                  "definitions": {
+                    "ChannelUnread": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "object",
+                          "properties": {
+                            "channel": {
+                              "description": "Id",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "user": {
+                              "description": "Id",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "channel",
+                            "user"
+                          ]
+                        },
+                        "last_id": {
+                          "type": "string"
+                        },
+                        "mentions": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "last_id"
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -10895,11 +11473,7 @@
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -10922,17 +11496,13 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Subscribed successfully."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -10945,17 +11515,13 @@
           "Web Push"
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Unsubscribed successfully."
           }
         },
         "security": [
           {
-            "User ID": [],
             "Session Token": []
-          },
-          {
-            "Bot Token": []
           }
         ]
       }
@@ -10965,7 +11531,7 @@
     "Account": {
       "type": "object",
       "properties": {
-        "id": {
+        "_id": {
           "description": "User ID",
           "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
           "type": "string"
@@ -10976,14 +11542,14 @@
         }
       },
       "required": [
-        "email",
-        "id"
+        "_id",
+        "email"
       ]
     },
     "Session": {
       "type": "object",
       "properties": {
-        "id": {
+        "_id": {
           "description": "Session ID",
           "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
           "type": "string"
@@ -10993,14 +11559,40 @@
           "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
           "type": "string"
         },
-        "session_token": {
+        "token": {
           "maxLength": 64,
+          "type": "string"
+        },
+        "name": {
+          "description": "Device name",
+          "type": "string"
+        },
+        "subscription": {
+          "description": "Web Push subscription",
           "type": "string"
         }
       },
       "required": [
-        "session_token",
+        "name",
+        "token",
         "user_id"
+      ]
+    },
+    "SessionInfo": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "Session ID",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
+        },
+        "name": {
+          "description": "Device name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
       ]
     },
     "AttachmentId": {
@@ -11304,14 +11896,13 @@
           "description": "Whether the bot can be added by anyone",
           "type": "boolean"
         },
-        "interactionsURL": {
+        "interactions_url": {
           "description": "Interactions endpoint URL\n\nRequired for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.",
           "type": "string"
         }
       },
       "required": [
         "_id",
-        "interactionsURL",
         "owner",
         "public",
         "token"
@@ -11629,7 +12220,6 @@
         "_id",
         "active",
         "channel_type",
-        "last_message",
         "recipients"
       ],
       "definitions": {
@@ -11835,12 +12425,15 @@
         "permissions": {
           "description": "Permissions given to group members",
           "type": "number"
+        },
+        "nsfw": {
+          "description": "Whether this channel is marked as not safe for work",
+          "type": "boolean"
         }
       },
       "required": [
         "_id",
         "channel_type",
-        "last_message",
         "name",
         "owner",
         "recipients"
@@ -12015,11 +12608,14 @@
           "additionalProperties": {
             "type": "number"
           }
+        },
+        "nsfw": {
+          "description": "Whether this channel is marked as not safe for work",
+          "type": "boolean"
         }
       },
       "required": [
         "_id",
-        "description",
         "name",
         "server"
       ],
@@ -12195,11 +12791,14 @@
               "additionalProperties": {
                 "type": "number"
               }
+            },
+            "nsfw": {
+              "description": "Whether this channel is marked as not safe for work",
+              "type": "boolean"
             }
           },
           "required": [
             "_id",
-            "description",
             "name",
             "server"
           ]
@@ -12218,8 +12817,7 @@
             }
           },
           "required": [
-            "channel_type",
-            "last_message"
+            "channel_type"
           ]
         }
       ],
@@ -12395,11 +12993,14 @@
               "additionalProperties": {
                 "type": "number"
               }
+            },
+            "nsfw": {
+              "description": "Whether this channel is marked as not safe for work",
+              "type": "boolean"
             }
           },
           "required": [
             "_id",
-            "description",
             "name",
             "server"
           ]
@@ -12532,7 +13133,6 @@
                 "_id",
                 "active",
                 "channel_type",
-                "last_message",
                 "recipients"
               ]
             },
@@ -12737,12 +13337,15 @@
                 "permissions": {
                   "description": "Permissions given to group members",
                   "type": "number"
+                },
+                "nsfw": {
+                  "description": "Whether this channel is marked as not safe for work",
+                  "type": "boolean"
                 }
               },
               "required": [
                 "_id",
                 "channel_type",
-                "last_message",
                 "name",
                 "owner",
                 "recipients"
@@ -12916,11 +13519,14 @@
                   "additionalProperties": {
                     "type": "number"
                   }
+                },
+                "nsfw": {
+                  "description": "Whether this channel is marked as not safe for work",
+                  "type": "boolean"
                 }
               },
               "required": [
                 "_id",
-                "description",
                 "name",
                 "server"
               ]
@@ -12939,8 +13545,7 @@
                 }
               },
               "required": [
-                "channel_type",
-                "last_message"
+                "channel_type"
               ]
             },
             {
@@ -13111,11 +13716,14 @@
                   "additionalProperties": {
                     "type": "number"
                   }
+                },
+                "nsfw": {
+                  "description": "Whether this channel is marked as not safe for work",
+                  "type": "boolean"
                 }
               },
               "required": [
                 "_id",
-                "description",
                 "name",
                 "server"
               ]
@@ -13606,6 +14214,9 @@
                           },
                           "id": {
                             "type": "string"
+                          },
+                          "timestamp": {
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -13764,7 +14375,7 @@
                   "icon_url": {
                     "type": "string"
                   },
-                  "color": {
+                  "colour": {
                     "type": "string"
                   }
                 },
@@ -14893,6 +15504,9 @@
             },
             "id": {
               "type": "string"
+            },
+            "timestamp": {
+              "type": "string"
             }
           },
           "required": [
@@ -15061,6 +15675,9 @@
                     },
                     "id": {
                       "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -15219,7 +15836,7 @@
             "icon_url": {
               "type": "string"
             },
-            "color": {
+            "colour": {
               "type": "string"
             }
           },
@@ -15891,7 +16508,7 @@
           }
         },
         "default_permissions": {
-          "description": "Default permissions for all members",
+          "description": "Default permissions for all members\n\nThis is a tuple consisting of server and channel permissions in that order.",
           "type": "array",
           "items": [
             {
@@ -16155,6 +16772,10 @@
             "size",
             "tag"
           ]
+        },
+        "nsfw": {
+          "description": "Whether this server is marked as not safe for work",
+          "type": "boolean"
         }
       },
       "required": [
@@ -17111,10 +17732,10 @@
         }
       }
     },
-    "SetSettingsData": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
+    "FetchUnreads": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ChannelUnread"
       },
       "definitions": {
         "AttachmentTag": {
@@ -17163,6 +17784,43 @@
           },
           "required": [
             "owner"
+          ]
+        },
+        "ChannelUnread": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "user"
+              ]
+            },
+            "last_id": {
+              "type": "string"
+            },
+            "mentions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "_id",
+            "last_id"
           ]
         }
       }
@@ -17218,6 +17876,43 @@
           },
           "required": [
             "owner"
+          ]
+        },
+        "ChannelUnread": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "user"
+              ]
+            },
+            "last_id": {
+              "type": "string"
+            },
+            "mentions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "_id",
+            "last_id"
           ]
         }
       }
@@ -17275,6 +17970,43 @@
           "required": [
             "owner"
           ]
+        },
+        "ChannelUnread": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "user"
+              ]
+            },
+            "last_id": {
+              "type": "string"
+            },
+            "mentions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "_id",
+            "last_id"
+          ]
         }
       }
     },
@@ -17331,6 +18063,43 @@
           "required": [
             "owner"
           ]
+        },
+        "ChannelUnread": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "Id",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "user"
+              ]
+            },
+            "last_id": {
+              "type": "string"
+            },
+            "mentions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "_id",
+            "last_id"
+          ]
         }
       }
     }
@@ -17343,23 +18112,17 @@
   ],
   "components": {
     "securitySchemes": {
-      "User ID": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-user-id",
-        "description": "User ID is found when calling `/auth/login`.\n"
-      },
       "Session Token": {
         "type": "apiKey",
         "in": "header",
         "name": "x-session-token",
-        "description": "Session is created by calling `/auth/login`.\n"
+        "description": "Session is created by calling `/session/login`.\n"
       },
       "Bot Token": {
         "type": "apiKey",
         "in": "header",
         "name": "x-bot-token",
-        "description": "Bot tokens can be found by fetching `/bots/:id`.\n"
+        "description": "Generate a bot token in-app by going to [\"My Bots\"](https://app.revolt.chat/settings/bots) in user settings.\n"
       }
     }
   }

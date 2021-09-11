@@ -26,7 +26,8 @@ resource('/onboard/hello', {
         await success(
             "Onboarding information.",
             ref("OnboardingInformation")
-        )
+        ),
+        true
     )
 });
 
@@ -48,6 +49,7 @@ resource('/onboard/complete', {
                 }
             `),
             ...await noContent("Successfully set username")
-        }
+        },
+        true
     )
 });

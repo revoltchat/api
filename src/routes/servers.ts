@@ -119,7 +119,8 @@ resource('/servers/create', {
                 }
             `),
             ...await success('Server', ref("Server"))
-        }
+        },
+        true
     )
 });
 
@@ -202,7 +203,8 @@ resource('/servers/:server/ack', {
         {
             ...serverParams,
             ...await noContent("Marked as read.")
-        }
+        },
+        true
     ),
 });
 //#endregion

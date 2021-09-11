@@ -12,7 +12,7 @@ import './routes/index.js';
 
 async function generate(): Promise<Document> {
     return {
-        ['__comment' as any]: "THIS FILE WAS AUTO-GENERATED USING https://gitlab.insrt.uk/revolt/api. DO NOT EDIT.",
+        ['__comment' as any]: "THIS FILE WAS AUTO-GENERATED USING https://github.com/revoltchat/api. DO NOT EDIT.",
         openapi: "3.0.0",
         info: await info(),
         tags,
@@ -28,23 +28,17 @@ async function generate(): Promise<Document> {
         ],
         components: {
             securitySchemes: {
-                'User ID': {
-                    type: "apiKey",
-                    in: "header",
-                    name: "x-user-id",
-                    description: "User ID is found when calling `/auth/login`.\n"
-                },
                 'Session Token': {
                     type: "apiKey",
                     in: "header",
                     name: "x-session-token",
-                    description: "Session is created by calling `/auth/login`.\n"
+                    description: "Session is created by calling `/session/login`.\n"
                 },
                 'Bot Token': {
                     type: "apiKey",
                     in: "header",
                     name: "x-bot-token",
-                    description: "Bot tokens can be found by fetching `/bots/:id`.\n"
+                    description: "Generate a bot token in-app by going to [\"My Bots\"](https://app.revolt.chat/settings/bots) in user settings.\n"
                 }
             }
         }
