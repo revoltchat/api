@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.3-alpha.0",
+    "version": "0.5.3-alpha.0-patch.0",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -244,7 +244,7 @@
         ]
       }
     },
-    "/account": {
+    "/auth/account": {
       "get": {
         "summary": "Fetch Account",
         "description": "Fetch account information.",
@@ -270,7 +270,7 @@
         ]
       }
     },
-    "/account/create": {
+    "/auth/account/create": {
       "post": {
         "summary": "Create Account",
         "description": "Create a new account.",
@@ -318,7 +318,7 @@
         }
       }
     },
-    "/account/reverify": {
+    "/auth/account/reverify": {
       "post": {
         "summary": "Resend Verification",
         "description": "Resend account creation verification email.",
@@ -355,7 +355,7 @@
         }
       }
     },
-    "/account/verify/:code": {
+    "/auth/account/verify/:code": {
       "post": {
         "summary": "Verify Email",
         "description": "Verifies an email with code.",
@@ -380,7 +380,7 @@
         }
       }
     },
-    "/account/reset_password": {
+    "/auth/account/reset_password": {
       "post": {
         "summary": "Send Password Reset",
         "description": "Send password reset email.",
@@ -455,7 +455,7 @@
         }
       }
     },
-    "/account/change/password": {
+    "/auth/account/change/password": {
       "post": {
         "summary": "Change Password",
         "description": "Change account password.",
@@ -502,7 +502,7 @@
         ]
       }
     },
-    "/account/change/email": {
+    "/auth/account/change/email": {
       "post": {
         "summary": "Change Email",
         "description": "Change account email.",
@@ -547,7 +547,7 @@
         ]
       }
     },
-    "/session/login": {
+    "/auth/session/login": {
       "post": {
         "summary": "Login",
         "description": "Login to an account.",
@@ -607,23 +607,12 @@
         }
       }
     },
-    "/session/logout": {
-      "delete": {
+    "/auth/session/logout": {
+      "post": {
         "summary": "Logout",
         "description": "Close current session.",
         "tags": [
           "Session"
-        ],
-        "parameters": [
-          {
-            "name": "session",
-            "in": "path",
-            "required": true,
-            "description": "Session ID",
-            "schema": {
-              "$ref": "#/definitions/Id"
-            }
-          }
         ],
         "responses": {
           "204": {
@@ -637,7 +626,7 @@
         ]
       }
     },
-    "/session/:session": {
+    "/auth/session/:session": {
       "patch": {
         "summary": "Edit Session",
         "description": "Edit session information.",
@@ -716,7 +705,7 @@
         ]
       }
     },
-    "/session/all": {
+    "/auth/session/all": {
       "get": {
         "summary": "Fetch Sessions",
         "description": "Fetch all sessions.",
@@ -748,6 +737,7 @@
                         }
                       },
                       "required": [
+                        "_id",
                         "name"
                       ]
                     }
@@ -11592,6 +11582,7 @@
         }
       },
       "required": [
+        "_id",
         "name"
       ]
     },

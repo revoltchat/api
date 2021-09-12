@@ -7,7 +7,7 @@ group("Auth");
 //#region Account
 tag("Account", "Manage your account.");
 
-resource('/account', {
+resource('/auth/account', {
     get: routeAuthenticated(
         "Fetch Account",
         "Fetch account information.",
@@ -16,7 +16,7 @@ resource('/account', {
     )
 });
 
-resource('/account/create', {
+resource('/auth/account/create', {
     post: route(
         "Create Account",
         "Create a new account.",
@@ -51,7 +51,7 @@ resource('/account/create', {
     )
 });
 
-resource('/account/reverify', {
+resource('/auth/account/reverify', {
     post: route(
         "Resend Verification",
         "Resend account creation verification email.",
@@ -74,7 +74,7 @@ resource('/account/reverify', {
     )
 });
 
-resource('/account/verify/:code', {
+resource('/auth/account/verify/:code', {
     post: route(
         "Verify Email",
         "Verifies an email with code.",
@@ -87,7 +87,7 @@ resource('/account/verify/:code', {
     )
 });
 
-resource('/account/reset_password', {
+resource('/auth/account/reset_password', {
     post: route(
         "Send Password Reset",
         "Send password reset email.",
@@ -132,8 +132,8 @@ resource('/account/reset_password', {
     )
 });
 
-resource('/account/change/password', {
-    post: routeAuthenticated(
+resource('/auth/account/change/password', {
+    patch: routeAuthenticated(
         "Change Password",
         "Change account password.",
         {
@@ -160,8 +160,8 @@ resource('/account/change/password', {
     )
 });
 
-resource('/account/change/email', {
-    post: routeAuthenticated(
+resource('/auth/account/change/email', {
+    patch: routeAuthenticated(
         "Change Email",
         "Change account email.",
         {
@@ -190,7 +190,7 @@ resource('/account/change/email', {
 //#region Session
 tag("Session", "Create and manage sessions.");
 
-resource('/session/login', {
+resource('/auth/session/login', {
     post: route(
         "Login",
         "Login to an account.",
@@ -232,7 +232,7 @@ resource('/session/login', {
     )
 });
 
-resource('/session/logout', {
+resource('/auth/session/logout', {
     post: routeAuthenticated(
         "Logout",
         "Close current session.",
@@ -241,7 +241,7 @@ resource('/session/logout', {
     )
 });
 
-resource('/session/:session', {
+resource('/auth/session/:session', {
     patch: routeAuthenticated(
         "Edit Session",
         "Edit session information.",
@@ -276,7 +276,7 @@ resource('/session/:session', {
     )
 });
 
-resource('/session/all', {
+resource('/auth/session/all', {
     get: routeAuthenticated(
         "Fetch Sessions",
         "Fetch all sessions.",
