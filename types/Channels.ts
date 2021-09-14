@@ -3,27 +3,6 @@ import type { Id, Nonce } from "./_common"
 import type { Embed } from "./January"
 
 /**
- * Last message sent in channel
- */
-export type LastMessage = {
-    /**
-     * Message ID
-     */
-    _id: Id
-
-    /**
-     * Author ID
-     */
-    author: Id
-
-    /**
-     * Short content of message
-     * @maxLength 128
-     */
-    short: string
-}
-
-/**
  * Saved Messages channel has only one participant, the user who created it.
  */
 export type SavedMessagesChannel = {
@@ -58,7 +37,10 @@ export type DirectMessageChannel = {
      */
     recipients: Id[]
 
-    last_message?: LastMessage
+    /**
+     * Id of the last message in this channel
+     */
+    last_message_id?: Id
 }
 
 export type GroupChannel = {
@@ -89,7 +71,10 @@ export type GroupChannel = {
      */
     description?: string,
 
-    last_message?: LastMessage,
+    /**
+     * Id of the last message in this channel
+     */
+    last_message_id?: Id
 
     /**
      * Group icon
@@ -151,7 +136,10 @@ export type ServerChannel = {
 export type TextChannel = ServerChannel & {
     channel_type: 'TextChannel'
 
-    last_message?: string
+    /**
+     * Id of the last message in this channel
+     */
+     last_message_id?: Id
 }
 
 export type VoiceChannel = ServerChannel & {
