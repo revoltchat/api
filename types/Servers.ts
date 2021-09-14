@@ -157,4 +157,12 @@ export type Server = {
      * Whether this server is marked as not safe for work
      */
     nsfw?: boolean
+
+    /**
+     * Server flags
+     * 
+     * `1`: Official Revolt server
+     * `2`: Verified community server
+     */
+    flags?: number
 }

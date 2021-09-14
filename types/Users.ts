@@ -97,6 +97,13 @@ export interface User {
 
     /**
      * Bitfield of user's badges
+     * 
+     * `1`: Developer
+     * `2`: Translator
+     * `4`: Supporter
+     * `8`: Responsible Disclosure
+     * `16`: Revolt Team
+     * `256`: Early Adopter
      */
     badges?: number
 
@@ -115,9 +122,9 @@ export interface User {
     /**
      * User flags
      * 
-     * `0x1`: Account is suspended
-     * `0x2`: Account was deleted
-     * `0x4`: Account is banned
+     * `1`: Account is suspended
+     * `2`: Account was deleted
+     * `4`: Account is banned
      */
     flags?: number
 
