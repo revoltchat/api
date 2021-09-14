@@ -62,6 +62,17 @@ resource('/users/@me', {
             `),
             ...await noContent("Succesfully changed user object.")
         }
+    ),
+    get: routeAuthenticated(
+        "Fetch Self",
+        "Retrieve your user information.",
+        {
+            ...userParams,
+            ...await success(
+                "User information.",
+                ref("User")
+            )
+        }
     )
 });
 
