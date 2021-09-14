@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.3-alpha.0-patch.0",
+    "version": "0.5.3-alpha.1",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -456,7 +456,7 @@
       }
     },
     "/auth/account/change/password": {
-      "post": {
+      "patch": {
         "summary": "Change Password",
         "description": "Change account password.",
         "tags": [
@@ -503,7 +503,7 @@
       }
     },
     "/auth/account/change/email": {
-      "post": {
+      "patch": {
         "summary": "Change Email",
         "description": "Change account email.",
         "tags": [
@@ -1130,31 +1130,10 @@
                               "type": "string"
                             }
                           },
-                          "last_message": {
-                            "description": "Last message sent in channel",
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "description": "Message ID",
-                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                "type": "string"
-                              },
-                              "author": {
-                                "description": "Author ID",
-                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                "type": "string"
-                              },
-                              "short": {
-                                "description": "Short content of message",
-                                "maxLength": 128,
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "_id",
-                              "author",
-                              "short"
-                            ]
+                          "last_message_id": {
+                            "description": "Id of the last message in this channel",
+                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -1198,31 +1177,10 @@
                             "description": "Group description",
                             "type": "string"
                           },
-                          "last_message": {
-                            "description": "Last message sent in channel",
-                            "type": "object",
-                            "properties": {
-                              "_id": {
-                                "description": "Message ID",
-                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                "type": "string"
-                              },
-                              "author": {
-                                "description": "Author ID",
-                                "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                "type": "string"
-                              },
-                              "short": {
-                                "description": "Short content of message",
-                                "maxLength": 128,
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "_id",
-                              "author",
-                              "short"
-                            ]
+                          "last_message_id": {
+                            "description": "Id of the last message in this channel",
+                            "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                            "type": "string"
                           },
                           "icon": {
                             "description": "Group icon",
@@ -10169,31 +10127,10 @@
                                     "type": "string"
                                   }
                                 },
-                                "last_message": {
-                                  "description": "Last message sent in channel",
-                                  "type": "object",
-                                  "properties": {
-                                    "_id": {
-                                      "description": "Message ID",
-                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                      "type": "string"
-                                    },
-                                    "author": {
-                                      "description": "Author ID",
-                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                      "type": "string"
-                                    },
-                                    "short": {
-                                      "description": "Short content of message",
-                                      "maxLength": 128,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "_id",
-                                    "author",
-                                    "short"
-                                  ]
+                                "last_message_id": {
+                                  "description": "Id of the last message in this channel",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
                                 }
                               },
                               "required": [
@@ -10249,31 +10186,10 @@
                                   "description": "Group description",
                                   "type": "string"
                                 },
-                                "last_message": {
-                                  "description": "Last message sent in channel",
-                                  "type": "object",
-                                  "properties": {
-                                    "_id": {
-                                      "description": "Message ID",
-                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                      "type": "string"
-                                    },
-                                    "author": {
-                                      "description": "Author ID",
-                                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                      "type": "string"
-                                    },
-                                    "short": {
-                                      "description": "Short content of message",
-                                      "maxLength": 128,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "_id",
-                                    "author",
-                                    "short"
-                                  ]
+                                "last_message_id": {
+                                  "description": "Id of the last message in this channel",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "type": "string"
                                 },
                                 "icon": {
                                   "description": "Group icon",
@@ -10607,7 +10523,9 @@
                                     "TextChannel"
                                   ]
                                 },
-                                "last_message": {
+                                "last_message_id": {
+                                  "description": "Id of the last message in this channel",
+                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
                                   "type": "string"
                                 }
                               },
@@ -12076,45 +11994,6 @@
         }
       }
     },
-    "LastMessage": {
-      "description": "Last message sent in channel",
-      "type": "object",
-      "properties": {
-        "_id": {
-          "description": "Message ID",
-          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-          "type": "string"
-        },
-        "author": {
-          "description": "Author ID",
-          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-          "type": "string"
-        },
-        "short": {
-          "description": "Short content of message",
-          "maxLength": 128,
-          "type": "string"
-        }
-      },
-      "required": [
-        "_id",
-        "author",
-        "short"
-      ],
-      "definitions": {
-        "AttachmentTag": {
-          "description": "Attachment tag",
-          "enum": [
-            "attachments",
-            "avatars",
-            "backgrounds",
-            "banners",
-            "icons"
-          ],
-          "type": "string"
-        }
-      }
-    },
     "SavedMessagesChannel": {
       "description": "Saved Messages channel has only one participant, the user who created it.",
       "type": "object",
@@ -12180,31 +12059,10 @@
             "type": "string"
           }
         },
-        "last_message": {
-          "description": "Last message sent in channel",
-          "type": "object",
-          "properties": {
-            "_id": {
-              "description": "Message ID",
-              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-              "type": "string"
-            },
-            "author": {
-              "description": "Author ID",
-              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-              "type": "string"
-            },
-            "short": {
-              "description": "Short content of message",
-              "maxLength": 128,
-              "type": "string"
-            }
-          },
-          "required": [
-            "_id",
-            "author",
-            "short"
-          ]
+        "last_message_id": {
+          "description": "Id of the last message in this channel",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
         }
       },
       "required": [
@@ -12261,31 +12119,10 @@
           "description": "Group description",
           "type": "string"
         },
-        "last_message": {
-          "description": "Last message sent in channel",
-          "type": "object",
-          "properties": {
-            "_id": {
-              "description": "Message ID",
-              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-              "type": "string"
-            },
-            "author": {
-              "description": "Author ID",
-              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-              "type": "string"
-            },
-            "short": {
-              "description": "Short content of message",
-              "maxLength": 128,
-              "type": "string"
-            }
-          },
-          "required": [
-            "_id",
-            "author",
-            "short"
-          ]
+        "last_message_id": {
+          "description": "Id of the last message in this channel",
+          "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+          "type": "string"
         },
         "icon": {
           "description": "Group icon",
@@ -12803,7 +12640,9 @@
                 "TextChannel"
               ]
             },
-            "last_message": {
+            "last_message_id": {
+              "description": "Id of the last message in this channel",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
               "type": "string"
             }
           },
@@ -13093,31 +12932,10 @@
                     "type": "string"
                   }
                 },
-                "last_message": {
-                  "description": "Last message sent in channel",
-                  "type": "object",
-                  "properties": {
-                    "_id": {
-                      "description": "Message ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    },
-                    "author": {
-                      "description": "Author ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    },
-                    "short": {
-                      "description": "Short content of message",
-                      "maxLength": 128,
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "_id",
-                    "author",
-                    "short"
-                  ]
+                "last_message_id": {
+                  "description": "Id of the last message in this channel",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
                 }
               },
               "required": [
@@ -13173,31 +12991,10 @@
                   "description": "Group description",
                   "type": "string"
                 },
-                "last_message": {
-                  "description": "Last message sent in channel",
-                  "type": "object",
-                  "properties": {
-                    "_id": {
-                      "description": "Message ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    },
-                    "author": {
-                      "description": "Author ID",
-                      "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                      "type": "string"
-                    },
-                    "short": {
-                      "description": "Short content of message",
-                      "maxLength": 128,
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "_id",
-                    "author",
-                    "short"
-                  ]
+                "last_message_id": {
+                  "description": "Id of the last message in this channel",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "type": "string"
                 },
                 "icon": {
                   "description": "Group icon",
@@ -13531,7 +13328,9 @@
                     "TextChannel"
                   ]
                 },
-                "last_message": {
+                "last_message_id": {
+                  "description": "Id of the last message in this channel",
+                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
                   "type": "string"
                 }
               },
