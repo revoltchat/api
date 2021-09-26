@@ -52,6 +52,8 @@ export type Role = {
      * @maxLength 32
      **/
     name: string
+    
+    _id: Id
 
     permissions: PermissionTuple
 
