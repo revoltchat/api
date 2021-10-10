@@ -144,18 +144,22 @@ resource('/users/:user/default_avatar', {
 
 resource('/users/:user/mutual', {
     get: routeAuthenticated(
-        "Fetch Mutual Friends",
-        "Retrieve a list of mutual friends with another user.",
+        "Fetch Mutual Friends And Servers",
+        "Retrieve a list of mutual friends and servers with another user.",
         {
             ...userParams,
             ...await success(
-                "Mutual friends.",
+                "Mutual friends and servers.",
                 schema`
                     interface ${'MutualFriends'} {
                         /**
                          * Array of user IDs who both you and the other user are friends with.
                          */
                         users: string[]
+                        /**
+                         * Array of server IDs who both you and the other user are members of.
+                         */
+                        servers: string[]
                     }
                 `
             )
