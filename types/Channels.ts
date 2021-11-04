@@ -212,7 +212,7 @@ export type Message = {
      */
     replies?: Id[]
 
-    masqurade?: Masquerade
+    masquerade?: Masquerade
 }
 
 export type SystemMessage =
