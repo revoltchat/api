@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.3-alpha.8",
+    "version": "0.5.3-alpha.8-patch.0",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -2067,11 +2067,7 @@
                         "description": "Avatar URL",
                         "type": "string"
                       }
-                    },
-                    "required": [
-                      "avatar",
-                      "name"
-                    ]
+                    }
                   }
                 },
                 "required": [
@@ -2855,7 +2851,7 @@
                               "type": "string"
                             }
                           },
-                          "masqurade": {
+                          "masquerade": {
                             "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
                             "type": "object",
                             "properties": {
@@ -2867,11 +2863,7 @@
                                 "description": "Avatar URL",
                                 "type": "string"
                               }
-                            },
-                            "required": [
-                              "avatar",
-                              "name"
-                            ]
+                            }
                           }
                         },
                         "required": [
@@ -3566,7 +3558,7 @@
                                   "type": "string"
                                 }
                               },
-                              "masqurade": {
+                              "masquerade": {
                                 "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
                                 "type": "object",
                                 "properties": {
@@ -3578,11 +3570,7 @@
                                     "description": "Avatar URL",
                                     "type": "string"
                                   }
-                                },
-                                "required": [
-                                  "avatar",
-                                  "name"
-                                ]
+                                }
                               }
                             },
                             "required": [
@@ -4930,7 +4918,7 @@
                               "type": "string"
                             }
                           },
-                          "masqurade": {
+                          "masquerade": {
                             "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
                             "type": "object",
                             "properties": {
@@ -4942,11 +4930,7 @@
                                 "description": "Avatar URL",
                                 "type": "string"
                               }
-                            },
-                            "required": [
-                              "avatar",
-                              "name"
-                            ]
+                            }
                           }
                         },
                         "required": [
@@ -5753,7 +5737,7 @@
                               "type": "string"
                             }
                           },
-                          "masqurade": {
+                          "masquerade": {
                             "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
                             "type": "object",
                             "properties": {
@@ -5765,11 +5749,7 @@
                                 "description": "Avatar URL",
                                 "type": "string"
                               }
-                            },
-                            "required": [
-                              "avatar",
-                              "name"
-                            ]
+                            }
                           }
                         },
                         "required": [
@@ -6464,7 +6444,7 @@
                                   "type": "string"
                                 }
                               },
-                              "masqurade": {
+                              "masquerade": {
                                 "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
                                 "type": "object",
                                 "properties": {
@@ -6476,11 +6456,7 @@
                                     "description": "Avatar URL",
                                     "type": "string"
                                   }
-                                },
-                                "required": [
-                                  "avatar",
-                                  "name"
-                                ]
+                                }
                               }
                             },
                             "required": [
@@ -13590,10 +13566,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "avatar",
-        "name"
-      ],
       "definitions": {
         "AttachmentTag": {
           "description": "Attachment tag",
@@ -14287,7 +14259,7 @@
             "type": "string"
           }
         },
-        "masqurade": {
+        "masquerade": {
           "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
           "type": "object",
           "properties": {
@@ -14299,11 +14271,7 @@
               "description": "Avatar URL",
               "type": "string"
             }
-          },
-          "required": [
-            "avatar",
-            "name"
-          ]
+          }
         }
       },
       "required": [
