@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.3-alpha.2",
+    "version": "0.5.3-alpha.8",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -913,6 +913,44 @@
             "Bot Token": []
           }
         ]
+      },
+      "get": {
+        "summary": "Fetch Self",
+        "description": "Retrieve your user information.",
+        "tags": [
+          "User Information"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "$ref": "#/definitions/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          },
+          {
+            "Bot Token": []
+          }
+        ]
       }
     },
     "/users/@me/username": {
@@ -1038,8 +1076,8 @@
     },
     "/users/:user/mutual": {
       "get": {
-        "summary": "Fetch Mutual Friends",
-        "description": "Retrieve a list of mutual friends with another user.",
+        "summary": "Fetch Mutual Friends And Servers",
+        "description": "Retrieve a list of mutual friends and servers with another user.",
         "tags": [
           "User Information"
         ],
@@ -1056,7 +1094,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Mutual friends.",
+            "description": "Mutual friends and servers.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1068,9 +1106,17 @@
                       "items": {
                         "type": "string"
                       }
+                    },
+                    "servers": {
+                      "description": "Array of server IDs who both you and the other user are members of.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   },
                   "required": [
+                    "servers",
                     "users"
                   ]
                 }
@@ -1980,12 +2026,6 @@
                     "maxLength": 2000,
                     "type": "string"
                   },
-                  "nonce": {
-                    "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-                    "minLength": 1,
-                    "maxLength": 36,
-                    "type": "string"
-                  },
                   "attachments": {
                     "description": "Attachments to include in message.",
                     "type": "array",
@@ -2014,11 +2054,28 @@
                         "mention"
                       ]
                     }
+                  },
+                  "masquerade": {
+                    "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "Nickname to display",
+                        "type": "string"
+                      },
+                      "avatar": {
+                        "description": "Avatar URL",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "avatar",
+                      "name"
+                    ]
                   }
                 },
                 "required": [
-                  "content",
-                  "nonce"
+                  "content"
                 ]
               }
             }
@@ -2797,6 +2854,24 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "masqurade": {
+                            "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Nickname to display",
+                                "type": "string"
+                              },
+                              "avatar": {
+                                "description": "Avatar URL",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "avatar",
+                              "name"
+                            ]
                           }
                         },
                         "required": [
@@ -3490,6 +3565,24 @@
                                 "items": {
                                   "type": "string"
                                 }
+                              },
+                              "masqurade": {
+                                "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "description": "Nickname to display",
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "description": "Avatar URL",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "avatar",
+                                  "name"
+                                ]
                               }
                             },
                             "required": [
@@ -4836,6 +4929,24 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "masqurade": {
+                            "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Nickname to display",
+                                "type": "string"
+                              },
+                              "avatar": {
+                                "description": "Avatar URL",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "avatar",
+                              "name"
+                            ]
                           }
                         },
                         "required": [
@@ -5641,6 +5752,24 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "masqurade": {
+                            "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Nickname to display",
+                                "type": "string"
+                              },
+                              "avatar": {
+                                "description": "Avatar URL",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "avatar",
+                              "name"
+                            ]
                           }
                         },
                         "required": [
@@ -6334,6 +6463,24 @@
                                 "items": {
                                   "type": "string"
                                 }
+                              },
+                              "masqurade": {
+                                "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "description": "Nickname to display",
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "description": "Avatar URL",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "avatar",
+                                  "name"
+                                ]
                               }
                             },
                             "required": [
@@ -6865,12 +7012,6 @@
                     "maxLength": 1024,
                     "type": "string"
                   },
-                  "nonce": {
-                    "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-                    "minLength": 1,
-                    "maxLength": 36,
-                    "type": "string"
-                  },
                   "users": {
                     "description": "Array of user IDs to add to the group.\n\nMust be friends with them.",
                     "maxItems": 49,
@@ -6885,8 +7026,7 @@
                   }
                 },
                 "required": [
-                  "name",
-                  "nonce"
+                  "name"
                 ]
               }
             }
@@ -7584,17 +7724,10 @@
                   "nsfw": {
                     "description": "Whether this server is not safe for work",
                     "type": "boolean"
-                  },
-                  "nonce": {
-                    "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-                    "minLength": 1,
-                    "maxLength": 36,
-                    "type": "string"
                   }
                 },
                 "required": [
-                  "name",
-                  "nonce"
+                  "name"
                 ]
               }
             }
@@ -7667,17 +7800,10 @@
                   "nsfw": {
                     "description": "Whether this channel is not safe for work",
                     "type": "boolean"
-                  },
-                  "nonce": {
-                    "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-                    "minLength": 1,
-                    "maxLength": 36,
-                    "type": "string"
                   }
                 },
                 "required": [
                   "name",
-                  "nonce",
                   "type"
                 ]
               }
@@ -10062,286 +10188,250 @@
                     "channel": {
                       "anyOf": [
                         {
-                          "allOf": [
-                            {
-                              "description": "Saved Messages channel has only one participant, the user who created it.",
-                              "type": "object",
-                              "properties": {
-                                "_id": {
-                                  "description": "Channel Id",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                },
-                                "channel_type": {
-                                  "type": "string",
-                                  "enum": [
-                                    "SavedMessages"
-                                  ]
-                                },
-                                "user": {
-                                  "description": "User Id",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "_id",
-                                "channel_type",
-                                "user"
+                          "description": "Saved Messages channel has only one participant, the user who created it.",
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "description": "Channel Id",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "channel_type": {
+                              "type": "string",
+                              "enum": [
+                                "SavedMessages"
                               ]
                             },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "nonce": {
-                                  "type": "string"
-                                }
-                              }
+                            "user": {
+                              "description": "User Id",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
                             }
+                          },
+                          "required": [
+                            "_id",
+                            "channel_type",
+                            "user"
                           ]
                         },
                         {
-                          "allOf": [
-                            {
-                              "type": "object",
-                              "properties": {
-                                "_id": {
-                                  "description": "Channel Id",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                },
-                                "channel_type": {
-                                  "type": "string",
-                                  "enum": [
-                                    "DirectMessage"
-                                  ]
-                                },
-                                "active": {
-                                  "description": "Whether this DM is active",
-                                  "type": "boolean"
-                                },
-                                "recipients": {
-                                  "description": "List of user IDs who are participating in this DM",
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "last_message_id": {
-                                  "description": "Id of the last message in this channel",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "_id",
-                                "active",
-                                "channel_type",
-                                "recipients"
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "description": "Channel Id",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "channel_type": {
+                              "type": "string",
+                              "enum": [
+                                "DirectMessage"
                               ]
                             },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "nonce": {
-                                  "type": "string"
-                                }
+                            "active": {
+                              "description": "Whether this DM is active",
+                              "type": "boolean"
+                            },
+                            "recipients": {
+                              "description": "List of user IDs who are participating in this DM",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
                               }
+                            },
+                            "last_message_id": {
+                              "description": "Id of the last message in this channel",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
                             }
+                          },
+                          "required": [
+                            "_id",
+                            "active",
+                            "channel_type",
+                            "recipients"
                           ]
                         },
                         {
-                          "allOf": [
-                            {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "description": "Channel Id",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "channel_type": {
+                              "type": "string",
+                              "enum": [
+                                "Group"
+                              ]
+                            },
+                            "recipients": {
+                              "description": "List of user IDs who are participating in this group",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "name": {
+                              "description": "Group name",
+                              "type": "string"
+                            },
+                            "owner": {
+                              "description": "User ID of group owner",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "description": {
+                              "description": "Group description",
+                              "type": "string"
+                            },
+                            "last_message_id": {
+                              "description": "Id of the last message in this channel",
+                              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                              "type": "string"
+                            },
+                            "icon": {
+                              "description": "Group icon",
                               "type": "object",
                               "properties": {
                                 "_id": {
-                                  "description": "Channel Id",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                                  "description": "Attachment ID",
+                                  "minLength": 1,
+                                  "maxLength": 128,
                                   "type": "string"
                                 },
-                                "channel_type": {
-                                  "type": "string",
-                                  "enum": [
-                                    "Group"
-                                  ]
+                                "tag": {
+                                  "$ref": "#/definitions/AttachmentTag"
                                 },
-                                "recipients": {
-                                  "description": "List of user IDs who are participating in this group",
-                                  "type": "array",
-                                  "items": {
-                                    "type": "string"
-                                  }
-                                },
-                                "name": {
-                                  "description": "Group name",
-                                  "type": "string"
-                                },
-                                "owner": {
-                                  "description": "User ID of group owner",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                },
-                                "description": {
-                                  "description": "Group description",
-                                  "type": "string"
-                                },
-                                "last_message_id": {
-                                  "description": "Id of the last message in this channel",
-                                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                                  "type": "string"
-                                },
-                                "icon": {
-                                  "description": "Group icon",
-                                  "type": "object",
-                                  "properties": {
-                                    "_id": {
-                                      "description": "Attachment ID",
-                                      "minLength": 1,
-                                      "maxLength": 128,
-                                      "type": "string"
-                                    },
-                                    "tag": {
-                                      "$ref": "#/definitions/AttachmentTag"
-                                    },
-                                    "size": {
-                                      "description": "File size (in bytes)",
-                                      "type": "number"
-                                    },
-                                    "filename": {
-                                      "description": "File name",
-                                      "type": "string"
-                                    },
-                                    "metadata": {
-                                      "description": "Metadata",
-                                      "anyOf": [
-                                        {
-                                          "type": "object",
-                                          "properties": {
-                                            "type": {
-                                              "type": "string",
-                                              "enum": [
-                                                "File"
-                                              ]
-                                            }
-                                          },
-                                          "required": [
-                                            "type"
-                                          ]
-                                        },
-                                        {
-                                          "type": "object",
-                                          "properties": {
-                                            "type": {
-                                              "type": "string",
-                                              "enum": [
-                                                "Text"
-                                              ]
-                                            }
-                                          },
-                                          "required": [
-                                            "type"
-                                          ]
-                                        },
-                                        {
-                                          "type": "object",
-                                          "properties": {
-                                            "type": {
-                                              "type": "string",
-                                              "enum": [
-                                                "Audio"
-                                              ]
-                                            }
-                                          },
-                                          "required": [
-                                            "type"
-                                          ]
-                                        },
-                                        {
-                                          "type": "object",
-                                          "properties": {
-                                            "type": {
-                                              "type": "string",
-                                              "enum": [
-                                                "Image"
-                                              ]
-                                            },
-                                            "width": {
-                                              "type": "number"
-                                            },
-                                            "height": {
-                                              "type": "number"
-                                            }
-                                          },
-                                          "required": [
-                                            "height",
-                                            "type",
-                                            "width"
-                                          ]
-                                        },
-                                        {
-                                          "type": "object",
-                                          "properties": {
-                                            "type": {
-                                              "type": "string",
-                                              "enum": [
-                                                "Video"
-                                              ]
-                                            },
-                                            "width": {
-                                              "type": "number"
-                                            },
-                                            "height": {
-                                              "type": "number"
-                                            }
-                                          },
-                                          "required": [
-                                            "height",
-                                            "type",
-                                            "width"
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    "content_type": {
-                                      "description": "Content type",
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "_id",
-                                    "content_type",
-                                    "filename",
-                                    "metadata",
-                                    "size",
-                                    "tag"
-                                  ]
-                                },
-                                "permissions": {
-                                  "description": "Permissions given to group members",
+                                "size": {
+                                  "description": "File size (in bytes)",
                                   "type": "number"
                                 },
-                                "nsfw": {
-                                  "description": "Whether this channel is marked as not safe for work",
-                                  "type": "boolean"
+                                "filename": {
+                                  "description": "File name",
+                                  "type": "string"
+                                },
+                                "metadata": {
+                                  "description": "Metadata",
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "File"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "Text"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "Audio"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "Image"
+                                          ]
+                                        },
+                                        "width": {
+                                          "type": "number"
+                                        },
+                                        "height": {
+                                          "type": "number"
+                                        }
+                                      },
+                                      "required": [
+                                        "height",
+                                        "type",
+                                        "width"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "Video"
+                                          ]
+                                        },
+                                        "width": {
+                                          "type": "number"
+                                        },
+                                        "height": {
+                                          "type": "number"
+                                        }
+                                      },
+                                      "required": [
+                                        "height",
+                                        "type",
+                                        "width"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "content_type": {
+                                  "description": "Content type",
+                                  "type": "string"
                                 }
                               },
                               "required": [
                                 "_id",
-                                "channel_type",
-                                "name",
-                                "owner",
-                                "recipients"
+                                "content_type",
+                                "filename",
+                                "metadata",
+                                "size",
+                                "tag"
                               ]
                             },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "nonce": {
-                                  "type": "string"
-                                }
-                              }
+                            "permissions": {
+                              "description": "Permissions given to group members",
+                              "type": "number"
+                            },
+                            "nsfw": {
+                              "description": "Whether this channel is marked as not safe for work",
+                              "type": "boolean"
                             }
+                          },
+                          "required": [
+                            "_id",
+                            "channel_type",
+                            "name",
+                            "owner",
+                            "recipients"
                           ]
                         },
                         {
@@ -10532,14 +10622,6 @@
                               "required": [
                                 "channel_type"
                               ]
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "nonce": {
-                                  "type": "string"
-                                }
-                              }
                             }
                           ]
                         },
@@ -10726,14 +10808,6 @@
                               "required": [
                                 "channel_type"
                               ]
-                            },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "nonce": {
-                                  "type": "string"
-                                }
-                              }
                             }
                           ]
                         }
@@ -10745,12 +10819,6 @@
                         "_id": {
                           "description": "Server ID",
                           "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                          "type": "string"
-                        },
-                        "nonce": {
-                          "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-                          "minLength": 1,
-                          "maxLength": 36,
                           "type": "string"
                         },
                         "owner": {
@@ -12871,286 +12939,250 @@
     "Channel": {
       "anyOf": [
         {
-          "allOf": [
-            {
-              "description": "Saved Messages channel has only one participant, the user who created it.",
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "description": "Channel Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "channel_type": {
-                  "type": "string",
-                  "enum": [
-                    "SavedMessages"
-                  ]
-                },
-                "user": {
-                  "description": "User Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "_id",
-                "channel_type",
-                "user"
+          "description": "Saved Messages channel has only one participant, the user who created it.",
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Channel Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "channel_type": {
+              "type": "string",
+              "enum": [
+                "SavedMessages"
               ]
             },
-            {
-              "type": "object",
-              "properties": {
-                "nonce": {
-                  "type": "string"
-                }
-              }
+            "user": {
+              "description": "User Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
             }
+          },
+          "required": [
+            "_id",
+            "channel_type",
+            "user"
           ]
         },
         {
-          "allOf": [
-            {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "description": "Channel Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "channel_type": {
-                  "type": "string",
-                  "enum": [
-                    "DirectMessage"
-                  ]
-                },
-                "active": {
-                  "description": "Whether this DM is active",
-                  "type": "boolean"
-                },
-                "recipients": {
-                  "description": "List of user IDs who are participating in this DM",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "last_message_id": {
-                  "description": "Id of the last message in this channel",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "_id",
-                "active",
-                "channel_type",
-                "recipients"
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Channel Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "channel_type": {
+              "type": "string",
+              "enum": [
+                "DirectMessage"
               ]
             },
-            {
-              "type": "object",
-              "properties": {
-                "nonce": {
-                  "type": "string"
-                }
+            "active": {
+              "description": "Whether this DM is active",
+              "type": "boolean"
+            },
+            "recipients": {
+              "description": "List of user IDs who are participating in this DM",
+              "type": "array",
+              "items": {
+                "type": "string"
               }
+            },
+            "last_message_id": {
+              "description": "Id of the last message in this channel",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
             }
+          },
+          "required": [
+            "_id",
+            "active",
+            "channel_type",
+            "recipients"
           ]
         },
         {
-          "allOf": [
-            {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Channel Id",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "channel_type": {
+              "type": "string",
+              "enum": [
+                "Group"
+              ]
+            },
+            "recipients": {
+              "description": "List of user IDs who are participating in this group",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "name": {
+              "description": "Group name",
+              "type": "string"
+            },
+            "owner": {
+              "description": "User ID of group owner",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "description": {
+              "description": "Group description",
+              "type": "string"
+            },
+            "last_message_id": {
+              "description": "Id of the last message in this channel",
+              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+              "type": "string"
+            },
+            "icon": {
+              "description": "Group icon",
               "type": "object",
               "properties": {
                 "_id": {
-                  "description": "Channel Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
+                  "description": "Attachment ID",
+                  "minLength": 1,
+                  "maxLength": 128,
                   "type": "string"
                 },
-                "channel_type": {
-                  "type": "string",
-                  "enum": [
-                    "Group"
-                  ]
+                "tag": {
+                  "$ref": "#/definitions/AttachmentTag"
                 },
-                "recipients": {
-                  "description": "List of user IDs who are participating in this group",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "name": {
-                  "description": "Group name",
-                  "type": "string"
-                },
-                "owner": {
-                  "description": "User ID of group owner",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "description": {
-                  "description": "Group description",
-                  "type": "string"
-                },
-                "last_message_id": {
-                  "description": "Id of the last message in this channel",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "icon": {
-                  "description": "Group icon",
-                  "type": "object",
-                  "properties": {
-                    "_id": {
-                      "description": "Attachment ID",
-                      "minLength": 1,
-                      "maxLength": 128,
-                      "type": "string"
-                    },
-                    "tag": {
-                      "$ref": "#/definitions/AttachmentTag"
-                    },
-                    "size": {
-                      "description": "File size (in bytes)",
-                      "type": "number"
-                    },
-                    "filename": {
-                      "description": "File name",
-                      "type": "string"
-                    },
-                    "metadata": {
-                      "description": "Metadata",
-                      "anyOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": [
-                                "File"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "type"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": [
-                                "Text"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "type"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": [
-                                "Audio"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "type"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": [
-                                "Image"
-                              ]
-                            },
-                            "width": {
-                              "type": "number"
-                            },
-                            "height": {
-                              "type": "number"
-                            }
-                          },
-                          "required": [
-                            "height",
-                            "type",
-                            "width"
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": [
-                                "Video"
-                              ]
-                            },
-                            "width": {
-                              "type": "number"
-                            },
-                            "height": {
-                              "type": "number"
-                            }
-                          },
-                          "required": [
-                            "height",
-                            "type",
-                            "width"
-                          ]
-                        }
-                      ]
-                    },
-                    "content_type": {
-                      "description": "Content type",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "_id",
-                    "content_type",
-                    "filename",
-                    "metadata",
-                    "size",
-                    "tag"
-                  ]
-                },
-                "permissions": {
-                  "description": "Permissions given to group members",
+                "size": {
+                  "description": "File size (in bytes)",
                   "type": "number"
                 },
-                "nsfw": {
-                  "description": "Whether this channel is marked as not safe for work",
-                  "type": "boolean"
+                "filename": {
+                  "description": "File name",
+                  "type": "string"
+                },
+                "metadata": {
+                  "description": "Metadata",
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "File"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Text"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Audio"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Image"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Video"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    }
+                  ]
+                },
+                "content_type": {
+                  "description": "Content type",
+                  "type": "string"
                 }
               },
               "required": [
                 "_id",
-                "channel_type",
-                "name",
-                "owner",
-                "recipients"
+                "content_type",
+                "filename",
+                "metadata",
+                "size",
+                "tag"
               ]
             },
-            {
-              "type": "object",
-              "properties": {
-                "nonce": {
-                  "type": "string"
-                }
-              }
+            "permissions": {
+              "description": "Permissions given to group members",
+              "type": "number"
+            },
+            "nsfw": {
+              "description": "Whether this channel is marked as not safe for work",
+              "type": "boolean"
             }
+          },
+          "required": [
+            "_id",
+            "channel_type",
+            "name",
+            "owner",
+            "recipients"
           ]
         },
         {
@@ -13341,14 +13373,6 @@
               "required": [
                 "channel_type"
               ]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "nonce": {
-                  "type": "string"
-                }
-              }
             }
           ]
         },
@@ -13535,17 +13559,40 @@
               "required": [
                 "channel_type"
               ]
-            },
-            {
-              "type": "object",
-              "properties": {
-                "nonce": {
-                  "type": "string"
-                }
-              }
             }
           ]
         }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Masquerade": {
+      "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Nickname to display",
+          "type": "string"
+        },
+        "avatar": {
+          "description": "Avatar URL",
+          "type": "string"
+        }
+      },
+      "required": [
+        "avatar",
+        "name"
       ],
       "definitions": {
         "AttachmentTag": {
@@ -14239,6 +14286,24 @@
           "items": {
             "type": "string"
           }
+        },
+        "masqurade": {
+          "description": "Masquerade displayed for a message.\nReplaces user's name and avatar.",
+          "type": "object",
+          "properties": {
+            "name": {
+              "description": "Nickname to display",
+              "type": "string"
+            },
+            "avatar": {
+              "description": "Avatar URL",
+              "type": "string"
+            }
+          },
+          "required": [
+            "avatar",
+            "name"
+          ]
         }
       },
       "required": [
@@ -16172,12 +16237,6 @@
         "_id": {
           "description": "Server ID",
           "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-          "type": "string"
-        },
-        "nonce": {
-          "description": "Nonce value, prefer to use ULIDs here for better feature support.\n\nUsed to prevent double requests to create objects.",
-          "minLength": 1,
-          "maxLength": 36,
           "type": "string"
         },
         "owner": {

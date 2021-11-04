@@ -169,6 +169,7 @@ resource('/channels/:channel/messages', {
             ...channelParams,
             ...await body("Message to be sent.", schema`
                 import type { Id, AutumnId } from './_common';
+                import type { Masquerade } from './Channels';
 
                 interface ${'SendMessage'} {
                     /**
@@ -197,6 +198,8 @@ resource('/channels/:channel/messages', {
                          */
                         mention: boolean;
                     }[]
+
+                    masquerade?: Masquerade;
                 }
             `),
             ...await success(

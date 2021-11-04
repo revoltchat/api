@@ -148,6 +148,22 @@ export type VoiceChannel = ServerChannel & {
 
 export type Channel = (SavedMessagesChannel | DirectMessageChannel | GroupChannel | TextChannel | VoiceChannel)
 
+/**
+ * Masquerade displayed for a message.
+ * Replaces user's name and avatar.
+ */
+export type Masquerade = {
+    /**
+     * Nickname to display
+     */
+    name: string
+
+    /**
+     * Avatar URL
+     */
+    avatar: string
+}
+
 export type Message = {
     /**
      * Message Id
@@ -195,6 +211,8 @@ export type Message = {
      * Array of message IDs replied to
      */
     replies?: Id[]
+
+    masqurade?: Masquerade
 }
 
 export type SystemMessage =
