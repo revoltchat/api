@@ -156,12 +156,12 @@ export type Masquerade = {
     /**
      * Nickname to display
      */
-    name: string
+    name?: string
 
     /**
      * Avatar URL
      */
-    avatar: string
+    avatar?: string
 }
 
 export type Message = {
