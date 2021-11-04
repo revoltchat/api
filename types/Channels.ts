@@ -146,7 +146,7 @@ export type VoiceChannel = ServerChannel & {
     channel_type: 'VoiceChannel'
 }
 
-export type Channel = (SavedMessagesChannel | DirectMessageChannel | GroupChannel | TextChannel | VoiceChannel) & { nonce?: string }
+export type Channel = (SavedMessagesChannel | DirectMessageChannel | GroupChannel | TextChannel | VoiceChannel)
 
 export type Message = {
     /**

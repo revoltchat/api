@@ -93,7 +93,7 @@ resource('/servers/create', {
         "Create a new server.",
         {
             ...await body("Server Data", schema`
-                import { Id, Nonce } from './_common';
+                import { Id } from './_common';
 
                 interface ${'ServerData'} {
                     /**
@@ -114,8 +114,6 @@ resource('/servers/create', {
                      * Whether this server is not safe for work
                      */
                     nsfw?: boolean;
-
-                    nonce: Nonce;
                 }
             `),
             ...await success('Server', ref("Server"))
@@ -131,7 +129,7 @@ resource('/servers/:server/channels', {
         {
             ...serverParams,
             ...await body("Channel Data", schema`
-                import { Id, Nonce } from './_common';
+                import { Id } from './_common';
 
                 interface ${'ChannelData'} {
                     /**
@@ -157,8 +155,6 @@ resource('/servers/:server/channels', {
                      * Whether this channel is not safe for work
                      */
                     nsfw?: boolean;
-
-                    nonce: Nonce;
                 }
             `),
             ...success("Channel", ref("Channel"))

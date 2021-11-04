@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.5.3-alpha.2",
+  "version": "0.5.3-alpha.8",
   "description": "Revolt API typings",
   "main": "dist/index.js",
   "type": "module",

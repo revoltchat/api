@@ -1,5 +1,5 @@
 import type { Attachment } from './Autumn';
-import type { Id, Nonce } from './_common';
+import type { Id } from './_common';
 
 export type MemberCompositeKey = {
     server: Id
@@ -96,8 +96,6 @@ export type Server = {
      * Server ID
      */
     _id: Id
-
-    nonce?: Nonce
 
     /**
      * User ID of server owner

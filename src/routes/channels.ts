@@ -168,7 +168,7 @@ resource('/channels/:channel/messages', {
         {
             ...channelParams,
             ...await body("Message to be sent.", schema`
-                import type { Id, Nonce, AutumnId } from './_common';
+                import type { Id, AutumnId } from './_common';
 
                 interface ${'SendMessage'} {
                     /**
@@ -177,8 +177,6 @@ resource('/channels/:channel/messages', {
                      * @maxLength 2000
                      */
                     content: string;
-
-                    nonce: Nonce;
 
                     /**
                      * Attachments to include in message.
@@ -412,7 +410,7 @@ resource('/channels/create', {
         "Create a new group with friends.",
         {
             ...await body("Group Data", schema`
-                import { Id, Nonce } from './_common';
+                import { Id } from './_common';
 
                 interface ${'GroupData'} {
                     /**
@@ -428,8 +426,6 @@ resource('/channels/create', {
                      * @maxLength 1024
                      */
                     description?: string;
-
-                    nonce: Nonce;
 
                     /**
                      * Array of user IDs to add to the group.
