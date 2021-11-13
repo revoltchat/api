@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.3-alpha.8-patch.0",
+    "version": "0.5.3-alpha.9",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -3944,7 +3944,7 @@
                           }
                         },
                         "badges": {
-                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Revolt Team\n`256`: Early Adopter",
+                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Founder\n`32`: Platform Moderation\n`64`: Active Supporter\n`128`: Paw\n`256`: Early Adopter\n`512`: Reserved Relevant Joke Badge 1",
                           "type": "number"
                         },
                         "status": {
@@ -6830,7 +6830,7 @@
                           }
                         },
                         "badges": {
-                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Revolt Team\n`256`: Early Adopter",
+                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Founder\n`32`: Platform Moderation\n`64`: Active Supporter\n`128`: Paw\n`256`: Early Adopter\n`512`: Reserved Relevant Joke Badge 1",
                           "type": "number"
                         },
                         "status": {
@@ -7239,7 +7239,7 @@
                           }
                         },
                         "badges": {
-                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Revolt Team\n`256`: Early Adopter",
+                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Founder\n`32`: Platform Moderation\n`64`: Active Supporter\n`128`: Paw\n`256`: Early Adopter\n`512`: Reserved Relevant Joke Badge 1",
                           "type": "number"
                         },
                         "status": {
@@ -8380,7 +8380,7 @@
                           }
                         },
                         "badges": {
-                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Revolt Team\n`256`: Early Adopter",
+                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Founder\n`32`: Platform Moderation\n`64`: Active Supporter\n`128`: Paw\n`256`: Early Adopter\n`512`: Reserved Relevant Joke Badge 1",
                           "type": "number"
                         },
                         "status": {
@@ -9461,7 +9461,7 @@
                           }
                         },
                         "badges": {
-                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Revolt Team\n`256`: Early Adopter",
+                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Founder\n`32`: Platform Moderation\n`64`: Active Supporter\n`128`: Paw\n`256`: Early Adopter\n`512`: Reserved Relevant Joke Badge 1",
                           "type": "number"
                         },
                         "status": {
@@ -9807,7 +9807,7 @@
                           }
                         },
                         "badges": {
-                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Revolt Team\n`256`: Early Adopter",
+                          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Founder\n`32`: Platform Moderation\n`64`: Active Supporter\n`128`: Paw\n`256`: Early Adopter\n`512`: Reserved Relevant Joke Badge 1",
                           "type": "number"
                         },
                         "status": {
@@ -17280,7 +17280,7 @@
           }
         },
         "badges": {
-          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Revolt Team\n`256`: Early Adopter",
+          "description": "Bitfield of user's badges\n\n`1`: Developer\n`2`: Translator\n`4`: Supporter\n`8`: Responsible Disclosure\n`16`: Founder\n`32`: Platform Moderation\n`64`: Active Supporter\n`128`: Paw\n`256`: Early Adopter\n`512`: Reserved Relevant Joke Badge 1",
           "type": "number"
         },
         "status": {

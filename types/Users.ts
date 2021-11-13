@@ -102,8 +102,12 @@ export interface User {
      * `2`: Translator
      * `4`: Supporter
      * `8`: Responsible Disclosure
-     * `16`: Revolt Team
+     * `16`: Founder
+     * `32`: Platform Moderation
+     * `64`: Active Supporter
+     * `128`: Paw
      * `256`: Early Adopter
+     * `512`: Reserved Relevant Joke Badge 1
      */
     badges?: number
 
