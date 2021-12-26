@@ -9,11 +9,6 @@ export interface RevoltConfiguration {
      */
     features: {
         /**
-         * Whether users can register
-         */
-        registration: boolean
-
-        /**
          * hCaptcha options
          */
         captcha: {
