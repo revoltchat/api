@@ -15204,12 +15204,16 @@
         },
         "member_count": {
           "type": "number"
+        },
+        "owner_id": {
+          "type": "string"
         }
       },
       "required": [
         "channel_id",
         "channel_name",
         "member_count",
+        "owner_id",
         "server_id",
         "server_name",
         "type",

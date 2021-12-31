@@ -38,5 +38,6 @@ export type RetrievedInvite = {
     channel_description?: string
     user_name: string
     user_avatar?: Attachment,
-    member_count: number
+    member_count: number,
+    owner_id: string
 }
