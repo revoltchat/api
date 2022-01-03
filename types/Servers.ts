@@ -163,4 +163,15 @@ export type Server = {
      * `2`: Verified community server
      */
     flags?: number
+
+    /**
+     * Whether to collect analytics on this server
+     * Enabled if server is discoverable
+     */
+    analytics?: boolean
+
+    /**
+     * Whether this server is discoverable
+     */
+    discoverable?: boolean
 }

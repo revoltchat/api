@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.3-alpha.9",
+    "version": "0.5.4-alpha.0",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -9275,6 +9275,14 @@
                           "description": "Whether the bot can be added by anyone",
                           "type": "boolean"
                         },
+                        "analytics": {
+                          "description": "Whether to collect analytics on this bot\nEnabled if bot is discoverable",
+                          "type": "boolean"
+                        },
+                        "discoverable": {
+                          "description": "Whether this bot is discoverable",
+                          "type": "boolean"
+                        },
                         "interactions_url": {
                           "description": "Interactions endpoint URL\n\nRequired for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.",
                           "type": "string"
@@ -9619,6 +9627,14 @@
                         },
                         "public": {
                           "description": "Whether the bot can be added by anyone",
+                          "type": "boolean"
+                        },
+                        "analytics": {
+                          "description": "Whether to collect analytics on this bot\nEnabled if bot is discoverable",
+                          "type": "boolean"
+                        },
+                        "discoverable": {
+                          "description": "Whether this bot is discoverable",
                           "type": "boolean"
                         },
                         "interactions_url": {
@@ -11191,6 +11207,14 @@
                         "flags": {
                           "description": "Server flags\n\n`1`: Official Revolt server\n`2`: Verified community server",
                           "type": "number"
+                        },
+                        "analytics": {
+                          "description": "Whether to collect analytics on this server\nEnabled if server is discoverable",
+                          "type": "boolean"
+                        },
+                        "discoverable": {
+                          "description": "Whether this server is discoverable",
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -11851,6 +11875,14 @@
         },
         "public": {
           "description": "Whether the bot can be added by anyone",
+          "type": "boolean"
+        },
+        "analytics": {
+          "description": "Whether to collect analytics on this bot\nEnabled if bot is discoverable",
+          "type": "boolean"
+        },
+        "discoverable": {
+          "description": "Whether this bot is discoverable",
           "type": "boolean"
         },
         "interactions_url": {
@@ -16601,6 +16633,14 @@
         "flags": {
           "description": "Server flags\n\n`1`: Official Revolt server\n`2`: Verified community server",
           "type": "number"
+        },
+        "analytics": {
+          "description": "Whether to collect analytics on this server\nEnabled if server is discoverable",
+          "type": "boolean"
+        },
+        "discoverable": {
+          "description": "Whether this server is discoverable",
+          "type": "boolean"
         }
       },
       "required": [
@@ -17012,10 +17052,14 @@
     "Badges": {
       "enum": [
         1,
+        128,
         16,
         2,
         256,
+        32,
         4,
+        512,
+        64,
         8
       ],
       "type": "number",
@@ -17557,99 +17601,6 @@
         }
       }
     },
-    "FetchUnreads": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/ChannelUnread"
-      },
-      "definitions": {
-        "AttachmentTag": {
-          "description": "Attachment tag",
-          "enum": [
-            "attachments",
-            "avatars",
-            "backgrounds",
-            "banners",
-            "icons"
-          ],
-          "type": "string"
-        },
-        "RelationshipStatus": {
-          "description": "Your relationship with the user",
-          "enum": [
-            "Blocked",
-            "BlockedOther",
-            "Friend",
-            "Incoming",
-            "None",
-            "Outgoing",
-            "User"
-          ],
-          "type": "string"
-        },
-        "Presence": {
-          "description": "User presence",
-          "enum": [
-            "Busy",
-            "Idle",
-            "Invisible",
-            "Online"
-          ],
-          "type": "string"
-        },
-        "BotInformation": {
-          "description": "Bot information",
-          "type": "object",
-          "properties": {
-            "owner": {
-              "description": "The User ID of the owner of this bot",
-              "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-              "type": "string"
-            }
-          },
-          "required": [
-            "owner"
-          ]
-        },
-        "ChannelUnread": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "object",
-              "properties": {
-                "channel": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "user": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "channel",
-                "user"
-              ]
-            },
-            "last_id": {
-              "type": "string"
-            },
-            "mentions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": [
-            "_id",
-            "last_id"
-          ]
-        }
-      }
-    },
     "Id": {
       "description": "Id",
       "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
@@ -17701,43 +17652,6 @@
           },
           "required": [
             "owner"
-          ]
-        },
-        "ChannelUnread": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "object",
-              "properties": {
-                "channel": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "user": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "channel",
-                "user"
-              ]
-            },
-            "last_id": {
-              "type": "string"
-            },
-            "mentions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": [
-            "_id",
-            "last_id"
           ]
         }
       }
@@ -17795,43 +17709,6 @@
           "required": [
             "owner"
           ]
-        },
-        "ChannelUnread": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "object",
-              "properties": {
-                "channel": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "user": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "channel",
-                "user"
-              ]
-            },
-            "last_id": {
-              "type": "string"
-            },
-            "mentions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": [
-            "_id",
-            "last_id"
-          ]
         }
       }
     },
@@ -17887,43 +17764,6 @@
           },
           "required": [
             "owner"
-          ]
-        },
-        "ChannelUnread": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "object",
-              "properties": {
-                "channel": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                },
-                "user": {
-                  "description": "Id",
-                  "pattern": "[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{26}",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "channel",
-                "user"
-              ]
-            },
-            "last_id": {
-              "type": "string"
-            },
-            "mentions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": [
-            "_id",
-            "last_id"
           ]
         }
       }

@@ -26,6 +26,17 @@ export interface Bot {
     public: boolean
 
     /**
+     * Whether to collect analytics on this bot
+     * Enabled if bot is discoverable
+     */
+    analytics?: boolean
+
+    /**
+     * Whether this bot is discoverable
+     */
+    discoverable?: boolean
+
+    /**
      * Interactions endpoint URL
      * 
      * Required for dynamic interactions such as bot commands and message actions. Events will be sent over HTTP and a response may be generated directly.
