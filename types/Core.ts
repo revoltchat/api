@@ -31,7 +31,7 @@ export interface RevoltConfiguration {
         /**
          * Whether an invite code is required to register
          */
-        invite_only: string
+        invite_only: boolean
 
         /**
          * Autumn (file server) options
