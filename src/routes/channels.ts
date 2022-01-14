@@ -169,7 +169,7 @@ resource('/channels/:channel/messages', {
             ...channelParams,
             ...await body("Message to be sent.", schema`
                 import type { Id, AutumnId } from './_common';
-                import type { Masquerade } from './Channels';
+                import type { Masquerade, SendableEmbed } from './Channels';
 
                 interface ${'SendMessage'} {
                     /**
@@ -183,6 +183,13 @@ resource('/channels/:channel/messages', {
                      * Attachments to include in message.
                      */
                     attachments?: AutumnId[];
+
+                    /**
+                     * Embeds to include in the message
+                     * @minLength 1
+                     * @maxLength 10
+                     */
+                    embeds?: SendableEmbed[];
 
                     /**
                      * Messages to reply to.
@@ -285,6 +292,13 @@ resource('/channels/:channel/messages/:message', {
                      * @maxLength 2000
                      */
                     content: string;
+
+                    /**
+                     * Embeds to include in the message.
+                     * @minLength 0
+                     * @maxLength 10
+                     */
+                    embeds?: SendableEmbed[];
                 }
             `),
             ...await noContent("Message was changed.")

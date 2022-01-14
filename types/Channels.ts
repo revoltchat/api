@@ -1,6 +1,6 @@
 import type { Attachment } from "./Autumn"
 import type { Id, Nonce } from "./_common"
-import type { Embed } from "./January"
+import type { JanuaryEmbed } from "./January"
 
 /**
  * Saved Messages channel has only one participant, the user who created it.
@@ -226,3 +226,28 @@ export type SystemMessage =
     | { type: "channel_renamed"; name: string, by: Id }
     | { type: "channel_description_changed"; by: Id }
     | { type: "channel_icon_changed"; by: Id };
+
+export type TextEmbed = {
+    type: "Text",
+
+    icon_url?: string,
+    url?: string,
+    title?: string,
+    description?: string,
+    media?: Attachment,
+    colour?: string
+}
+
+export type Embed = TextEmbed | JanuaryEmbed | { type: "None" }
+
+// better name?
+export type SendableEmbed = {
+    type: "Text",
+
+    icon_url?: string,
+    url?: string,
+    title?: string,
+    description?: string,
+    media?: string,
+    colour?: string
+}

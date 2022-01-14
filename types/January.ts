@@ -35,12 +35,10 @@ export type EmbedSpecial = (
 )
 
 /**
- * Message embed
+ * Message url embed
  */
-export type Embed = (
+export type JanuaryEmbed = (
     {
-        type: 'None'
-    } | {
         type: 'Website'
 
         url?: string
