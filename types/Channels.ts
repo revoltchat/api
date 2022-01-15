@@ -240,7 +240,6 @@ export type TextEmbed = {
 
 export type Embed = TextEmbed | JanuaryEmbed | { type: "None" }
 
-// better name?
 export type SendableEmbed = {
     type: "Text",
 

@@ -3,7 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "version": "0.5.3-alpha.11",
+    "version": "0.5.3-alpha.12",
     "description": "User-first privacy focused chat platform built with modern web technologies.\n\n# Authentication\n\nCurrently all relevant requests are authenticated by the use of two headers which identify a session.\n\n<SecurityDefinitions />",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
@@ -2033,6 +2033,44 @@
                       "type": "string"
                     }
                   },
+                  "embeds": {
+                    "description": "Embeds to include in the message",
+                    "minLength": 1,
+                    "maxLength": 10,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Text"
+                          ]
+                        },
+                        "icon_url": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "media": {
+                          "type": "string"
+                        },
+                        "colour": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    }
+                  },
                   "replies": {
                     "description": "Messages to reply to.",
                     "type": "array",
@@ -2563,22 +2601,7 @@
                             "description": "Message link embeds",
                             "type": "array",
                             "items": {
-                              "description": "Message embed",
                               "anyOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "None"
-                                      ]
-                                    }
-                                  },
-                                  "required": [
-                                    "type"
-                                  ]
-                                },
                                 {
                                   "type": "object",
                                   "properties": {
@@ -2832,6 +2855,174 @@
                                         "width"
                                       ]
                                     }
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Text"
+                                      ]
+                                    },
+                                    "icon_url": {
+                                      "type": "string"
+                                    },
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "media": {
+                                      "type": "object",
+                                      "properties": {
+                                        "_id": {
+                                          "description": "Attachment ID",
+                                          "minLength": 1,
+                                          "maxLength": 128,
+                                          "type": "string"
+                                        },
+                                        "tag": {
+                                          "$ref": "#/definitions/AttachmentTag"
+                                        },
+                                        "size": {
+                                          "description": "File size (in bytes)",
+                                          "type": "number"
+                                        },
+                                        "filename": {
+                                          "description": "File name",
+                                          "type": "string"
+                                        },
+                                        "metadata": {
+                                          "description": "Metadata",
+                                          "anyOf": [
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "File"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Text"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Audio"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Image"
+                                                  ]
+                                                },
+                                                "width": {
+                                                  "type": "number"
+                                                },
+                                                "height": {
+                                                  "type": "number"
+                                                }
+                                              },
+                                              "required": [
+                                                "height",
+                                                "type",
+                                                "width"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Video"
+                                                  ]
+                                                },
+                                                "width": {
+                                                  "type": "number"
+                                                },
+                                                "height": {
+                                                  "type": "number"
+                                                }
+                                              },
+                                              "required": [
+                                                "height",
+                                                "type",
+                                                "width"
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        "content_type": {
+                                          "description": "Content type",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "_id",
+                                        "content_type",
+                                        "filename",
+                                        "metadata",
+                                        "size",
+                                        "tag"
+                                      ]
+                                    },
+                                    "colour": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "None"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
                                   ]
                                 }
                               ]
@@ -3270,22 +3461,7 @@
                                 "description": "Message link embeds",
                                 "type": "array",
                                 "items": {
-                                  "description": "Message embed",
                                   "anyOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "None"
-                                          ]
-                                        }
-                                      },
-                                      "required": [
-                                        "type"
-                                      ]
-                                    },
                                     {
                                       "type": "object",
                                       "properties": {
@@ -3539,6 +3715,174 @@
                                             "width"
                                           ]
                                         }
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "Text"
+                                          ]
+                                        },
+                                        "icon_url": {
+                                          "type": "string"
+                                        },
+                                        "url": {
+                                          "type": "string"
+                                        },
+                                        "title": {
+                                          "type": "string"
+                                        },
+                                        "description": {
+                                          "type": "string"
+                                        },
+                                        "media": {
+                                          "type": "object",
+                                          "properties": {
+                                            "_id": {
+                                              "description": "Attachment ID",
+                                              "minLength": 1,
+                                              "maxLength": 128,
+                                              "type": "string"
+                                            },
+                                            "tag": {
+                                              "$ref": "#/definitions/AttachmentTag"
+                                            },
+                                            "size": {
+                                              "description": "File size (in bytes)",
+                                              "type": "number"
+                                            },
+                                            "filename": {
+                                              "description": "File name",
+                                              "type": "string"
+                                            },
+                                            "metadata": {
+                                              "description": "Metadata",
+                                              "anyOf": [
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "File"
+                                                      ]
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Text"
+                                                      ]
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Audio"
+                                                      ]
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Image"
+                                                      ]
+                                                    },
+                                                    "width": {
+                                                      "type": "number"
+                                                    },
+                                                    "height": {
+                                                      "type": "number"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "height",
+                                                    "type",
+                                                    "width"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Video"
+                                                      ]
+                                                    },
+                                                    "width": {
+                                                      "type": "number"
+                                                    },
+                                                    "height": {
+                                                      "type": "number"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "height",
+                                                    "type",
+                                                    "width"
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            "content_type": {
+                                              "description": "Content type",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "_id",
+                                            "content_type",
+                                            "filename",
+                                            "metadata",
+                                            "size",
+                                            "tag"
+                                          ]
+                                        },
+                                        "colour": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "type"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "None"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type"
                                       ]
                                     }
                                   ]
@@ -4123,6 +4467,44 @@
                     "minLength": 1,
                     "maxLength": 2000,
                     "type": "string"
+                  },
+                  "embeds": {
+                    "description": "Embeds to include in the message.",
+                    "minLength": 0,
+                    "maxLength": 10,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Text"
+                          ]
+                        },
+                        "icon_url": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "media": {
+                          "type": "string"
+                        },
+                        "colour": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    }
                   }
                 },
                 "required": [
@@ -4630,22 +5012,7 @@
                             "description": "Message link embeds",
                             "type": "array",
                             "items": {
-                              "description": "Message embed",
                               "anyOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "None"
-                                      ]
-                                    }
-                                  },
-                                  "required": [
-                                    "type"
-                                  ]
-                                },
                                 {
                                   "type": "object",
                                   "properties": {
@@ -4899,6 +5266,174 @@
                                         "width"
                                       ]
                                     }
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Text"
+                                      ]
+                                    },
+                                    "icon_url": {
+                                      "type": "string"
+                                    },
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "media": {
+                                      "type": "object",
+                                      "properties": {
+                                        "_id": {
+                                          "description": "Attachment ID",
+                                          "minLength": 1,
+                                          "maxLength": 128,
+                                          "type": "string"
+                                        },
+                                        "tag": {
+                                          "$ref": "#/definitions/AttachmentTag"
+                                        },
+                                        "size": {
+                                          "description": "File size (in bytes)",
+                                          "type": "number"
+                                        },
+                                        "filename": {
+                                          "description": "File name",
+                                          "type": "string"
+                                        },
+                                        "metadata": {
+                                          "description": "Metadata",
+                                          "anyOf": [
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "File"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Text"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Audio"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Image"
+                                                  ]
+                                                },
+                                                "width": {
+                                                  "type": "number"
+                                                },
+                                                "height": {
+                                                  "type": "number"
+                                                }
+                                              },
+                                              "required": [
+                                                "height",
+                                                "type",
+                                                "width"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Video"
+                                                  ]
+                                                },
+                                                "width": {
+                                                  "type": "number"
+                                                },
+                                                "height": {
+                                                  "type": "number"
+                                                }
+                                              },
+                                              "required": [
+                                                "height",
+                                                "type",
+                                                "width"
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        "content_type": {
+                                          "description": "Content type",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "_id",
+                                        "content_type",
+                                        "filename",
+                                        "metadata",
+                                        "size",
+                                        "tag"
+                                      ]
+                                    },
+                                    "colour": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "None"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
                                   ]
                                 }
                               ]
@@ -5449,22 +5984,7 @@
                             "description": "Message link embeds",
                             "type": "array",
                             "items": {
-                              "description": "Message embed",
                               "anyOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "None"
-                                      ]
-                                    }
-                                  },
-                                  "required": [
-                                    "type"
-                                  ]
-                                },
                                 {
                                   "type": "object",
                                   "properties": {
@@ -5718,6 +6238,174 @@
                                         "width"
                                       ]
                                     }
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Text"
+                                      ]
+                                    },
+                                    "icon_url": {
+                                      "type": "string"
+                                    },
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "media": {
+                                      "type": "object",
+                                      "properties": {
+                                        "_id": {
+                                          "description": "Attachment ID",
+                                          "minLength": 1,
+                                          "maxLength": 128,
+                                          "type": "string"
+                                        },
+                                        "tag": {
+                                          "$ref": "#/definitions/AttachmentTag"
+                                        },
+                                        "size": {
+                                          "description": "File size (in bytes)",
+                                          "type": "number"
+                                        },
+                                        "filename": {
+                                          "description": "File name",
+                                          "type": "string"
+                                        },
+                                        "metadata": {
+                                          "description": "Metadata",
+                                          "anyOf": [
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "File"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Text"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Audio"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Image"
+                                                  ]
+                                                },
+                                                "width": {
+                                                  "type": "number"
+                                                },
+                                                "height": {
+                                                  "type": "number"
+                                                }
+                                              },
+                                              "required": [
+                                                "height",
+                                                "type",
+                                                "width"
+                                              ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "Video"
+                                                  ]
+                                                },
+                                                "width": {
+                                                  "type": "number"
+                                                },
+                                                "height": {
+                                                  "type": "number"
+                                                }
+                                              },
+                                              "required": [
+                                                "height",
+                                                "type",
+                                                "width"
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        "content_type": {
+                                          "description": "Content type",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "_id",
+                                        "content_type",
+                                        "filename",
+                                        "metadata",
+                                        "size",
+                                        "tag"
+                                      ]
+                                    },
+                                    "colour": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "None"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "type"
                                   ]
                                 }
                               ]
@@ -6156,22 +6844,7 @@
                                 "description": "Message link embeds",
                                 "type": "array",
                                 "items": {
-                                  "description": "Message embed",
                                   "anyOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "None"
-                                          ]
-                                        }
-                                      },
-                                      "required": [
-                                        "type"
-                                      ]
-                                    },
                                     {
                                       "type": "object",
                                       "properties": {
@@ -6425,6 +7098,174 @@
                                             "width"
                                           ]
                                         }
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "Text"
+                                          ]
+                                        },
+                                        "icon_url": {
+                                          "type": "string"
+                                        },
+                                        "url": {
+                                          "type": "string"
+                                        },
+                                        "title": {
+                                          "type": "string"
+                                        },
+                                        "description": {
+                                          "type": "string"
+                                        },
+                                        "media": {
+                                          "type": "object",
+                                          "properties": {
+                                            "_id": {
+                                              "description": "Attachment ID",
+                                              "minLength": 1,
+                                              "maxLength": 128,
+                                              "type": "string"
+                                            },
+                                            "tag": {
+                                              "$ref": "#/definitions/AttachmentTag"
+                                            },
+                                            "size": {
+                                              "description": "File size (in bytes)",
+                                              "type": "number"
+                                            },
+                                            "filename": {
+                                              "description": "File name",
+                                              "type": "string"
+                                            },
+                                            "metadata": {
+                                              "description": "Metadata",
+                                              "anyOf": [
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "File"
+                                                      ]
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Text"
+                                                      ]
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Audio"
+                                                      ]
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Image"
+                                                      ]
+                                                    },
+                                                    "width": {
+                                                      "type": "number"
+                                                    },
+                                                    "height": {
+                                                      "type": "number"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "height",
+                                                    "type",
+                                                    "width"
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "type": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "Video"
+                                                      ]
+                                                    },
+                                                    "width": {
+                                                      "type": "number"
+                                                    },
+                                                    "height": {
+                                                      "type": "number"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "height",
+                                                    "type",
+                                                    "width"
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            "content_type": {
+                                              "description": "Content type",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "_id",
+                                            "content_type",
+                                            "filename",
+                                            "metadata",
+                                            "size",
+                                            "tag"
+                                          ]
+                                        },
+                                        "colour": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "type"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "None"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type"
                                       ]
                                     }
                                   ]
@@ -14003,22 +14844,7 @@
           "description": "Message link embeds",
           "type": "array",
           "items": {
-            "description": "Message embed",
             "anyOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "None"
-                    ]
-                  }
-                },
-                "required": [
-                  "type"
-                ]
-              },
               {
                 "type": "object",
                 "properties": {
@@ -14272,6 +15098,174 @@
                       "width"
                     ]
                   }
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "Text"
+                    ]
+                  },
+                  "icon_url": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "media": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "description": "Attachment ID",
+                        "minLength": 1,
+                        "maxLength": 128,
+                        "type": "string"
+                      },
+                      "tag": {
+                        "$ref": "#/definitions/AttachmentTag"
+                      },
+                      "size": {
+                        "description": "File size (in bytes)",
+                        "type": "number"
+                      },
+                      "filename": {
+                        "description": "File name",
+                        "type": "string"
+                      },
+                      "metadata": {
+                        "description": "Metadata",
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "File"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "Text"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "Audio"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "Image"
+                                ]
+                              },
+                              "width": {
+                                "type": "number"
+                              },
+                              "height": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "height",
+                              "type",
+                              "width"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "Video"
+                                ]
+                              },
+                              "width": {
+                                "type": "number"
+                              },
+                              "height": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "height",
+                              "type",
+                              "width"
+                            ]
+                          }
+                        ]
+                      },
+                      "content_type": {
+                        "description": "Content type",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "_id",
+                      "content_type",
+                      "filename",
+                      "metadata",
+                      "size",
+                      "tag"
+                    ]
+                  },
+                  "colour": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "None"
+                    ]
+                  }
+                },
+                "required": [
+                  "type"
                 ]
               }
             ]
@@ -14557,6 +15551,658 @@
         }
       }
     },
+    "TextEmbed": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Text"
+          ]
+        },
+        "icon_url": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "media": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "description": "Attachment ID",
+              "minLength": 1,
+              "maxLength": 128,
+              "type": "string"
+            },
+            "tag": {
+              "$ref": "#/definitions/AttachmentTag"
+            },
+            "size": {
+              "description": "File size (in bytes)",
+              "type": "number"
+            },
+            "filename": {
+              "description": "File name",
+              "type": "string"
+            },
+            "metadata": {
+              "description": "Metadata",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "File"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Text"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Audio"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Image"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Video"
+                      ]
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "height",
+                    "type",
+                    "width"
+                  ]
+                }
+              ]
+            },
+            "content_type": {
+              "description": "Content type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "_id",
+            "content_type",
+            "filename",
+            "metadata",
+            "size",
+            "tag"
+          ]
+        },
+        "colour": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Embed": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Website"
+              ]
+            },
+            "url": {
+              "type": "string"
+            },
+            "special": {
+              "description": "A special 3rd party embed",
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "None"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "YouTube"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Twitch"
+                      ]
+                    },
+                    "content_type": {
+                      "enum": [
+                        "Channel",
+                        "Clip",
+                        "Video"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content_type",
+                    "id",
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Spotify"
+                      ]
+                    },
+                    "content_type": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content_type",
+                    "id",
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Soundcloud"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "Bandcamp"
+                      ]
+                    },
+                    "content_type": {
+                      "enum": [
+                        "Album",
+                        "Track"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "content_type",
+                    "id",
+                    "type"
+                  ]
+                }
+              ]
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "image": {
+              "description": "An embedded image",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "size": {
+                  "enum": [
+                    "Large",
+                    "Preview"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "height",
+                "size",
+                "url",
+                "width"
+              ]
+            },
+            "video": {
+              "description": "An embedded video",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "height",
+                "url",
+                "width"
+              ]
+            },
+            "site_name": {
+              "type": "string"
+            },
+            "icon_url": {
+              "type": "string"
+            },
+            "colour": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Image"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            {
+              "description": "An embedded image",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "size": {
+                  "enum": [
+                    "Large",
+                    "Preview"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "height",
+                "size",
+                "url",
+                "width"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Text"
+              ]
+            },
+            "icon_url": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "media": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "description": "Attachment ID",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "tag": {
+                  "$ref": "#/definitions/AttachmentTag"
+                },
+                "size": {
+                  "description": "File size (in bytes)",
+                  "type": "number"
+                },
+                "filename": {
+                  "description": "File name",
+                  "type": "string"
+                },
+                "metadata": {
+                  "description": "Metadata",
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "File"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Text"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Audio"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Image"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Video"
+                          ]
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "height",
+                        "type",
+                        "width"
+                      ]
+                    }
+                  ]
+                },
+                "content_type": {
+                  "description": "Content type",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "_id",
+                "content_type",
+                "filename",
+                "metadata",
+                "size",
+                "tag"
+              ]
+            },
+            "colour": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "None"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "SendableEmbed": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Text"
+          ]
+        },
+        "icon_url": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "media": {
+          "type": "string"
+        },
+        "colour": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "definitions": {
+        "AttachmentTag": {
+          "description": "Attachment tag",
+          "enum": [
+            "attachments",
+            "avatars",
+            "backgrounds",
+            "banners",
+            "icons"
+          ],
+          "type": "string"
+        }
+      }
+    },
     "RevoltConfiguration": {
       "type": "object",
       "properties": {
@@ -14568,10 +16214,6 @@
           "description": "Available features exposed by the API",
           "type": "object",
           "properties": {
-            "registration": {
-              "description": "Whether users can register",
-              "type": "boolean"
-            },
             "captcha": {
               "description": "hCaptcha options",
               "type": "object",
@@ -14596,7 +16238,7 @@
             },
             "invite_only": {
               "description": "Whether an invite code is required to register",
-              "type": "string"
+              "type": "boolean"
             },
             "autumn": {
               "description": "Autumn (file server) options",
@@ -14664,7 +16306,6 @@
             "email",
             "invite_only",
             "january",
-            "registration",
             "voso"
           ]
         },
@@ -15477,23 +17118,9 @@
         }
       }
     },
-    "Embed": {
-      "description": "Message embed",
+    "JanuaryEmbed": {
+      "description": "Message url embed",
       "anyOf": [
-        {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "None"
-              ]
-            }
-          },
-          "required": [
-            "type"
-          ]
-        },
         {
           "type": "object",
           "properties": {

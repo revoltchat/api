@@ -285,6 +285,8 @@ resource('/channels/:channel/messages/:message', {
         {
             ...messageParams,
             ...await body("Message edit data.", schema`
+                import type { SendableEmbed } from './Channels';
+
                 interface ${'MessageEdit'} {
                     /**
                      * Message content
