@@ -1,5 +1,5 @@
 import type { Attachment } from "./Autumn"
-import type { Id, Nonce } from "./_common"
+import type { Id, Nonce, OverrideField } from "./_common"
 import type { JanuaryEmbed } from "./January"
 
 /**
@@ -118,13 +118,13 @@ export type ServerChannel = {
     /**
      * Permissions given to all users
      */
-    default_permissions?: number
+    default_permissions?: OverrideField
 
     /**
      * Permissions given to roles
      */
     role_permissions?: {
-        [key: string]: number
+        [key: string]: OverrideField
     }
 
     /**

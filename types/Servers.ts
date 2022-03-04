@@ -1,5 +1,5 @@
 import type { Attachment } from './Autumn';
-import type { Id } from './_common';
+import type { Id, OverrideField } from './_common';
 
 export type MemberCompositeKey = {
     server: Id
@@ -21,14 +21,6 @@ export type Ban = {
     _id: MemberCompositeKey
     reason?: string
 }
-
-/**
- * Tuple consisting of server and channel permissions in that order
- */
-export type PermissionTuple = [
-    number,
-    number
-]
 
 /**
  * Valid HTML colour
@@ -53,7 +45,7 @@ export type Role = {
      **/
     name: string
 
-    permissions: PermissionTuple
+    permissions: OverrideField
 
     colour?: Colour
 
@@ -136,10 +128,8 @@ export type Server = {
 
     /**
      * Default permissions for all members
-     *
-     * This is a tuple consisting of server and channel permissions in that order.
      */
-    default_permissions: PermissionTuple
+    default_permissions: number
 
     /**
      * Server icon

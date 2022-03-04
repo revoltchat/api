@@ -20,3 +20,23 @@ export type Nonce = string;
  * @maxLength 128
  */
 export type AutumnId = string;
+
+/**
+ * Permission override as it is processed.
+ */
+export type Override = {
+    // Allowed permission values
+    allow: number,
+    // Denied permission values
+    deny: number
+};
+
+/**
+ * Permission override as it is stored in the database.
+ */
+export type OverrideField = {
+    // Allowed permission values
+    a: number,
+    // Denied permission values
+    d: number
+};
