@@ -929,6 +929,23 @@ export interface components {
       /** @description Profile Description */
       description?: string | null;
     };
+    /** Bot Response */
+    BotResponse: {
+      /** @description Bot object */
+      bot: components["schemas"]["Bot"];
+      /** @description User object */
+      user: components["schemas"]["User"];
+    };
+    /**
+     * Owned Bots Response
+     * @description Both lists are sorted by their IDs.
+     */
+    OwnedBotsResponse: {
+      /** @description Bot objects */
+      bots: components["schemas"]["Bot"][];
+      /** @description User objects */
+      users: components["schemas"]["User"][];
+    };
     /** Bot Details */
     DataEditBot: {
       /** @description Bot username */
@@ -2129,7 +2146,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Bot"];
+          "application/json": components["schemas"]["BotResponse"];
         };
       };
       /** An error occurred. */
@@ -2189,7 +2206,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Bot"][];
+          "application/json": components["schemas"]["OwnedBotsResponse"];
         };
       };
       /** An error occurred. */

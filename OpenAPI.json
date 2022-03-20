@@ -808,7 +808,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Bot"
+                  "$ref": "#/components/schemas/BotResponse"
                 }
               }
             }
@@ -938,10 +938,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Bot"
-                  }
+                  "$ref": "#/components/schemas/OwnedBotsResponse"
                 }
               }
             }
@@ -5657,6 +5654,57 @@
             "description": "Profile Description",
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "BotResponse": {
+        "title": "Bot Response",
+        "type": "object",
+        "required": [
+          "bot",
+          "user"
+        ],
+        "properties": {
+          "bot": {
+            "description": "Bot object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Bot"
+              }
+            ]
+          },
+          "user": {
+            "description": "User object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ]
+          }
+        }
+      },
+      "OwnedBotsResponse": {
+        "title": "Owned Bots Response",
+        "description": "Both lists are sorted by their IDs.",
+        "type": "object",
+        "required": [
+          "bots",
+          "users"
+        ],
+        "properties": {
+          "bots": {
+            "description": "Bot objects",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bot"
+            }
+          },
+          "users": {
+            "description": "User objects",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
           }
         }
       },
