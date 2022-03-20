@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.5.3-alpha.12",
+  "version": "0.5.3-rc.1",
   "description": "Revolt API typings",
   "main": "dist/index.js",
   "type": "module",
@@ -9,23 +9,18 @@
   "author": "Paul Makles <insrt.uk>",
   "license": "MIT",
   "scripts": {
-    "build:generator": "tsc",
-    "start:generator": "node .",
-    "watch:generator": "tsc-watch",
-    "redoc": "docker run --network host -e SPEC_URL=http://localhost:5500/OpenAPI.json redocly/redoc",
-    "preview": "sirv . --port 5500 --host",
-    "dev": "concurrently \"yarn redoc\" \"nodemon --exec \\\"yarn build:generator && yarn start:generator && yarn preview\\\"\"",
-    "open": "concurrently \"yarn redoc\" \"yarn preview\" \"open-cli http://localhost:80\""
+    "build": "tsc",
+    "watch": "tsc-watch --onSuccess \"node --experimental-specifier-resolution=node dist\"",
+    "routes": "node scripts/generate_routes.js",
+    "exports": "node scripts/generate_exports.js",
+    "convert": "openapi-typescript OpenAPI.json --output src/schema.ts && node scripts/generate_routes.js && node scripts/generate_exports.js"
   },
   "devDependencies": {
-    "@openapi-contrib/json-schema-to-openapi-schema": "^2.0.0",
-    "concurrently": "^6.2.0",
-    "nodemon": "^2.0.12",
-    "open-cli": "^7.0.0",
-    "openapi-types": "^9.1.0",
-    "sirv-cli": "^1.0.12",
     "tsc-watch": "^4.4.0",
-    "typescript": "^4.3.5",
-    "typescript-json-schema": "^0.50.1"
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "axios": "^0.26.1",
+    "openapi-typescript": "^5.2.0"
   }
 }
