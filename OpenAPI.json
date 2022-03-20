@@ -437,7 +437,9 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/MutualResponse"
+                }
               }
             }
           }
@@ -1861,7 +1863,9 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/CreateVoiceUserResponse"
+                }
               }
             }
           }
@@ -2312,7 +2316,9 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/AllMemberResponse"
+                }
               }
             }
           }
@@ -2741,7 +2747,9 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/NewRoleResponse"
+                }
               }
             }
           }
@@ -3059,7 +3067,9 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/InviteJoinResponse"
+                }
               }
             }
           }
@@ -5506,6 +5516,30 @@
           }
         }
       },
+      "MutualResponse": {
+        "title": "Mutual Friends and Servers Response",
+        "type": "object",
+        "required": [
+          "servers",
+          "users"
+        ],
+        "properties": {
+          "users": {
+            "description": "Array of mutual user IDs that both users are friends with",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "servers": {
+            "description": "Array of mutual server IDs that both users are in",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "Bot": {
         "description": "Representation of a bot on Revolt",
         "type": "object",
@@ -6821,6 +6855,19 @@
           }
         }
       },
+      "CreateVoiceUserResponse": {
+        "title": "Voice Server Token Response",
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "description": "Token for authenticating with the voice server",
+            "type": "string"
+          }
+        }
+      },
       "Data": {
         "title": "Permission Value",
         "type": "object",
@@ -7220,6 +7267,31 @@
           "Voice"
         ]
       },
+      "AllMemberResponse": {
+        "title": "Member List",
+        "description": "Both lists are sorted by ID.",
+        "type": "object",
+        "required": [
+          "members",
+          "users"
+        ],
+        "properties": {
+          "members": {
+            "description": "List of members",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Member"
+            }
+          },
+          "users": {
+            "description": "List of users",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
       "DataMemberEdit": {
         "title": "Member Data",
         "type": "object",
@@ -7348,6 +7420,28 @@
               }
             ],
             "nullable": true
+          }
+        }
+      },
+      "NewRoleResponse": {
+        "title": "New Role Response",
+        "type": "object",
+        "required": [
+          "id",
+          "role"
+        ],
+        "properties": {
+          "id": {
+            "description": "Id of the role",
+            "type": "string"
+          },
+          "role": {
+            "description": "New role",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Role"
+              }
+            ]
           }
         }
       },
@@ -7573,6 +7667,43 @@
                   }
                 ],
                 "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "InviteJoinResponse": {
+        "title": "Join Response",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "channel",
+              "server",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Server"
+                ]
+              },
+              "channel": {
+                "description": "Channel we are joining",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Channel"
+                  }
+                ]
+              },
+              "server": {
+                "description": "Server we are joining",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Server"
+                  }
+                ]
               }
             }
           }

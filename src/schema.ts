@@ -875,6 +875,13 @@ export interface components {
        */
       r?: number | null;
     };
+    /** Mutual Friends and Servers Response */
+    MutualResponse: {
+      /** @description Array of mutual user IDs that both users are friends with */
+      users: string[];
+      /** @description Array of mutual server IDs that both users are in */
+      servers: string[];
+    };
     /** @description Representation of a bot on Revolt */
     Bot: {
       /**
@@ -1306,6 +1313,11 @@ export interface components {
       /** @description Whether this group is age-restricted */
       nsfw?: boolean | null;
     };
+    /** Voice Server Token Response */
+    CreateVoiceUserResponse: {
+      /** @description Token for authenticating with the voice server */
+      token: string;
+    };
     /** Permission Value */
     Data: {
       /** @description Allow / deny values to set for this role */
@@ -1461,6 +1473,16 @@ export interface components {
      * @enum {string}
      */
     ChannelType: "Text" | "Voice";
+    /**
+     * Member List
+     * @description Both lists are sorted by ID.
+     */
+    AllMemberResponse: {
+      /** @description List of members */
+      members: components["schemas"]["Member"][];
+      /** @description List of users */
+      users: components["schemas"]["User"][];
+    };
     /** Member Data */
     DataMemberEdit: {
       /** @description Member nickname */
@@ -1507,6 +1529,13 @@ export interface components {
       username: string;
       /** @description Avatar of the banned user */
       avatar?: components["schemas"]["File"] | null;
+    };
+    /** New Role Response */
+    NewRoleResponse: {
+      /** @description Id of the role */
+      id: string;
+      /** @description New role */
+      role: components["schemas"]["Role"];
     };
     /** Role Data */
     DataCreateRole: {
@@ -1599,6 +1628,15 @@ export interface components {
           /** @description Avatar of the user who created the invite */
           user_avatar?: components["schemas"]["File"] | null;
         };
+    /** Join Response */
+    InviteJoinResponse: {
+      /** @enum {string} */
+      type: "Server";
+      /** @description Channel we are joining */
+      channel: components["schemas"]["Channel"];
+      /** @description Server we are joining */
+      server: components["schemas"]["Server"];
+    };
     /** Account Data */
     DataCreateAccount: {
       /** @description Valid email address */
@@ -1921,7 +1959,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": unknown;
+          "application/json": components["schemas"]["MutualResponse"];
         };
       };
       /** An error occurred. */
@@ -2556,7 +2594,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": unknown;
+          "application/json": components["schemas"]["CreateVoiceUserResponse"];
         };
       };
       /** An error occurred. */
@@ -2760,7 +2798,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": unknown;
+          "application/json": components["schemas"]["AllMemberResponse"];
         };
       };
       /** An error occurred. */
@@ -2937,7 +2975,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": unknown;
+          "application/json": components["schemas"]["NewRoleResponse"];
         };
       };
       /** An error occurred. */
@@ -3030,7 +3068,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": unknown;
+          "application/json": components["schemas"]["InviteJoinResponse"];
         };
       };
       /** An error occurred. */
