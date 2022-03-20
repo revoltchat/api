@@ -902,14 +902,15 @@ export interface components {
       name: string;
     };
     /** Invite Destination */
-    InviteBotDestination: Partial<{
-      /** @description Server Id */
-      server: string;
-    }> &
-      Partial<{
-        /** @description Group Id */
-        group: string;
-      }>;
+    InviteBotDestination:
+      | {
+          /** @description Server Id */
+          server: string;
+        }
+      | {
+          /** @description Group Id */
+          group: string;
+        };
     /** Public Bot */
     PublicBot: {
       /** @description Bot Id */
@@ -1014,7 +1015,7 @@ export interface components {
       masquerade?: components["schemas"]["Masquerade"] | null;
     };
     /** @description Untagged enum representing message content */
-    Content: Partial<string> & Partial<components["schemas"]["SystemMessage"]>;
+    Content: string | components["schemas"]["SystemMessage"];
     /** @description Representation of a system event message */
     SystemMessage:
       | {
@@ -1217,15 +1218,16 @@ export interface components {
      * Bulk Message Response
      * @description Response used when multiple messages are fetched
      */
-    BulkMessageResponse: Partial<components["schemas"]["Message"][]> &
-      Partial<{
-        /** @description List of messages */
-        messages: components["schemas"]["Message"][];
-        /** @description List of users */
-        users: components["schemas"]["User"][];
-        /** @description List of members */
-        members?: components["schemas"]["Member"][] | null;
-      }>;
+    BulkMessageResponse:
+      | components["schemas"]["Message"][]
+      | {
+          /** @description List of messages */
+          messages: components["schemas"]["Message"][];
+          /** @description List of users */
+          users: components["schemas"]["User"][];
+          /** @description List of members */
+          members?: components["schemas"]["Member"][] | null;
+        };
     /** @description Representation of a member of a server on Revolt */
     Member: {
       /** @description Unique member id */
@@ -1328,17 +1330,18 @@ export interface components {
       rank?: number | null;
     };
     /** Permission Value */
-    DataDefaultChannelPermissions: Partial<{
-      /**
-       * Format: uint64
-       * @description Permission values to set for members in a `Group`
-       */
-      permissions: number;
-    }> &
-      Partial<{
-        /** @description Allow / deny values to set for members in this `TextChannel` or `VoiceChannel` */
-        permissions: components["schemas"]["Override"];
-      }>;
+    DataDefaultChannelPermissions:
+      | {
+          /**
+           * Format: uint64
+           * @description Permission values to set for members in a `Group`
+           */
+          permissions: number;
+        }
+      | {
+          /** @description Allow / deny values to set for members in this `TextChannel` or `VoiceChannel` */
+          permissions: components["schemas"]["Override"];
+        };
     /** @description Representation of a server on Revolt */
     Server: {
       /** @description Unique Id */
