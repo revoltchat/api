@@ -2,28 +2,38 @@
 
 ![revolt-api](https://img.shields.io/npm/v/revolt-api)
 
-This package contains typings for objects in the [Revolt API](https://developers.revolt.chat/api/) and code for generating the OpenAPI specification.
-
-For most cases, if not all, you should only be concerned with `revolt-api/types`.
+This package contains typings for objects in the [Revolt API](https://developers.revolt.chat/api/) and a fully typed API request builder.
 
 ### Example Usage
 
+If you just need access to types:
+
 ```typescript
-import type { User } from 'revolt-api/types/Users';
+import type { User } from 'revolt-api';
 ```
 
-### Tip (for development)
+If you want to send requests:
 
-For faster compile times when working on API routes, comment out the categories you don't care about.
+```typescript
+import { API } from 'revolt-api';
 
-```ts
-/// src/routes/index.ts
-export async function load() {
-    // await import('./core.js');
-    // await import('./users.js');
-    // await import('./channels.js');
-    await import('./servers.js');
-}
+// Initialise a new API client:
+const client = new API();
 
-await load();
+// or with authentication:
+const client = new API({ authentication: { revolt: 'bot-token' } });
+
+// Make requests with ease:
+client.get('/users/@me')
+    // Fully typed responses!
+    .then(user => user.username);
+
+// No need to worry about the details:
+let channel_id = "some channel id";
+client.post(`/channels/${channel_id}/messages`, {
+    // Parameters given are fully typed as well!
+    content: "some content"
+});
 ```
+
+For more details on how this works, see the [README of @insertish/oapi](https://github.com/insertish/oapi#example).
