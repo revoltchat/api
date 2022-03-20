@@ -10,6 +10,18 @@ import type { APIRoutes } from './routes';
 import { defaultBaseURL } from './baseURL';
 import { pathResolve, queryParams } from './params';
 
+type Methods = APIRoutes['method'];
+type PickRoutes<Method extends Methods> = APIRoutes & { method: Method };
+
+type GetRoutes = PickRoutes<'get'>;
+type PatchRoutes = PickRoutes<'patch'>;
+type PutRoutes = PickRoutes<'put'>;
+type DeleteRoutes = PickRoutes<'delete'>;
+type PostRoutes = PickRoutes<'post'>;
+
+type Count<Str extends string, SubStr extends string, Matches extends null[] = []> =
+    Str extends `${infer _}${SubStr}${infer After}` ? Count<After, SubStr, [...Matches, null]> : Matches['length'];
+
 /**
  * Get the specific path name of any given path.
  * @param anyPath Any path
@@ -33,15 +45,6 @@ export function getPathName(anyPath: string) {
         if (i === segments.length) return copy.join('/');
     }
 }
-
-type Methods = APIRoutes['method'];
-type PickRoutes<Method extends Methods> = APIRoutes & { method: Method };
-
-type GetRoutes = PickRoutes<'get'>;
-type PatchRoutes = PickRoutes<'patch'>;
-type PutRoutes = PickRoutes<'put'>;
-type DeleteRoutes = PickRoutes<'delete'>;
-type PostRoutes = PickRoutes<'post'>;
 
 /**
  * Client configuration options
@@ -124,7 +127,7 @@ export class API {
      * @param config Axios configuration
      * @returns Typed Response Data
      */
-    req<Method extends Methods, Routes extends PickRoutes<Method>, Path extends Routes['path'], Route extends Routes & { path: Path }>(method: Method, path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']> {
+    req<Method extends Methods, Routes extends PickRoutes<Method>, Path extends Routes['path'], Route extends Routes & { path: Path, parts: Count<Path, '/'> }>(method: Method, path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']> {
         let query, body;
         let named = getPathName(path);
 
@@ -167,16 +170,17 @@ export class API {
      * @param config Axios configuration
      * @returns Typed Response Data
      */
-    get<Path extends GetRoutes['path'], Route extends GetRoutes & { path: Path }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
+    get<Path extends GetRoutes['path'], Route extends GetRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
 
     /**
      * Send HTTP GET request.
      * @param path Path
      * @returns Typed Response Data
      */
-    get<Path extends (GetRoutes & { params: undefined })['path'], Route extends GetRoutes & { path: Path }>(path: Path): Promise<Route['response']>;
+    get<Path extends (GetRoutes & { params: undefined })['path'], Route extends GetRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path): Promise<Route['response']>;
 
     get(path: any, params?: any, config?: AxiosRequestConfig): Promise<any> {
+        // @ts-ignore-next-line
         return this.req('get', path, params, config);
     }
 
@@ -187,16 +191,17 @@ export class API {
      * @param config Axios configuration
      * @returns Typed Response Data
      */
-    patch<Path extends PatchRoutes['path'], Route extends PatchRoutes & { path: Path }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
+    patch<Path extends PatchRoutes['path'], Route extends PatchRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
 
     /**
      * Send HTTP PATCH request.
      * @param path Path
      * @returns Typed Response Data
      */
-    patch<Path extends (PatchRoutes & { params: undefined })['path'], Route extends PatchRoutes & { path: Path }>(path: Path): Promise<Route['response']>;
+    patch<Path extends (PatchRoutes & { params: undefined })['path'], Route extends PatchRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path): Promise<Route['response']>;
 
     patch(path: any, params?: any, config?: AxiosRequestConfig): Promise<any> {
+        // @ts-ignore-next-line
         return this.req('patch', path, params, config);
     }
 
@@ -207,16 +212,17 @@ export class API {
      * @param config Axios configuration
      * @returns Typed Response Data
      */
-    put<Path extends PutRoutes['path'], Route extends PutRoutes & { path: Path }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
+    put<Path extends PutRoutes['path'], Route extends PutRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
     
     /**
      * Send HTTP PUT request.
      * @param path Path
      * @returns Typed Response Data
      */
-    put<Path extends (PutRoutes & { params: undefined })['path'], Route extends PutRoutes & { path: Path }>(path: Path): Promise<Route['response']>;
+    put<Path extends (PutRoutes & { params: undefined })['path'], Route extends PutRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path): Promise<Route['response']>;
 
     put(path: any, params?: any, config?: AxiosRequestConfig): Promise<any> {
+        // @ts-ignore-next-line
         return this.req('put', path, params, config);
     }
 
@@ -227,16 +233,17 @@ export class API {
      * @param config Axios configuration
      * @returns Typed Response Data
      */
-    delete<Path extends DeleteRoutes['path'], Route extends DeleteRoutes & { path: Path }>(path: Path, config?: AxiosRequestConfig): Promise<Route['response']>;
+    delete<Path extends DeleteRoutes['path'], Route extends DeleteRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, config?: AxiosRequestConfig): Promise<Route['response']>;
     
     /**
      * Send HTTP DELETE request.
      * @param path Path
      * @returns Typed Response Data
      */
-    delete<Path extends (DeleteRoutes & { params: undefined })['path'], Route extends DeleteRoutes & { path: Path }>(path: Path): Promise<Route['response']>;
+    delete<Path extends (DeleteRoutes & { params: undefined })['path'], Route extends DeleteRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path): Promise<Route['response']>;
 
     delete(path: any, config?: AxiosRequestConfig): Promise<any> {
+        // @ts-ignore-next-line
         return this.req('delete', path, undefined, config);
     }
 
@@ -247,16 +254,17 @@ export class API {
      * @param config Axios configuration
      * @returns Typed Response Data
      */
-    post<Path extends PostRoutes['path'], Route extends PostRoutes & { path: Path }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
+    post<Path extends PostRoutes['path'], Route extends PostRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path, params: Route['params'], config?: AxiosRequestConfig): Promise<Route['response']>;
     
     /**
      * Send HTTP POST request.
      * @param path Path
      * @returns Typed Response Data
      */
-    post<Path extends (PostRoutes & { params: undefined })['path'], Route extends PostRoutes & { path: Path }>(path: Path): Promise<Route['response']>;
+    post<Path extends (PostRoutes & { params: undefined })['path'], Route extends PostRoutes & { path: Path, parts: Count<Path, '/'> }>(path: Path): Promise<Route['response']>;
 
     post(path: any, params?: any, config?: AxiosRequestConfig): Promise<any> {
+        // @ts-ignore-next-line
         return this.req('post', path, params, config);
     }
 }
