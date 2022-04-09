@@ -2030,7 +2030,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Server"
+                  "$ref": "#/components/schemas/CreateServerResponse"
                 }
               }
             }
@@ -6996,6 +6996,31 @@
           }
         ]
       },
+      "CreateServerResponse": {
+        "title": "Create Server Response",
+        "type": "object",
+        "required": [
+          "channels",
+          "server"
+        ],
+        "properties": {
+          "server": {
+            "description": "Server object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Server"
+              }
+            ]
+          },
+          "channels": {
+            "description": "Default channels",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Channel"
+            }
+          }
+        }
+      },
       "Server": {
         "description": "Representation of a server on Revolt",
         "type": "object",
@@ -7602,6 +7627,7 @@
             "required": [
               "channel_id",
               "channel_name",
+              "code",
               "member_count",
               "server_id",
               "server_name",
@@ -7614,6 +7640,10 @@
                 "enum": [
                   "Server"
                 ]
+              },
+              "code": {
+                "description": "Invite code",
+                "type": "string"
               },
               "server_id": {
                 "description": "Id of the server",
@@ -7680,6 +7710,7 @@
             "required": [
               "channel_id",
               "channel_name",
+              "code",
               "type",
               "user_name"
             ],
@@ -7689,6 +7720,10 @@
                 "enum": [
                   "Group"
                 ]
+              },
+              "code": {
+                "description": "Invite code",
+                "type": "string"
               },
               "channel_id": {
                 "description": "Id of group channel",
@@ -7726,7 +7761,7 @@
           {
             "type": "object",
             "required": [
-              "channel",
+              "channels",
               "server",
               "type"
             ],
@@ -7737,13 +7772,12 @@
                   "Server"
                 ]
               },
-              "channel": {
-                "description": "Channel we are joining",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Channel"
-                  }
-                ]
+              "channels": {
+                "description": "Channels in the server",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Channel"
+                }
               },
               "server": {
                 "description": "Server we are joining",

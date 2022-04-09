@@ -1371,6 +1371,13 @@ export interface components {
           /** @description Allow / deny values to set for members in this `TextChannel` or `VoiceChannel` */
           permissions: components["schemas"]["Override"];
         };
+    /** Create Server Response */
+    CreateServerResponse: {
+      /** @description Server object */
+      server: components["schemas"]["Server"];
+      /** @description Default channels */
+      channels: components["schemas"]["Channel"][];
+    };
     /** @description Representation of a server on Revolt */
     Server: {
       /** @description Unique Id */
@@ -1607,6 +1614,8 @@ export interface components {
       | {
           /** @enum {string} */
           type: "Server";
+          /** @description Invite code */
+          code: string;
           /** @description Id of the server */
           server_id: string;
           /** @description Name of the server */
@@ -1634,6 +1643,8 @@ export interface components {
       | {
           /** @enum {string} */
           type: "Group";
+          /** @description Invite code */
+          code: string;
           /** @description Id of group channel */
           channel_id: string;
           /** @description Name of group channel */
@@ -1649,8 +1660,8 @@ export interface components {
     InviteJoinResponse: {
       /** @enum {string} */
       type: "Server";
-      /** @description Channel we are joining */
-      channel: components["schemas"]["Channel"];
+      /** @description Channels in the server */
+      channels: components["schemas"]["Channel"][];
       /** @description Server we are joining */
       server: components["schemas"]["Server"];
     };
@@ -2680,7 +2691,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Server"];
+          "application/json": components["schemas"]["CreateServerResponse"];
         };
       };
       /** An error occurred. */

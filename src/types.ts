@@ -64,6 +64,7 @@ export type CreateVoiceUserResponse = components['schemas']['CreateVoiceUserResp
 export type Data = components['schemas']['Data'];
 export type Override = components['schemas']['Override'];
 export type DataDefaultChannelPermissions = components['schemas']['DataDefaultChannelPermissions'];
+export type CreateServerResponse = components['schemas']['CreateServerResponse'];
 export type Server = components['schemas']['Server'];
 export type Category = components['schemas']['Category'];
 export type SystemMessageChannels = components['schemas']['SystemMessageChannels'];
