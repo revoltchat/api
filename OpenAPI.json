@@ -363,7 +363,7 @@
           "Direct Messaging"
         ],
         "summary": "Open Direct Message",
-        "description": "Open a DM with another user.",
+        "description": "Open a DM with another user.\n\nIf the target is oneself, a saved messages channel is returned.",
         "operationId": "open_dm_req",
         "parameters": [
           {
@@ -5922,7 +5922,7 @@
             "description": "Time at which this message was last edited",
             "allOf": [
               {
-                "$ref": "#/components/schemas/DateTimeContainer"
+                "$ref": "#/components/schemas/ISO8601 Timestamp"
               }
             ],
             "nullable": true
@@ -6176,18 +6176,10 @@
           }
         ]
       },
-      "DateTimeContainer": {
-        "description": "Container so we can apply this within Option<>s.",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/DateTime"
-          }
-        ]
-      },
-      "DateTime": {
-        "description": "Local definition of DateTime from Bson",
-        "type": "integer",
-        "format": "int64"
+      "ISO8601 Timestamp": {
+        "description": "ISO8601 formatted timestamp",
+        "type": "string",
+        "example": "1970-01-01T00:00:00Z"
       },
       "Embed": {
         "oneOf": [

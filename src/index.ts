@@ -185,7 +185,7 @@ export class API {
     }
 
     /**
-     * Send HTTP GET request.
+     * Send HTTP PATCH request.
      * @param path Path
      * @param params Body or Query Parameters
      * @param config Axios configuration

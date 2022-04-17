@@ -39,7 +39,11 @@ export interface paths {
     get: operations["fetch_dms_req"];
   };
   "/users/{target}/dm": {
-    /** Open a DM with another user. */
+    /**
+     * Open a DM with another user.
+     *
+     * If the target is oneself, a saved messages channel is returned.
+     */
     get: operations["open_dm_req"];
   };
   "/users/{target}/mutual": {
@@ -1028,7 +1032,7 @@ export interface components {
       /** @description Array of attachments */
       attachments?: components["schemas"]["File"][] | null;
       /** @description Time at which this message was last edited */
-      edited?: components["schemas"]["DateTimeContainer"] | null;
+      edited?: components["schemas"]["ISO8601 Timestamp"] | null;
       /** @description Attached embeds to this message */
       embeds?: components["schemas"]["Embed"][] | null;
       /** @description Array of user ids mentioned in this message */
@@ -1095,13 +1099,11 @@ export interface components {
           type: "channel_icon_changed";
           by: string;
         };
-    /** @description Container so we can apply this within Option<>s. */
-    DateTimeContainer: components["schemas"]["DateTime"];
     /**
-     * Format: int64
-     * @description Local definition of DateTime from Bson
+     * @description ISO8601 formatted timestamp
+     * @example 1970-01-01T00:00:00Z
      */
-    DateTime: number;
+    "ISO8601 Timestamp": string;
     Embed:
       | {
           /** @enum {string} */
@@ -1956,7 +1958,11 @@ export interface operations {
       };
     };
   };
-  /** Open a DM with another user. */
+  /**
+   * Open a DM with another user.
+   *
+   * If the target is oneself, a saved messages channel is returned.
+   */
   open_dm_req: {
     parameters: {
       path: {
