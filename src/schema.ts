@@ -1211,7 +1211,7 @@ export interface components {
        */
       nonce?: string | null;
       /** @description Message content to send */
-      content: string;
+      content?: string | null;
       /** @description Attachments to include in message */
       attachments?: string[] | null;
       /** @description Messages to reply to */
@@ -2827,6 +2827,10 @@ export interface operations {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
+      };
+      query: {
+        /** Whether to exclude offline users */
+        exclude_offline?: boolean | null;
       };
     };
     responses: {

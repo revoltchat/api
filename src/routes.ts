@@ -84,8 +84,8 @@ export type APIRoutes =
 | { method: 'put', path: '-/servers/{target}/ack', parts: 3, params: undefined, response: undefined }
 | { method: 'post', path: `/servers/${string}/channels`, parts: 3, params: paths['/servers/{target}/channels']['post']['requestBody']['content']['application/json'], response: paths['/servers/{target}/channels']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: '-/servers/{target}/channels', parts: 3, params: paths['/servers/{target}/channels']['post']['requestBody']['content']['application/json'], response: paths['/servers/{target}/channels']['post']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/servers/${string}/members`, parts: 3, params: undefined, response: paths['/servers/{target}/members']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: '-/servers/{target}/members', parts: 3, params: undefined, response: paths['/servers/{target}/members']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/servers/${string}/members`, parts: 3, params: paths['/servers/{target}/members']['get']['parameters']['query'], response: paths['/servers/{target}/members']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: '-/servers/{target}/members', parts: 3, params: paths['/servers/{target}/members']['get']['parameters']['query'], response: paths['/servers/{target}/members']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/servers/${string}/members/${string}`, parts: 4, params: undefined, response: paths['/servers/{target}/members/{member}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/servers/{target}/members/{member}', parts: 4, params: undefined, response: paths['/servers/{target}/members/{member}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/servers/${string}/members/${string}`, parts: 4, params: undefined, response: undefined }

@@ -2296,6 +2296,16 @@
             "schema": {
               "$ref": "#/components/schemas/Id"
             }
+          },
+          {
+            "name": "exclude_offline",
+            "in": "query",
+            "description": "Whether to exclude offline users",
+            "schema": {
+              "description": "Whether to exclude offline users",
+              "type": "boolean",
+              "nullable": true
+            }
           }
         ],
         "responses": {
@@ -6533,9 +6543,6 @@
       },
       "DataMessageSend": {
         "type": "object",
-        "required": [
-          "content"
-        ],
         "properties": {
           "nonce": {
             "description": "Unique token to prevent duplicate message sending\n\n**This is deprecated and replaced by `Idempotency-Key`!**",
@@ -6546,7 +6553,8 @@
             "description": "Message content to send",
             "type": "string",
             "maxLength": 2000,
-            "minLength": 0
+            "minLength": 0,
+            "nullable": true
           },
           "attachments": {
             "description": "Attachments to include in message",
