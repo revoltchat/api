@@ -138,7 +138,7 @@ export class API {
 
             // Map each parameter to the correct object.
             for (const parameter of Object.keys(params)) {
-                if (allowed_query.includes(parameter)) {
+                if (allowed_query?.includes(parameter)) {
                     query = {
                         ...(query ?? {}),
                         [parameter]: (params as Record<any, any>)[parameter]
