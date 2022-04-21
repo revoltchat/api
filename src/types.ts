@@ -37,7 +37,6 @@ export type DataEditChannel = components['schemas']['DataEditChannel'];
 export type FieldsChannel = components['schemas']['FieldsChannel'];
 export type Invite = components['schemas']['Invite'];
 export type Message = components['schemas']['Message'];
-export type Content = components['schemas']['Content'];
 export type SystemMessage = components['schemas']['SystemMessage'];
 export type ISO8601_Timestamp = components['schemas']['ISO8601 Timestamp'];
 export type Embed = components['schemas']['Embed'];

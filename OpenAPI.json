@@ -5881,8 +5881,7 @@
         "required": [
           "_id",
           "author",
-          "channel",
-          "content"
+          "channel"
         ],
         "properties": {
           "_id": {
@@ -5904,11 +5903,17 @@
           },
           "content": {
             "description": "Message content",
+            "type": "string",
+            "nullable": true
+          },
+          "system": {
+            "description": "System message",
             "allOf": [
               {
-                "$ref": "#/components/schemas/Content"
+                "$ref": "#/components/schemas/SystemMessage"
               }
-            ]
+            ],
+            "nullable": true
           },
           "attachments": {
             "description": "Array of attachments",
@@ -5961,23 +5966,6 @@
             "nullable": true
           }
         }
-      },
-      "Content": {
-        "description": "Untagged enum representing message content",
-        "anyOf": [
-          {
-            "description": "Message contains text content",
-            "type": "string"
-          },
-          {
-            "description": "Message is a system event",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/SystemMessage"
-              }
-            ]
-          }
-        ]
       },
       "SystemMessage": {
         "description": "Representation of a system event message",

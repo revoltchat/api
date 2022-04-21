@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.5.3-rc.12",
+  "version": "0.5.3-rc.13",
   "description": "Revolt API Library",
   "main": "dist/index.js",
   "homepage": "https://developers.revolt.chat",

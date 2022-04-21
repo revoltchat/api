@@ -1028,7 +1028,9 @@ export interface components {
       /** @description Id of the user that sent this message */
       author: string;
       /** @description Message content */
-      content: components["schemas"]["Content"];
+      content?: string | null;
+      /** @description System message */
+      system?: components["schemas"]["SystemMessage"] | null;
       /** @description Array of attachments */
       attachments?: components["schemas"]["File"][] | null;
       /** @description Time at which this message was last edited */
@@ -1042,8 +1044,6 @@ export interface components {
       /** @description Name and / or avatar overrides for this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
     };
-    /** @description Untagged enum representing message content */
-    Content: string | components["schemas"]["SystemMessage"];
     /** @description Representation of a system event message */
     SystemMessage:
       | {
