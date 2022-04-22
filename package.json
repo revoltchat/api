@@ -1,14 +1,15 @@
 {
   "name": "revolt-api",
-  "version": "0.5.3-rc.14",
+  "version": "0.5.3-rc.15",
   "description": "Revolt API Library",
   "main": "dist/index.js",
+  "module": "esm/index.js",
   "homepage": "https://developers.revolt.chat",
   "repository": "https://gitlab.insrt.uk/revolt/api.git",
   "author": "Paul Makles <insrt.uk>",
   "license": "MIT",
   "scripts": {
-    "build": "REWRITE_ANYOF=1 oapilib && tsc",
+    "build": "REWRITE_ANYOF=1 oapilib && tsc && tsc -p tsconfig.esm.json",
     "prepublish": "in-publish && yarn build || echo Skipping build."
   },
   "devDependencies": {
@@ -25,6 +26,7 @@
   "files": [
     "src",
     "dist",
+    "esm",
     "OpenAPI.json",
     "LICENSE",
     "README.md"
