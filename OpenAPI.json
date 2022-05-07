@@ -1691,6 +1691,56 @@
         ]
       }
     },
+    "/channels/{target}/messages/bulk": {
+      "delete": {
+        "tags": [
+          "Messaging"
+        ],
+        "summary": "Bulk Delete Messages",
+        "description": "Delete multiple messages you've sent or one you have permission to delete.\n\nThis will always require `ManageMessages` permission regardless of whether you own the message or not.",
+        "operationId": "message_bulk_delete_req",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OptionsMessageSearch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Api Key": []
+          }
+        ]
+      }
+    },
     "/channels/create": {
       "post": {
         "tags": [
@@ -4852,7 +4902,6 @@
           },
           "privileged": {
             "description": "Whether this user is privileged",
-            "default": false,
             "type": "boolean"
           },
           "bot": {

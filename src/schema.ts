@@ -138,6 +138,14 @@ export interface paths {
     /** Edits a message that you've previously sent. */
     patch: operations["message_edit_req"];
   };
+  "/channels/{target}/messages/bulk": {
+    /**
+     * Delete multiple messages you've sent or one you have permission to delete.
+     *
+     * This will always require `ManageMessages` permission regardless of whether you own the message or not.
+     */
+    delete: operations["message_bulk_delete_req"];
+  };
   "/channels/create": {
     /** Create a new group channel. */
     post: operations["group_create_req"];
@@ -2643,6 +2651,33 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataEditMessage"];
+      };
+    };
+  };
+  /**
+   * Delete multiple messages you've sent or one you have permission to delete.
+   *
+   * This will always require `ManageMessages` permission regardless of whether you own the message or not.
+   */
+  message_bulk_delete_req: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OptionsMessageSearch"];
       };
     };
   };

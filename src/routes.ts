@@ -62,6 +62,8 @@ export type APIRoutes =
 | { method: 'delete', path: '-/channels/{target}/messages/{msg}', parts: 4, params: undefined, response: undefined }
 | { method: 'patch', path: `/channels/${string}/messages/${string}`, parts: 4, params: paths['/channels/{target}/messages/{msg}']['patch']['requestBody']['content']['application/json'], response: paths['/channels/{target}/messages/{msg}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'patch', path: '-/channels/{target}/messages/{msg}', parts: 4, params: paths['/channels/{target}/messages/{msg}']['patch']['requestBody']['content']['application/json'], response: paths['/channels/{target}/messages/{msg}']['patch']['responses']['200']['content']['application/json'] }
+| { method: 'delete', path: `/channels/${string}/messages/bulk`, parts: 4, params: paths['/channels/{target}/messages/bulk']['delete']['requestBody']['content']['application/json'], response: undefined }
+| { method: 'delete', path: '-/channels/{target}/messages/bulk', parts: 4, params: paths['/channels/{target}/messages/bulk']['delete']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/channels/create`, parts: 2, params: paths['/channels/create']['post']['requestBody']['content']['application/json'], response: paths['/channels/create']['post']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/channels/${string}/recipients/${string}`, parts: 4, params: undefined, response: undefined }
 | { method: 'put', path: '-/channels/{target}/recipients/{member}', parts: 4, params: undefined, response: undefined }
