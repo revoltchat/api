@@ -148,7 +148,7 @@ export interface paths {
     /** Removes a user from the group. */
     delete: operations["group_remove_member_req"];
   };
-  "/channels/{_target}/join_call": {
+  "/channels/{target}/join_call": {
     /** Asks the voice server for a token to join the call. */
     post: operations["voice_join_req"];
   };
@@ -419,9 +419,15 @@ export interface components {
       | "MoveMembers"
       | "GrantAllSafe"
       | "GrantAll";
-    /** @enum {string} */
+    /**
+     * @description User permission definitions
+     * @enum {string}
+     */
     UserPermission: "Access" | "ViewProfile" | "SendMessage" | "Invite";
-    /** Error */
+    /**
+     * Error
+     * @description Possible API Errors
+     */
     Error:
       | {
           /** @enum {string} */
@@ -623,6 +629,8 @@ export interface components {
        * @description Enum of user flags
        */
       flags?: number | null;
+      /** @description Whether this user is privileged */
+      privileged?: boolean;
       /** @description Bot information */
       bot?: components["schemas"]["BotInformation"] | null;
       /** @description Current session user's relationship with this user */
@@ -873,11 +881,6 @@ export interface components {
        * @description Disallow bit flags
        */
       d: number;
-      /**
-       * Format: int64
-       * @description Ranking of this override
-       */
-      r?: number | null;
     };
     /** Mutual Friends and Servers Response */
     MutualResponse: {
@@ -906,6 +909,11 @@ export interface components {
       discoverable?: boolean;
       /** @description Reserved; URL for handling interactions */
       interactions_url?: string | null;
+      /**
+       * Format: int32
+       * @description Enum of bot flags
+       */
+      flags?: number | null;
     };
     /** Bot Details */
     DataCreateBot: {
@@ -1100,48 +1108,74 @@ export interface components {
           by: string;
         };
     /**
+     * Format: date-time
      * @description ISO8601 formatted timestamp
      * @example 1970-01-01T00:00:00Z
      */
     "ISO8601 Timestamp": string;
+    /** @description Embed */
     Embed:
       | {
           /** @enum {string} */
           type: "Website";
+          /** @description Direct URL to web page */
           url?: string | null;
+          /** @description Remote content */
           special?: components["schemas"]["Special"] | null;
+          /** @description Title of website */
           title?: string | null;
+          /** @description Description of website */
           description?: string | null;
+          /** @description Embedded image */
           image?: components["schemas"]["Image"] | null;
+          /** @description Embedded video */
           video?: components["schemas"]["Video"] | null;
+          /** @description Site name */
           site_name?: string | null;
+          /** @description URL to site icon */
           icon_url?: string | null;
+          /** @description CSS Colour */
           colour?: string | null;
         }
       | {
           /** @enum {string} */
           type: "Image";
+          /** @description URL to the original image */
           url: string;
-          /** Format: int */
+          /**
+           * Format: int
+           * @description Width of the image
+           */
           width: number;
-          /** Format: int */
+          /**
+           * Format: int
+           * @description Height of the image
+           */
           height: number;
+          /** @description Positioning and size */
           size: components["schemas"]["ImageSize"];
         }
       | {
           /** @enum {string} */
           type: "Text";
+          /** @description URL to icon */
           icon_url?: string | null;
+          /** @description URL for title */
           url?: string | null;
+          /** @description Title of text embed */
           title?: string | null;
+          /** @description Description of text embed */
           description?: string | null;
+          /** @description ID of uploaded autumn file */
           media?: components["schemas"]["File"] | null;
+          /** @description CSS Colour */
           colour?: string | null;
         }
       | {
           /** @enum {string} */
           type: "None";
         };
+    /** @description Information about special remote content */
     Special:
       | {
           /** @enum {string} */
@@ -1152,6 +1186,12 @@ export interface components {
           type: "YouTube";
           id: string;
           timestamp?: string | null;
+        }
+      | {
+          /** @enum {string} */
+          type: "Lightspeed";
+          content_type: components["schemas"]["LightspeedType"];
+          id: string;
         }
       | {
           /** @enum {string} */
@@ -1175,25 +1215,56 @@ export interface components {
           content_type: components["schemas"]["BandcampType"];
           id: string;
         };
-    /** @enum {string} */
+    /**
+     * @description Type of remote Lightspeed.tv content
+     * @enum {string}
+     */
+    LightspeedType: "Channel";
+    /**
+     * @description Type of remote Twitch content
+     * @enum {string}
+     */
     TwitchType: "Channel" | "Video" | "Clip";
-    /** @enum {string} */
+    /**
+     * @description Type of remote Bandcamp content
+     * @enum {string}
+     */
     BandcampType: "Album" | "Track";
+    /** @description Image */
     Image: {
+      /** @description URL to the original image */
       url: string;
-      /** Format: int */
+      /**
+       * Format: int
+       * @description Width of the image
+       */
       width: number;
-      /** Format: int */
+      /**
+       * Format: int
+       * @description Height of the image
+       */
       height: number;
+      /** @description Positioning and size */
       size: components["schemas"]["ImageSize"];
     };
-    /** @enum {string} */
+    /**
+     * @description Image positioning and size
+     * @enum {string}
+     */
     ImageSize: "Large" | "Preview";
+    /** @description Video */
     Video: {
+      /** @description URL to the original video */
       url: string;
-      /** Format: int */
+      /**
+       * Format: int
+       * @description Width of the video
+       */
       width: number;
-      /** Format: int */
+      /**
+       * Format: int
+       * @description Height of the video
+       */
       height: number;
     };
     /** @description Name and / or avatar override information */
@@ -1354,11 +1425,6 @@ export interface components {
        * @description Disallow bit flags
        */
       deny: number;
-      /**
-       * Format: int64
-       * @description Ranking of this override
-       */
-      rank?: number | null;
     };
     /** Permission Value */
     DataDefaultChannelPermissions:
@@ -1419,23 +1485,44 @@ export interface components {
       /** @description Whether this server should be publicly discoverable */
       discoverable?: boolean;
     };
+    /** @description Channel category */
     Category: {
+      /** @description Unique ID for this category */
       id: string;
+      /** @description Title for this category */
       title: string;
+      /** @description Channels in this category */
       channels: string[];
     };
+    /** @description System message channel assignments */
     SystemMessageChannels: {
+      /** @description ID of channel to send user join messages in */
       user_joined?: string | null;
+      /** @description ID of channel to send user left messages in */
       user_left?: string | null;
+      /** @description ID of channel to send user kicked messages in */
       user_kicked?: string | null;
+      /** @description ID of channel to send user banned messages in */
       user_banned?: string | null;
     };
+    /** @description Representation of a server role */
     Role: {
+      /** @description Role name */
       name: string;
+      /** @description Permissions available to this role */
       permissions: components["schemas"]["OverrideField"];
+      /**
+       * @description Colour used for this role
+       *
+       * This can be any valid CSS colour
+       */
       colour?: string | null;
+      /** @description Whether this role should be shown separately on the member sidebar */
       hoist?: boolean;
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @description Ranking of this role
+       */
       rank?: number;
     };
     /** Server Data */
@@ -2622,7 +2709,7 @@ export interface operations {
   voice_join_req: {
     parameters: {
       path: {
-        _target: components["schemas"]["Id"];
+        target: components["schemas"]["Id"];
       };
     };
     responses: {

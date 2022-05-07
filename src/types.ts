@@ -41,6 +41,7 @@ export type SystemMessage = components['schemas']['SystemMessage'];
 export type ISO8601_Timestamp = components['schemas']['ISO8601 Timestamp'];
 export type Embed = components['schemas']['Embed'];
 export type Special = components['schemas']['Special'];
+export type LightspeedType = components['schemas']['LightspeedType'];
 export type TwitchType = components['schemas']['TwitchType'];
 export type BandcampType = components['schemas']['BandcampType'];
 export type Image = components['schemas']['Image'];

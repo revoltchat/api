@@ -67,8 +67,8 @@ export type APIRoutes =
 | { method: 'put', path: '-/channels/{target}/recipients/{member}', parts: 4, params: undefined, response: undefined }
 | { method: 'delete', path: `/channels/${string}/recipients/${string}`, parts: 4, params: undefined, response: undefined }
 | { method: 'delete', path: '-/channels/{target}/recipients/{member}', parts: 4, params: undefined, response: undefined }
-| { method: 'post', path: `/channels/${string}/join_call`, parts: 3, params: undefined, response: paths['/channels/{_target}/join_call']['post']['responses']['200']['content']['application/json'] }
-| { method: 'post', path: '-/channels/{_target}/join_call', parts: 3, params: undefined, response: paths['/channels/{_target}/join_call']['post']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: `/channels/${string}/join_call`, parts: 3, params: undefined, response: paths['/channels/{target}/join_call']['post']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: '-/channels/{target}/join_call', parts: 3, params: undefined, response: paths['/channels/{target}/join_call']['post']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/channels/${string}/permissions/${string}`, parts: 4, params: paths['/channels/{target}/permissions/{role_id}']['put']['requestBody']['content']['application/json'], response: paths['/channels/{target}/permissions/{role_id}']['put']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: '-/channels/{target}/permissions/{role_id}', parts: 4, params: paths['/channels/{target}/permissions/{role_id}']['put']['requestBody']['content']['application/json'], response: paths['/channels/{target}/permissions/{role_id}']['put']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/channels/${string}/permissions/default`, parts: 4, params: paths['/channels/{target}/permissions/default']['put']['requestBody']['content']['application/json'], response: paths['/channels/{target}/permissions/default']['put']['responses']['200']['content']['application/json'] }

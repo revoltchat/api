@@ -723,7 +723,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Api Key": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -1827,7 +1832,7 @@
         ]
       }
     },
-    "/channels/{_target}/join_call": {
+    "/channels/{target}/join_call": {
       "post": {
         "tags": [
           "Voice"
@@ -1837,7 +1842,7 @@
         "operationId": "voice_join_req",
         "parameters": [
           {
-            "name": "_target",
+            "name": "target",
             "in": "path",
             "required": true,
             "schema": {
@@ -4150,6 +4155,7 @@
         ]
       },
       "UserPermission": {
+        "description": "User permission definitions",
         "type": "string",
         "enum": [
           "Access",
@@ -4160,6 +4166,7 @@
       },
       "Error": {
         "title": "Error",
+        "description": "Possible API Errors",
         "oneOf": [
           {
             "description": "This error was not labeled :(",
@@ -4843,6 +4850,11 @@
             "format": "int32",
             "nullable": true
           },
+          "privileged": {
+            "description": "Whether this user is privileged",
+            "default": false,
+            "type": "boolean"
+          },
           "bot": {
             "description": "Bot information",
             "allOf": [
@@ -5514,12 +5526,6 @@
             "description": "Disallow bit flags",
             "type": "integer",
             "format": "int64"
-          },
-          "r": {
-            "description": "Ranking of this override",
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
           }
         }
       },
@@ -5584,6 +5590,12 @@
           "interactions_url": {
             "description": "Reserved; URL for handling interactions",
             "type": "string",
+            "nullable": true
+          },
+          "flags": {
+            "description": "Enum of bot flags",
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         }
@@ -6177,11 +6189,14 @@
       "ISO8601 Timestamp": {
         "description": "ISO8601 formatted timestamp",
         "type": "string",
+        "format": "date-time",
         "example": "1970-01-01T00:00:00Z"
       },
       "Embed": {
+        "description": "Embed",
         "oneOf": [
           {
+            "description": "Website metadata",
             "type": "object",
             "required": [
               "type"
@@ -6194,10 +6209,12 @@
                 ]
               },
               "url": {
+                "description": "Direct URL to web page",
                 "type": "string",
                 "nullable": true
               },
               "special": {
+                "description": "Remote content",
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/Special"
@@ -6206,14 +6223,17 @@
                 "nullable": true
               },
               "title": {
+                "description": "Title of website",
                 "type": "string",
                 "nullable": true
               },
               "description": {
+                "description": "Description of website",
                 "type": "string",
                 "nullable": true
               },
               "image": {
+                "description": "Embedded image",
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/Image"
@@ -6222,6 +6242,7 @@
                 "nullable": true
               },
               "video": {
+                "description": "Embedded video",
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/Video"
@@ -6230,20 +6251,24 @@
                 "nullable": true
               },
               "site_name": {
+                "description": "Site name",
                 "type": "string",
                 "nullable": true
               },
               "icon_url": {
+                "description": "URL to site icon",
                 "type": "string",
                 "nullable": true
               },
               "colour": {
+                "description": "CSS Colour",
                 "type": "string",
                 "nullable": true
               }
             }
           },
           {
+            "description": "Image",
             "type": "object",
             "required": [
               "height",
@@ -6260,22 +6285,31 @@
                 ]
               },
               "url": {
+                "description": "URL to the original image",
                 "type": "string"
               },
               "width": {
+                "description": "Width of the image",
                 "type": "integer",
                 "format": "int"
               },
               "height": {
+                "description": "Height of the image",
                 "type": "integer",
                 "format": "int"
               },
               "size": {
-                "$ref": "#/components/schemas/ImageSize"
+                "description": "Positioning and size",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ImageSize"
+                  }
+                ]
               }
             }
           },
           {
+            "description": "Text Embed",
             "type": "object",
             "required": [
               "type"
@@ -6288,22 +6322,27 @@
                 ]
               },
               "icon_url": {
+                "description": "URL to icon",
                 "type": "string",
                 "nullable": true
               },
               "url": {
+                "description": "URL for title",
                 "type": "string",
                 "nullable": true
               },
               "title": {
+                "description": "Title of text embed",
                 "type": "string",
                 "nullable": true
               },
               "description": {
+                "description": "Description of text embed",
                 "type": "string",
                 "nullable": true
               },
               "media": {
+                "description": "ID of uploaded autumn file",
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/File"
@@ -6312,6 +6351,7 @@
                 "nullable": true
               },
               "colour": {
+                "description": "CSS Colour",
                 "type": "string",
                 "nullable": true
               }
@@ -6334,8 +6374,10 @@
         ]
       },
       "Special": {
+        "description": "Information about special remote content",
         "oneOf": [
           {
+            "description": "No remote content",
             "type": "object",
             "required": [
               "type"
@@ -6350,6 +6392,7 @@
             }
           },
           {
+            "description": "YouTube video",
             "type": "object",
             "required": [
               "id",
@@ -6372,6 +6415,30 @@
             }
           },
           {
+            "description": "Lightspeed.tv stream",
+            "type": "object",
+            "required": [
+              "content_type",
+              "id",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Lightspeed"
+                ]
+              },
+              "content_type": {
+                "$ref": "#/components/schemas/LightspeedType"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Twitch stream or clip",
             "type": "object",
             "required": [
               "content_type",
@@ -6394,6 +6461,7 @@
             }
           },
           {
+            "description": "Spotify track",
             "type": "object",
             "required": [
               "content_type",
@@ -6416,6 +6484,7 @@
             }
           },
           {
+            "description": "Soundcloud track",
             "type": "object",
             "required": [
               "type"
@@ -6430,6 +6499,7 @@
             }
           },
           {
+            "description": "Bandcamp track",
             "type": "object",
             "required": [
               "content_type",
@@ -6453,7 +6523,15 @@
           }
         ]
       },
+      "LightspeedType": {
+        "description": "Type of remote Lightspeed.tv content",
+        "type": "string",
+        "enum": [
+          "Channel"
+        ]
+      },
       "TwitchType": {
+        "description": "Type of remote Twitch content",
         "type": "string",
         "enum": [
           "Channel",
@@ -6462,6 +6540,7 @@
         ]
       },
       "BandcampType": {
+        "description": "Type of remote Bandcamp content",
         "type": "string",
         "enum": [
           "Album",
@@ -6469,6 +6548,7 @@
         ]
       },
       "Image": {
+        "description": "Image",
         "type": "object",
         "required": [
           "height",
@@ -6478,22 +6558,31 @@
         ],
         "properties": {
           "url": {
+            "description": "URL to the original image",
             "type": "string"
           },
           "width": {
+            "description": "Width of the image",
             "type": "integer",
             "format": "int"
           },
           "height": {
+            "description": "Height of the image",
             "type": "integer",
             "format": "int"
           },
           "size": {
-            "$ref": "#/components/schemas/ImageSize"
+            "description": "Positioning and size",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImageSize"
+              }
+            ]
           }
         }
       },
       "ImageSize": {
+        "description": "Image positioning and size",
         "type": "string",
         "enum": [
           "Large",
@@ -6501,6 +6590,7 @@
         ]
       },
       "Video": {
+        "description": "Video",
         "type": "object",
         "required": [
           "height",
@@ -6509,13 +6599,16 @@
         ],
         "properties": {
           "url": {
+            "description": "URL to the original video",
             "type": "string"
           },
           "width": {
+            "description": "Width of the video",
             "type": "integer",
             "format": "int"
           },
           "height": {
+            "description": "Height of the video",
             "type": "integer",
             "format": "int"
           }
@@ -6940,12 +7033,6 @@
             "type": "integer",
             "format": "uint64",
             "minimum": 0.0
-          },
-          "rank": {
-            "description": "Ranking of this override",
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
           }
         }
       },
@@ -7112,6 +7199,7 @@
         }
       },
       "Category": {
+        "description": "Channel category",
         "type": "object",
         "required": [
           "channels",
@@ -7120,16 +7208,19 @@
         ],
         "properties": {
           "id": {
+            "description": "Unique ID for this category",
             "type": "string",
             "maxLength": 32,
             "minLength": 1
           },
           "title": {
+            "description": "Title for this category",
             "type": "string",
             "maxLength": 32,
             "minLength": 1
           },
           "channels": {
+            "description": "Channels in this category",
             "type": "array",
             "items": {
               "type": "string"
@@ -7138,27 +7229,33 @@
         }
       },
       "SystemMessageChannels": {
+        "description": "System message channel assignments",
         "type": "object",
         "properties": {
           "user_joined": {
+            "description": "ID of channel to send user join messages in",
             "type": "string",
             "nullable": true
           },
           "user_left": {
+            "description": "ID of channel to send user left messages in",
             "type": "string",
             "nullable": true
           },
           "user_kicked": {
+            "description": "ID of channel to send user kicked messages in",
             "type": "string",
             "nullable": true
           },
           "user_banned": {
+            "description": "ID of channel to send user banned messages in",
             "type": "string",
             "nullable": true
           }
         }
       },
       "Role": {
+        "description": "Representation of a server role",
         "type": "object",
         "required": [
           "name",
@@ -7166,19 +7263,28 @@
         ],
         "properties": {
           "name": {
+            "description": "Role name",
             "type": "string"
           },
           "permissions": {
-            "$ref": "#/components/schemas/OverrideField"
+            "description": "Permissions available to this role",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OverrideField"
+              }
+            ]
           },
           "colour": {
+            "description": "Colour used for this role\n\nThis can be any valid CSS colour",
             "type": "string",
             "nullable": true
           },
           "hoist": {
+            "description": "Whether this role should be shown separately on the member sidebar",
             "type": "boolean"
           },
           "rank": {
+            "description": "Ranking of this role",
             "default": 0,
             "type": "integer",
             "format": "int64"
