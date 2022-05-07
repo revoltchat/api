@@ -143,6 +143,8 @@ export interface paths {
      * Delete multiple messages you've sent or one you have permission to delete.
      *
      * This will always require `ManageMessages` permission regardless of whether you own the message or not.
+     *
+     * Messages must have been sent within the past 1 week.
      */
     delete: operations["message_bulk_delete_req"];
   };
@@ -2663,6 +2665,8 @@ export interface operations {
    * Delete multiple messages you've sent or one you have permission to delete.
    *
    * This will always require `ManageMessages` permission regardless of whether you own the message or not.
+   *
+   * Messages must have been sent within the past 1 week.
    */
   message_bulk_delete_req: {
     parameters: {
