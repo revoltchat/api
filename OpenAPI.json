@@ -1713,7 +1713,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OptionsMessageSearch"
+                "$ref": "#/components/schemas/OptionsBulkDelete"
               }
             }
           },
@@ -6993,6 +6993,24 @@
             "maxItems": 10,
             "minItems": 0,
             "nullable": true
+          }
+        }
+      },
+      "OptionsBulkDelete": {
+        "title": "Search Parameters",
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "properties": {
+          "ids": {
+            "description": "Message IDs",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1
           }
         }
       },

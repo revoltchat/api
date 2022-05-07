@@ -1396,6 +1396,11 @@ export interface components {
       /** @description Embeds to include in the message */
       embeds?: components["schemas"]["SendableEmbed"][] | null;
     };
+    /** Search Parameters */
+    OptionsBulkDelete: {
+      /** @description Message IDs */
+      ids: string[];
+    };
     /** Group Data */
     DataCreateGroup: {
       /** @description Group name */
@@ -2677,7 +2682,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["OptionsMessageSearch"];
+        "application/json": components["schemas"]["OptionsBulkDelete"];
       };
     };
   };

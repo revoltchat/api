@@ -58,6 +58,7 @@ export type MessageSort = components['schemas']['MessageSort'];
 export type OptionsMessageSearch = components['schemas']['OptionsMessageSearch'];
 export type OptionsQueryStale = components['schemas']['OptionsQueryStale'];
 export type DataEditMessage = components['schemas']['DataEditMessage'];
+export type OptionsBulkDelete = components['schemas']['OptionsBulkDelete'];
 export type DataCreateGroup = components['schemas']['DataCreateGroup'];
 export type CreateVoiceUserResponse = components['schemas']['CreateVoiceUserResponse'];
 export type Data = components['schemas']['Data'];
