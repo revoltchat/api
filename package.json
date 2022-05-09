@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "module": "esm/index.js",
   "homepage": "https://developers.revolt.chat",
-  "repository": "https://gitlab.insrt.uk/revolt/api.git",
+  "repository": "https://github.com/revoltchat/api.git",
   "author": "Paul Makles <insrt.uk>",
   "license": "MIT",
   "scripts": {
