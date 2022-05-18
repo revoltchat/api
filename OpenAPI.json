@@ -6272,6 +6272,11 @@
                 "type": "string",
                 "nullable": true
               },
+              "original_url": {
+                "description": "Original direct URL",
+                "type": "string",
+                "nullable": true
+              },
               "special": {
                 "description": "Remote content",
                 "allOf": [
@@ -6364,6 +6369,38 @@
                     "$ref": "#/components/schemas/ImageSize"
                   }
                 ]
+              }
+            }
+          },
+          {
+            "description": "Video",
+            "type": "object",
+            "required": [
+              "height",
+              "type",
+              "url",
+              "width"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Video"
+                ]
+              },
+              "url": {
+                "description": "URL to the original video",
+                "type": "string"
+              },
+              "width": {
+                "description": "Width of the video",
+                "type": "integer",
+                "format": "int"
+              },
+              "height": {
+                "description": "Height of the video",
+                "type": "integer",
+                "format": "int"
               }
             }
           },

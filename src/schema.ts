@@ -1134,6 +1134,8 @@ export interface components {
           type: "Website";
           /** @description Direct URL to web page */
           url?: string | null;
+          /** @description Original direct URL */
+          original_url?: string | null;
           /** @description Remote content */
           special?: components["schemas"]["Special"] | null;
           /** @description Title of website */
@@ -1168,6 +1170,22 @@ export interface components {
           height: number;
           /** @description Positioning and size */
           size: components["schemas"]["ImageSize"];
+        }
+      | {
+          /** @enum {string} */
+          type: "Video";
+          /** @description URL to the original video */
+          url: string;
+          /**
+           * Format: int
+           * @description Width of the video
+           */
+          width: number;
+          /**
+           * Format: int
+           * @description Height of the video
+           */
+          height: number;
         }
       | {
           /** @enum {string} */
