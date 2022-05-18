@@ -919,6 +919,10 @@ export interface components {
       discoverable?: boolean;
       /** @description Reserved; URL for handling interactions */
       interactions_url?: string | null;
+      /** @description URL for terms of service */
+      terms_of_service_url?: string | null;
+      /** @description URL for privacy policy */
+      privacy_policy_url?: string | null;
       /**
        * Format: int32
        * @description Enum of bot flags
@@ -1190,6 +1194,10 @@ export interface components {
       | {
           /** @enum {string} */
           type: "None";
+        }
+      | {
+          /** @enum {string} */
+          type: "GIF";
         }
       | {
           /** @enum {string} */

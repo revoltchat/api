@@ -5280,7 +5280,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[a-zA-Z0-9_.]+$"
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$"
           },
           "password": {
             "description": "Current account password",
@@ -5641,6 +5641,16 @@
             "type": "string",
             "nullable": true
           },
+          "terms_of_service_url": {
+            "description": "URL for terms of service",
+            "type": "string",
+            "nullable": true
+          },
+          "privacy_policy_url": {
+            "description": "URL for privacy policy",
+            "type": "string",
+            "nullable": true
+          },
           "flags": {
             "description": "Enum of bot flags",
             "type": "integer",
@@ -5661,7 +5671,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[a-zA-Z0-9_.]+$"
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$"
           }
         }
       },
@@ -5788,7 +5798,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[a-zA-Z0-9_.]+$",
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$",
             "nullable": true
           },
           "public": {
@@ -6436,6 +6446,21 @@
                 "type": "string",
                 "enum": [
                   "None"
+                ]
+              }
+            }
+          },
+          {
+            "description": "Content hint that this contains a GIF\n\nUse metadata to find video or image to play",
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "GIF"
                 ]
               }
             }
@@ -8302,7 +8327,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[a-zA-Z0-9_.]+$"
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$"
           }
         }
       },
