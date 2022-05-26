@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.5.3-5-patch.3",
+  "version": "0.5.3-5-patch.4",
   "description": "Revolt API Library",
   "main": "dist/index.js",
   "module": "esm/index.js",
@@ -19,7 +19,7 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
-    "@insertish/oapi": "0.1.15",
+    "@insertish/oapi": "0.1.16",
     "axios": "^0.26.1",
     "lodash.defaultsdeep": "^4.6.1"
   },
