@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Revolt API",
-    "description": "User-first privacy focused chat platform.",
+    "description": "Open source user-first chat platform.",
     "termsOfService": "https://revolt.chat/terms",
     "contact": {
       "name": "Revolt Support",
@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.3-rc.1"
+    "version": "0.5.3-7"
   },
   "servers": [
     {
@@ -90,7 +90,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -135,7 +135,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -182,7 +182,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -229,10 +229,10 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           },
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -312,7 +312,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -352,7 +352,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -399,7 +399,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -446,26 +446,26 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
     },
-    "/users/{username}/friend": {
+    "/users/{target}/friend": {
       "put": {
         "tags": [
           "Relationships"
         ],
-        "summary": "Send Friend Request / Accept Request",
-        "description": "Send a friend request to another user or accept another user's friend request.",
+        "summary": "Accept Friend Request",
+        "description": "Accept another user's friend request.",
         "operationId": "add_friend_req",
         "parameters": [
           {
-            "name": "username",
+            "name": "target",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           }
         ],
@@ -493,12 +493,10 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
-      }
-    },
-    "/users/{target}/friend": {
+      },
       "delete": {
         "tags": [
           "Relationships"
@@ -540,7 +538,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -587,7 +585,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -632,7 +630,54 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/users/friend": {
+      "post": {
+        "tags": [
+          "Relationships"
+        ],
+        "summary": "Send Friend Request",
+        "description": "Send a friend request to another user.",
+        "operationId": "send_friend_request_req",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSendFriendRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
           }
         ]
       }
@@ -679,7 +724,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -726,7 +771,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -774,7 +819,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -821,7 +866,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -859,7 +904,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -914,7 +959,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -951,7 +996,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -999,7 +1044,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1046,7 +1091,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -1084,7 +1129,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -1139,7 +1184,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1189,7 +1234,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1236,7 +1281,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1352,7 +1397,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -1415,7 +1460,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1472,7 +1517,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1522,7 +1567,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1577,7 +1622,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -1623,7 +1668,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -1686,7 +1731,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1736,7 +1781,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1783,7 +1828,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1831,7 +1876,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -1877,7 +1922,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1924,7 +1969,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -1989,7 +2034,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2046,7 +2091,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2093,7 +2138,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2140,7 +2185,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -2178,7 +2223,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -2233,7 +2278,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2273,7 +2318,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2330,7 +2375,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2387,7 +2432,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2442,7 +2487,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -2488,7 +2533,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2553,7 +2598,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2618,7 +2663,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -2664,7 +2709,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2711,7 +2756,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2761,7 +2806,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2818,7 +2863,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2866,7 +2911,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -2929,7 +2974,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -2994,7 +3039,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3051,7 +3096,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3138,7 +3183,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -3176,7 +3221,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3251,6 +3296,72 @@
         }
       }
     },
+    "/auth/account/delete": {
+      "put": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Confirm Account Deletion",
+        "description": "Schedule an account for deletion by confirming the received token.",
+        "operationId": "confirm_deletion_confirm_deletion",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataAccountDeletion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Delete Account",
+        "description": "Request to have an account deleted.",
+        "operationId": "delete_account_delete_account",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Valid MFA Ticket": []
+          },
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
     "/auth/account/": {
       "get": {
         "tags": [
@@ -3283,7 +3394,40 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/auth/account/disable": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Disable Account",
+        "description": "Disable an account.",
+        "operationId": "disable_account_disable_account",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Valid MFA Ticket": []
+          },
+          {
+            "Session Token": []
           }
         ]
       }
@@ -3323,7 +3467,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3363,7 +3507,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3538,7 +3682,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3578,7 +3722,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -3616,7 +3760,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3656,7 +3800,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       },
@@ -3703,7 +3847,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Session"
+                  "$ref": "#/components/schemas/SessionInfo"
                 }
               }
             }
@@ -3711,7 +3855,317 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/auth/mfa/ticket": {
+      "put": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "Create MFA ticket",
+        "description": "Create a new MFA ticket or validate an existing one.",
+        "operationId": "create_ticket_create_ticket",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MFAResponse"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MFATicket"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          },
+          {
+            "Unvalidated MFA Ticket": []
+          }
+        ]
+      }
+    },
+    "/auth/mfa/": {
+      "get": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "MFA Status",
+        "description": "Fetch MFA status of an account.",
+        "operationId": "fetch_status_fetch_status",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiFactorStatus"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/auth/mfa/recovery": {
+      "post": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "Fetch Recovery Codes",
+        "description": "Fetch recovery codes for an account.",
+        "operationId": "fetch_recovery_fetch_recovery",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Valid MFA Ticket": []
+          },
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "Generate Recovery Codes",
+        "description": "Re-generate recovery codes for an account.",
+        "operationId": "generate_recovery_generate_recovery",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Valid MFA Ticket": []
+          },
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/auth/mfa/methods": {
+      "get": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "Get MFA Methods",
+        "description": "Fetch available MFA methods.",
+        "operationId": "get_mfa_methods_get_mfa_methods",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MFAMethod"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/auth/mfa/totp": {
+      "put": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "Enable TOTP 2FA",
+        "description": "Generate a new secret for TOTP.",
+        "operationId": "totp_enable_totp_enable",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MFAResponse"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "Generate TOTP Secret",
+        "description": "Generate a new secret for TOTP.",
+        "operationId": "totp_generate_secret_totp_generate_secret",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTotpSecret"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Valid MFA Ticket": []
+          },
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "MFA"
+        ],
+        "summary": "Disable TOTP 2FA",
+        "description": "Disable TOTP 2FA for an account.",
+        "operationId": "totp_disable_totp_disable",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Valid MFA Ticket": []
+          },
+          {
+            "Session Token": []
           }
         ]
       }
@@ -3738,10 +4192,10 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           },
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3781,10 +4235,10 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           },
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3824,7 +4278,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3854,7 +4308,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3915,7 +4369,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -3971,7 +4425,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -4011,7 +4465,7 @@
         },
         "security": [
           {
-            "Api Key": []
+            "Session Token": []
           }
         ]
       }
@@ -4257,6 +4711,20 @@
                 "type": "string",
                 "enum": [
                   "UsernameTaken"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "InvalidUsername"
                 ]
               }
             }
@@ -5599,6 +6067,18 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "DataSendFriendRequest": {
+        "title": "User Lookup Information",
+        "type": "object",
+        "required": [
+          "username"
+        ],
+        "properties": {
+          "username": {
+            "type": "string"
           }
         }
       },
@@ -8014,6 +8494,303 @@
           }
         ]
       },
+      "RAuth Error": {
+        "title": "Error",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "with"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "IncorrectData"
+                ]
+              },
+              "with": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "operation",
+              "type",
+              "with"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "DatabaseError"
+                ]
+              },
+              "operation": {
+                "type": "string"
+              },
+              "with": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "InternalError"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "OperationFailed"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "RenderFail"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "MissingHeaders"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "CaptchaFailed"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "InvalidSession"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "UnverifiedAccount"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "UnknownUser"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "EmailFailed"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "InvalidToken"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "MissingInvite"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "InvalidInvite"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "InvalidCredentials"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "CompromisedPassword"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "DisabledAccount"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Blacklisted"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "TotpAlreadyEnabled"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "DisallowedMFAMethod"
+                ]
+              }
+            }
+          }
+        ]
+      },
       "DataCreateAccount": {
         "title": "Account Data",
         "type": "object",
@@ -8057,6 +8834,19 @@
             "description": "Captcha verification code",
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "DataAccountDeletion": {
+        "title": "Account Deletion Token",
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "description": "Deletion token",
+            "type": "string"
           }
         }
       },
@@ -8150,8 +8940,10 @@
       "ResponseLogin": {
         "oneOf": [
           {
+            "description": "Session information",
             "type": "object",
             "required": [
+              "_id",
               "name",
               "result",
               "token",
@@ -8165,39 +8957,29 @@
                 ]
               },
               "_id": {
-                "type": "string",
-                "nullable": true
+                "description": "Unique Id",
+                "type": "string"
               },
               "user_id": {
+                "description": "User Id",
                 "type": "string"
               },
               "token": {
+                "description": "Session token",
                 "type": "string"
               },
               "name": {
+                "description": "Display name",
                 "type": "string"
               },
               "subscription": {
+                "description": "Web Push subscription",
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/WebPushSubscription"
                   }
                 ],
                 "nullable": true
-              }
-            }
-          },
-          {
-            "type": "object",
-            "required": [
-              "result"
-            ],
-            "properties": {
-              "result": {
-                "type": "string",
-                "enum": [
-                  "EmailOTP"
-                ]
               }
             }
           },
@@ -8221,7 +9003,7 @@
               "allowed_methods": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/MFAMethod"
                 }
               }
             }
@@ -8229,6 +9011,7 @@
         ]
       },
       "WebPushSubscription": {
+        "description": "Web Push subscription",
         "type": "object",
         "required": [
           "auth",
@@ -8247,38 +9030,110 @@
           }
         }
       },
+      "MFAMethod": {
+        "description": "MFA method",
+        "type": "string",
+        "enum": [
+          "Password",
+          "Recovery",
+          "Totp"
+        ]
+      },
       "DataLogin": {
         "title": "Login Data",
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "properties": {
-          "email": {
-            "description": "Email",
-            "type": "string"
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "email",
+              "password"
+            ],
+            "properties": {
+              "email": {
+                "description": "Email",
+                "type": "string"
+              },
+              "password": {
+                "description": "Password",
+                "type": "string"
+              },
+              "captcha": {
+                "description": "Captcha verification code",
+                "type": "string",
+                "nullable": true
+              },
+              "friendly_name": {
+                "description": "Friendly name used for the session",
+                "type": "string",
+                "nullable": true
+              }
+            }
           },
-          "password": {
-            "description": "Password",
-            "type": "string",
-            "nullable": true
-          },
-          "challenge": {
-            "description": "UN-USED: MFA challenge",
-            "type": "string",
-            "nullable": true
-          },
-          "friendly_name": {
-            "description": "Friendly name used for the session",
-            "type": "string",
-            "nullable": true
-          },
-          "captcha": {
-            "description": "Captcha verification code",
-            "type": "string",
-            "nullable": true
+          {
+            "type": "object",
+            "required": [
+              "mfa_response",
+              "mfa_ticket"
+            ],
+            "properties": {
+              "mfa_ticket": {
+                "description": "Unvalidated MFA ticket\n\nUsed to resolve the correct account",
+                "type": "string"
+              },
+              "mfa_response": {
+                "description": "Valid MFA response\n\nThis will take precedence over the `password` field where applicable",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MFAResponse"
+                  }
+                ]
+              },
+              "friendly_name": {
+                "description": "Friendly name used for the session",
+                "type": "string",
+                "nullable": true
+              }
+            }
           }
-        }
+        ]
+      },
+      "MFAResponse": {
+        "description": "MFA response",
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "password"
+            ],
+            "properties": {
+              "password": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "recovery_code"
+            ],
+            "properties": {
+              "recovery_code": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "totp_code"
+            ],
+            "properties": {
+              "totp_code": {
+                "type": "string"
+              }
+            }
+          }
+        ]
       },
       "SessionInfo": {
         "type": "object",
@@ -8295,37 +9150,6 @@
           }
         }
       },
-      "Session": {
-        "type": "object",
-        "required": [
-          "name",
-          "token",
-          "user_id"
-        ],
-        "properties": {
-          "_id": {
-            "type": "string",
-            "nullable": true
-          },
-          "user_id": {
-            "type": "string"
-          },
-          "token": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "subscription": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/WebPushSubscription"
-              }
-            ],
-            "nullable": true
-          }
-        }
-      },
       "DataEditSession": {
         "title": "Edit Data",
         "type": "object",
@@ -8335,6 +9159,77 @@
         "properties": {
           "friendly_name": {
             "description": "Session friendly name",
+            "type": "string"
+          }
+        }
+      },
+      "MFATicket": {
+        "description": "Multi-factor auth ticket",
+        "type": "object",
+        "required": [
+          "_id",
+          "account_id",
+          "token",
+          "validated"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique Id",
+            "type": "string"
+          },
+          "account_id": {
+            "description": "Account Id",
+            "type": "string"
+          },
+          "token": {
+            "description": "Unique Token",
+            "type": "string"
+          },
+          "validated": {
+            "description": "Whether this ticket has been validated",
+            "type": "boolean"
+          }
+        }
+      },
+      "MultiFactorStatus": {
+        "type": "object",
+        "required": [
+          "email_mfa",
+          "email_otp",
+          "recovery_active",
+          "security_key_mfa",
+          "totp_mfa",
+          "trusted_handover"
+        ],
+        "properties": {
+          "email_otp": {
+            "type": "boolean"
+          },
+          "trusted_handover": {
+            "type": "boolean"
+          },
+          "email_mfa": {
+            "type": "boolean"
+          },
+          "totp_mfa": {
+            "type": "boolean"
+          },
+          "security_key_mfa": {
+            "type": "boolean"
+          },
+          "recovery_active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ResponseTotpSecret": {
+        "title": "Totp Secret",
+        "type": "object",
+        "required": [
+          "secret"
+        ],
+        "properties": {
+          "secret": {
             "type": "string"
           }
         }
@@ -8434,10 +9329,22 @@
       }
     },
     "securitySchemes": {
-      "Api Key": {
-        "description": "Session Token",
+      "Session Token": {
+        "description": "Used to authenticate as a user.",
         "type": "apiKey",
         "name": "x-session-token",
+        "in": "header"
+      },
+      "Valid MFA Ticket": {
+        "description": "Used to authorise a request.",
+        "type": "apiKey",
+        "name": "x-mfa-ticket",
+        "in": "header"
+      },
+      "Unvalidated MFA Ticket": {
+        "description": "Used to authorise a request.",
+        "type": "apiKey",
+        "name": "x-mfa-ticket",
         "in": "header"
       }
     }
@@ -8501,7 +9408,8 @@
       "tags": [
         "Account",
         "Session",
-        "Onboarding"
+        "Onboarding",
+        "MFA"
       ]
     },
     {
