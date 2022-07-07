@@ -246,6 +246,10 @@ export interface paths {
     /** Sets permissions for the default role in this server. */
     put: operations["permissions_set_default_req"];
   };
+  "/servers/{target}/emojis": {
+    /** Fetch all emoji on a server. */
+    get: operations["emoji_list_list_emoji"];
+  };
   "/invites/{target}": {
     /** Fetch an invite by its id. */
     get: operations["invite_fetch_req"];
@@ -253,6 +257,14 @@ export interface paths {
     post: operations["invite_join_req"];
     /** Delete an invite by its id. */
     delete: operations["invite_delete_req"];
+  };
+  "/custom/emoji/{id}": {
+    /** Fetch an emoji by its id. */
+    get: operations["emoji_fetch_fetch_emoji"];
+    /** Create an emoji by its Autumn upload id. */
+    put: operations["emoji_create_create_emoji"];
+    /** Delete an emoji by its id. */
+    delete: operations["emoji_delete_delete_emoji"];
   };
   "/auth/account/create": {
     /** Create a new account. */
@@ -442,6 +454,7 @@ export interface components {
       | "ManageServer"
       | "ManagePermissions"
       | "ManageRole"
+      | "ManageCustomisation"
       | "KickMembers"
       | "BanMembers"
       | "TimeoutMembers"
@@ -551,6 +564,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "PayloadTooLarge";
+        }
+      | {
+          /** @enum {string} */
           type: "CannotRemoveYourself";
         }
       | {
@@ -584,6 +601,10 @@ export interface components {
           type: "TooManyServers";
           /** Format: uint */
           max: number;
+        }
+      | {
+          /** @enum {string} */
+          type: "TooManyEmoji";
         }
       | {
           /** @enum {string} */
@@ -1369,7 +1390,11 @@ export interface components {
       attachments?: string[] | null;
       /** @description Messages to reply to */
       replies?: components["schemas"]["Reply"][] | null;
-      /** @description Embeds to include in message */
+      /**
+       * @description Embeds to include in message
+       *
+       * Text embed content contributes to the content length cap
+       */
       embeds?: components["schemas"]["SendableEmbed"][] | null;
       /** @description Masquerade to apply to this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
@@ -1785,6 +1810,25 @@ export interface components {
        */
       permissions: number;
     };
+    /** @description Representation of an Emoji on Revolt */
+    Emoji: {
+      /** @description Unique Id */
+      _id: string;
+      /** @description What owns this emoji */
+      parent: components["schemas"]["EmojiParent"];
+      /** @description Uploader user id */
+      creator_id: string;
+      /** @description Emoji name */
+      name: string;
+      /** @description Whether the emoji is animated */
+      animated: boolean;
+    };
+    /** @description Information about what owns this emoji */
+    EmojiParent: {
+      /** @enum {string} */
+      type: "Server";
+      id: string;
+    };
     /** Invite */
     InviteResponse:
       | {
@@ -1840,6 +1884,12 @@ export interface components {
       channels: components["schemas"]["Channel"][];
       /** @description Server we are joining */
       server: components["schemas"]["Server"];
+    };
+    /** Emoji Data */
+    DataCreateEmoji: {
+      /** @description Server name */
+      name: string;
+      parent: components["schemas"]["EmojiParent"];
     };
     /** Error */
     "RAuth Error":
@@ -1913,6 +1963,10 @@ export interface components {
       | {
           /** @enum {string} */
           type: "DisabledAccount";
+        }
+      | {
+          /** @enum {string} */
+          type: "ShortPassword";
         }
       | {
           /** @enum {string} */
@@ -3438,6 +3492,27 @@ export interface operations {
       };
     };
   };
+  /** Fetch all emoji on a server. */
+  emoji_list_list_emoji: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Emoji"][];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
   /** Fetch an invite by its id. */
   invite_fetch_req: {
     parameters: {
@@ -3485,6 +3560,71 @@ export interface operations {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Fetch an emoji by its id. */
+  emoji_fetch_fetch_emoji: {
+    parameters: {
+      path: {
+        id: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Emoji"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Create an emoji by its Autumn upload id. */
+  emoji_create_create_emoji: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Emoji"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataCreateEmoji"];
+      };
+    };
+  };
+  /** Delete an emoji by its id. */
+  emoji_delete_delete_emoji: {
+    parameters: {
+      path: {
+        id: components["schemas"]["Id"];
       };
     };
     responses: {

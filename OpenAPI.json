@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.3-7"
+    "version": "0.5.4"
   },
   "servers": [
     {
@@ -3101,6 +3101,56 @@
         ]
       }
     },
+    "/servers/{target}/emojis": {
+      "get": {
+        "tags": [
+          "Server Customisation"
+        ],
+        "summary": "Fetch Server Emoji",
+        "description": "Fetch all emoji on a server.",
+        "operationId": "emoji_list_list_emoji",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Emoji"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
     "/invites/{target}": {
       "get": {
         "tags": [
@@ -3197,6 +3247,146 @@
         "parameters": [
           {
             "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/custom/emoji/{id}": {
+      "get": {
+        "tags": [
+          "Emojis"
+        ],
+        "summary": "Fetch Emoji",
+        "description": "Fetch an emoji by its id.",
+        "operationId": "emoji_fetch_fetch_emoji",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emoji"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Emojis"
+        ],
+        "summary": "Create New Emoji",
+        "description": "Create an emoji by its Autumn upload id.",
+        "operationId": "emoji_create_create_emoji",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataCreateEmoji"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emoji"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Emojis"
+        ],
+        "summary": "Delete Emoji",
+        "description": "Delete an emoji by its id.",
+        "operationId": "emoji_delete_delete_emoji",
+        "parameters": [
+          {
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -4631,6 +4821,7 @@
           "ManageServer",
           "ManagePermissions",
           "ManageRole",
+          "ManageCustomisation",
           "KickMembers",
           "BanMembers",
           "TimeoutMembers",
@@ -4934,6 +5125,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "PayloadTooLarge"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "CannotRemoveYourself"
                 ]
               }
@@ -5046,6 +5251,20 @@
                 "type": "integer",
                 "format": "uint",
                 "minimum": 0.0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "TooManyEmoji"
+                ]
               }
             }
           },
@@ -5748,7 +5967,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$"
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω@#:\\n\\r\\[\\]]+$"
           },
           "password": {
             "description": "Current account password",
@@ -6151,7 +6370,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$"
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω@#:\\n\\r\\[\\]]+$"
           }
         }
       },
@@ -6278,7 +6497,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$",
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω@#:\\n\\r\\[\\]]+$",
             "nullable": true
           },
           "public": {
@@ -7231,6 +7450,8 @@
           "nonce": {
             "description": "Unique token to prevent duplicate message sending\n\n**This is deprecated and replaced by `Idempotency-Key`!**",
             "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
             "nullable": true
           },
           "content": {
@@ -7259,7 +7480,7 @@
             "nullable": true
           },
           "embeds": {
-            "description": "Embeds to include in message",
+            "description": "Embeds to include in message\n\nText embed content contributes to the content length cap",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SendableEmbed"
@@ -8321,6 +8542,66 @@
           }
         }
       },
+      "Emoji": {
+        "description": "Representation of an Emoji on Revolt",
+        "type": "object",
+        "required": [
+          "_id",
+          "animated",
+          "creator_id",
+          "name",
+          "parent"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique Id",
+            "type": "string"
+          },
+          "parent": {
+            "description": "What owns this emoji",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmojiParent"
+              }
+            ]
+          },
+          "creator_id": {
+            "description": "Uploader user id",
+            "type": "string"
+          },
+          "name": {
+            "description": "Emoji name",
+            "type": "string"
+          },
+          "animated": {
+            "description": "Whether the emoji is animated",
+            "type": "boolean"
+          }
+        }
+      },
+      "EmojiParent": {
+        "description": "Information about what owns this emoji",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Server"
+                ]
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
       "InviteResponse": {
         "title": "Invite",
         "oneOf": [
@@ -8493,6 +8774,26 @@
             }
           }
         ]
+      },
+      "DataCreateEmoji": {
+        "title": "Emoji Data",
+        "type": "object",
+        "required": [
+          "name",
+          "parent"
+        ],
+        "properties": {
+          "name": {
+            "description": "Server name",
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_]+$"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/EmojiParent"
+          }
+        }
       },
       "RAuth Error": {
         "title": "Error",
@@ -8743,6 +9044,20 @@
                 "type": "string",
                 "enum": [
                   "DisabledAccount"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ShortPassword"
                 ]
               }
             }
@@ -9259,7 +9574,7 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 2,
-            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω]+$"
+            "pattern": "^[^\\u200BА-Яа-яΑ-Ωα-ω@#:\\n\\r\\[\\]]+$"
           }
         }
       },
@@ -9401,6 +9716,12 @@
       "name": "Invites",
       "tags": [
         "Invites"
+      ]
+    },
+    {
+      "name": "Customisation",
+      "tags": [
+        "Emojis"
       ]
     },
     {
