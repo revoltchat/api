@@ -180,6 +180,24 @@ export interface paths {
      */
     put: operations["permissions_set_default_req"];
   };
+  "/channels/{target}/messages/{msg}/reactions/{emoji}": {
+    /** React to a given message. */
+    put: operations["message_react_react_message"];
+    /**
+     * Remove your own, someone else's or all of a given reaction.
+     *
+     * Requires `ManageMessages` if changing others' reactions.
+     */
+    delete: operations["message_unreact_unreact_message"];
+  };
+  "/channels/{target}/messages/{msg}/reactions": {
+    /**
+     * Remove your own, someone else's or all of a given reaction.
+     *
+     * Requires `ManageMessages` permission.
+     */
+    delete: operations["message_clear_reactions_clear_reactions"];
+  };
   "/servers/create": {
     /** Create a new server. */
     post: operations["server_create_req"];
@@ -472,6 +490,7 @@ export interface components {
       | "SendEmbeds"
       | "UploadFiles"
       | "Masquerade"
+      | "React"
       | "Connect"
       | "Speak"
       | "Video"
@@ -635,6 +654,10 @@ export interface components {
       | {
           /** @enum {string} */
           type: "CannotGiveMissingPermissions";
+        }
+      | {
+          /** @enum {string} */
+          type: "NotOwner";
         }
       | {
           /** @enum {string} */
@@ -1067,6 +1090,8 @@ export interface components {
       name?: string | null;
       /** @description Channel description */
       description?: string | null;
+      /** @description Group owner */
+      owner?: string | null;
       /**
        * @description Icon
        *
@@ -1130,6 +1155,10 @@ export interface components {
       mentions?: string[] | null;
       /** @description Array of message ids this message is replying to */
       replies?: string[] | null;
+      /** @description Hashmap of emoji IDs to array of user IDs */
+      reactions?: { [key: string]: string[] };
+      /** @description Information about how this message should be interacted with */
+      interactions?: components["schemas"]["Interactions"];
       /** @description Name and / or avatar overrides for this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
     };
@@ -1187,6 +1216,12 @@ export interface components {
           /** @enum {string} */
           type: "channel_icon_changed";
           by: string;
+        }
+      | {
+          /** @enum {string} */
+          type: "channel_ownership_changed";
+          from: string;
+          to: string;
         };
     /**
      * Format: date-time
@@ -1370,12 +1405,27 @@ export interface components {
        */
       height: number;
     };
+    /** @description Information to guide interactions on this message */
+    Interactions: {
+      /** @description Reactions which should always appear and be distinct */
+      reactions?: string[] | null;
+      /** @description Whether reactions should be restricted to the given list */
+      restrict_reactions?: boolean;
+    };
     /** @description Name and / or avatar override information */
     Masquerade: {
       /** @description Replace the display name shown on this message */
       name?: string | null;
       /** @description Replace the avatar shown on this message (URL to image file) */
       avatar?: string | null;
+      /**
+       * @description Replace the display role colour shown on this message
+       *
+       * Must have `ManageRole` permission to use
+       *
+       * This can be any valid CSS colour
+       */
+      colour?: string | null;
     };
     DataMessageSend: {
       /**
@@ -1398,6 +1448,8 @@ export interface components {
       embeds?: components["schemas"]["SendableEmbed"][] | null;
       /** @description Masquerade to apply to this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
+      /** @description Information about how this message should be interacted with */
+      interactions?: components["schemas"]["Interactions"] | null;
     };
     /**
      * Reply
@@ -1436,12 +1488,16 @@ export interface components {
     Member: {
       /** @description Unique member id */
       _id: components["schemas"]["MemberCompositeKey"];
+      /** @description Time at which this user joined the server */
+      joined_at: components["schemas"]["ISO8601 Timestamp"];
       /** @description Member's nickname */
       nickname?: string | null;
       /** @description Avatar attachment */
       avatar?: components["schemas"]["File"] | null;
       /** @description Member's roles */
-      roles?: string[] | null;
+      roles?: string[];
+      /** @description Timestamp this member is timed out until */
+      timeout?: components["schemas"]["ISO8601 Timestamp"] | null;
     };
     /** @description Composite primary key consisting of server and user id */
     MemberCompositeKey: {
@@ -1660,6 +1716,8 @@ export interface components {
       categories?: components["schemas"]["Category"][] | null;
       /** @description System message configuration */
       system_messages?: components["schemas"]["SystemMessageChannels"] | null;
+      /** @description Whether this server is public and should show up on [Revolt Discover](https://rvlt.gg) */
+      discoverable?: boolean | null;
       /**
        * @description Whether analytics should be collected for this server
        *
@@ -1716,6 +1774,8 @@ export interface components {
       avatar?: string | null;
       /** @description Array of role ids */
       roles?: string[] | null;
+      /** @description Timestamp this member is timed out until */
+      timeout?: components["schemas"]["ISO8601 Timestamp"] | null;
       /** @description Fields to remove from channel object */
       remove?: components["schemas"]["FieldsMember"][] | null;
     };
@@ -1723,7 +1783,7 @@ export interface components {
      * @description Optional fields on server member object
      * @enum {string}
      */
-    FieldsMember: "Nickname" | "Avatar" | "Roles";
+    FieldsMember: "Nickname" | "Avatar" | "Roles" | "Timeout";
     /** @description Representation of a server ban on Revolt */
     ServerBan: {
       /** @description Unique member id */
@@ -1821,14 +1881,21 @@ export interface components {
       /** @description Emoji name */
       name: string;
       /** @description Whether the emoji is animated */
-      animated: boolean;
+      animated?: boolean;
+      /** @description Whether the emoji is marked as nsfw */
+      nsfw?: boolean;
     };
     /** @description Information about what owns this emoji */
-    EmojiParent: {
-      /** @enum {string} */
-      type: "Server";
-      id: string;
-    };
+    EmojiParent:
+      | {
+          /** @enum {string} */
+          type: "Server";
+          id: string;
+        }
+      | {
+          /** @enum {string} */
+          type: "Detached";
+        };
     /** Invite */
     InviteResponse:
       | {
@@ -1889,7 +1956,10 @@ export interface components {
     DataCreateEmoji: {
       /** @description Server name */
       name: string;
+      /** @description Parent information */
       parent: components["schemas"]["EmojiParent"];
+      /** @description Whether the emoji is mature */
+      nsfw?: boolean;
     };
     /** Error */
     "RAuth Error":
@@ -3106,6 +3176,79 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataSetServerDefaultPermission"];
+      };
+    };
+  };
+  /** React to a given message. */
+  message_react_react_message: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+        msg: components["schemas"]["Id"];
+        emoji: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /**
+   * Remove your own, someone else's or all of a given reaction.
+   *
+   * Requires `ManageMessages` if changing others' reactions.
+   */
+  message_unreact_unreact_message: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+        msg: components["schemas"]["Id"];
+        emoji: components["schemas"]["Id"];
+      };
+      query: {
+        /** Remove a specific user's reaction */
+        user_id?: string | null;
+        /** Remove all reactions */
+        remove_all?: boolean | null;
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /**
+   * Remove your own, someone else's or all of a given reaction.
+   *
+   * Requires `ManageMessages` permission.
+   */
+  message_clear_reactions_clear_reactions: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+        msg: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
       };
     };
   };

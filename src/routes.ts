@@ -76,6 +76,12 @@ export type APIRoutes =
 | { method: 'put', path: '-/channels/{target}/permissions/{role_id}', parts: 4, params: paths['/channels/{target}/permissions/{role_id}']['put']['requestBody']['content']['application/json'], response: paths['/channels/{target}/permissions/{role_id}']['put']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/channels/${string}/permissions/default`, parts: 4, params: paths['/channels/{target}/permissions/default']['put']['requestBody']['content']['application/json'], response: paths['/channels/{target}/permissions/default']['put']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: '-/channels/{target}/permissions/default', parts: 4, params: paths['/channels/{target}/permissions/default']['put']['requestBody']['content']['application/json'], response: paths['/channels/{target}/permissions/default']['put']['responses']['200']['content']['application/json'] }
+| { method: 'put', path: `/channels/${string}/messages/${string}/reactions/${string}`, parts: 6, params: undefined, response: undefined }
+| { method: 'put', path: '-/channels/{target}/messages/{msg}/reactions/{emoji}', parts: 6, params: undefined, response: undefined }
+| { method: 'delete', path: `/channels/${string}/messages/${string}/reactions/${string}`, parts: 6, params: paths['/channels/{target}/messages/{msg}/reactions/{emoji}']['delete']['parameters']['query'], response: undefined }
+| { method: 'delete', path: '-/channels/{target}/messages/{msg}/reactions/{emoji}', parts: 6, params: paths['/channels/{target}/messages/{msg}/reactions/{emoji}']['delete']['parameters']['query'], response: undefined }
+| { method: 'delete', path: `/channels/${string}/messages/${string}/reactions`, parts: 5, params: undefined, response: undefined }
+| { method: 'delete', path: '-/channels/{target}/messages/{msg}/reactions', parts: 5, params: undefined, response: undefined }
 | { method: 'post', path: `/servers/create`, parts: 2, params: paths['/servers/create']['post']['requestBody']['content']['application/json'], response: paths['/servers/create']['post']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/servers/${string}`, parts: 2, params: undefined, response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/servers/{target}', parts: 2, params: undefined, response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }

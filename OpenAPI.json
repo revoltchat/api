@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.4"
+    "version": "0.5.5"
   },
   "servers": [
     {
@@ -2087,6 +2087,184 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/channels/{target}/messages/{msg}/reactions/{emoji}": {
+      "put": {
+        "tags": [
+          "Interactions"
+        ],
+        "summary": "Add Reaction to Message",
+        "description": "React to a given message.",
+        "operationId": "message_react_react_message",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "msg",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "emoji",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Interactions"
+        ],
+        "summary": "Remove Reaction(s) to Message",
+        "description": "Remove your own, someone else's or all of a given reaction.\n\nRequires `ManageMessages` if changing others' reactions.",
+        "operationId": "message_unreact_unreact_message",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "msg",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "emoji",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Remove a specific user's reaction",
+            "schema": {
+              "description": "Remove a specific user's reaction",
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "remove_all",
+            "in": "query",
+            "description": "Remove all reactions",
+            "schema": {
+              "description": "Remove all reactions",
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/channels/{target}/messages/{msg}/reactions": {
+      "delete": {
+        "tags": [
+          "Interactions"
+        ],
+        "summary": "Remove All Reactions from Message",
+        "description": "Remove your own, someone else's or all of a given reaction.\n\nRequires `ManageMessages` permission.",
+        "operationId": "message_clear_reactions_clear_reactions",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "msg",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
           }
         },
         "security": [
@@ -4839,6 +5017,7 @@
           "SendEmbeds",
           "UploadFiles",
           "Masquerade",
+          "React",
           "Connect",
           "Speak",
           "Video",
@@ -5370,6 +5549,20 @@
                 "type": "string",
                 "enum": [
                   "CannotGiveMissingPermissions"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "NotOwner"
                 ]
               }
             }
@@ -6554,6 +6747,11 @@
             "minLength": 0,
             "nullable": true
           },
+          "owner": {
+            "description": "Group owner",
+            "type": "string",
+            "nullable": true
+          },
           "icon": {
             "description": "Icon\n\nProvide an Autumn attachment Id.",
             "type": "string",
@@ -6735,6 +6933,25 @@
               "type": "string"
             },
             "nullable": true
+          },
+          "reactions": {
+            "description": "Hashmap of emoji IDs to array of user IDs",
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            }
+          },
+          "interactions": {
+            "description": "Information about how this message should be interacted with",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Interactions"
+              }
+            ]
           },
           "masquerade": {
             "description": "Name and / or avatar overrides for this message",
@@ -6938,6 +7155,28 @@
                 ]
               },
               "by": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "from",
+              "to",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "channel_ownership_changed"
+                ]
+              },
+              "from": {
+                "type": "string"
+              },
+              "to": {
                 "type": "string"
               }
             }
@@ -7424,6 +7663,25 @@
           }
         }
       },
+      "Interactions": {
+        "description": "Information to guide interactions on this message",
+        "type": "object",
+        "properties": {
+          "reactions": {
+            "description": "Reactions which should always appear and be distinct",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true,
+            "nullable": true
+          },
+          "restrict_reactions": {
+            "description": "Whether reactions should be restricted to the given list",
+            "type": "boolean"
+          }
+        }
+      },
       "Masquerade": {
         "description": "Name and / or avatar override information",
         "type": "object",
@@ -7439,6 +7697,13 @@
             "description": "Replace the avatar shown on this message (URL to image file)",
             "type": "string",
             "maxLength": 128,
+            "minLength": 1,
+            "nullable": true
+          },
+          "colour": {
+            "description": "Replace the display role colour shown on this message\n\nMust have `ManageRole` permission to use\n\nThis can be any valid CSS colour",
+            "type": "string",
+            "maxLength": 32,
             "minLength": 1,
             "nullable": true
           }
@@ -7497,6 +7762,15 @@
               }
             ],
             "nullable": true
+          },
+          "interactions": {
+            "description": "Information about how this message should be interacted with",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Interactions"
+              }
+            ],
+            "nullable": true
           }
         }
       },
@@ -7551,8 +7825,9 @@
           },
           "colour": {
             "type": "string",
-            "maxLength": 64,
+            "maxLength": 128,
             "minLength": 1,
+            "pattern": "(?i)^(?:[a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|(repeating-)?(linear|conic|radial)-gradient\\(([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|\\d+deg)([ ]+(\\d{1,3}%|0))?(,[ ]*([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+)([ ]+(\\d{1,3}%|0))?)+\\))$",
             "nullable": true
           }
         }
@@ -7604,7 +7879,8 @@
         "description": "Representation of a member of a server on Revolt",
         "type": "object",
         "required": [
-          "_id"
+          "_id",
+          "joined_at"
         ],
         "properties": {
           "_id": {
@@ -7612,6 +7888,14 @@
             "allOf": [
               {
                 "$ref": "#/components/schemas/MemberCompositeKey"
+              }
+            ]
+          },
+          "joined_at": {
+            "description": "Time at which this user joined the server",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ISO8601 Timestamp"
               }
             ]
           },
@@ -7634,7 +7918,15 @@
             "type": "array",
             "items": {
               "type": "string"
-            },
+            }
+          },
+          "timeout": {
+            "description": "Timestamp this member is timed out until",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ISO8601 Timestamp"
+              }
+            ],
             "nullable": true
           }
         }
@@ -8193,6 +8485,11 @@
             ],
             "nullable": true
           },
+          "discoverable": {
+            "description": "Whether this server is public and should show up on [Revolt Discover](https://rvlt.gg)",
+            "type": "boolean",
+            "nullable": true
+          },
           "analytics": {
             "description": "Whether analytics should be collected for this server\n\nMust be enabled in order to show up on [Revolt Discover](https://rvlt.gg).",
             "type": "boolean",
@@ -8313,6 +8610,15 @@
             },
             "nullable": true
           },
+          "timeout": {
+            "description": "Timestamp this member is timed out until",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ISO8601 Timestamp"
+              }
+            ],
+            "nullable": true
+          },
           "remove": {
             "description": "Fields to remove from channel object",
             "type": "array",
@@ -8330,7 +8636,8 @@
         "enum": [
           "Nickname",
           "Avatar",
-          "Roles"
+          "Roles",
+          "Timeout"
         ]
       },
       "ServerBan": {
@@ -8477,8 +8784,9 @@
           "colour": {
             "description": "Role colour",
             "type": "string",
-            "maxLength": 32,
+            "maxLength": 128,
             "minLength": 1,
+            "pattern": "(?i)^(?:[a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|(repeating-)?(linear|conic|radial)-gradient\\(([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|\\d+deg)([ ]+(\\d{1,3}%|0))?(,[ ]*([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+)([ ]+(\\d{1,3}%|0))?)+\\))$",
             "nullable": true
           },
           "hoist": {
@@ -8547,7 +8855,6 @@
         "type": "object",
         "required": [
           "_id",
-          "animated",
           "creator_id",
           "name",
           "parent"
@@ -8576,6 +8883,10 @@
           "animated": {
             "description": "Whether the emoji is animated",
             "type": "boolean"
+          },
+          "nsfw": {
+            "description": "Whether the emoji is marked as nsfw",
+            "type": "boolean"
           }
         }
       },
@@ -8597,6 +8908,20 @@
               },
               "id": {
                 "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Detached"
+                ]
               }
             }
           }
@@ -8788,10 +9113,20 @@
             "type": "string",
             "maxLength": 32,
             "minLength": 1,
-            "pattern": "^[a-zA-Z0-9_]+$"
+            "pattern": "^[a-z0-9_]+$"
           },
           "parent": {
-            "$ref": "#/components/schemas/EmojiParent"
+            "description": "Parent information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmojiParent"
+              }
+            ]
+          },
+          "nsfw": {
+            "description": "Whether the emoji is mature",
+            "default": false,
+            "type": "boolean"
           }
         }
       },
@@ -9700,6 +10035,7 @@
         "Channel Invites",
         "Channel Permissions",
         "Messaging",
+        "Interactions",
         "Groups",
         "Voice"
       ]

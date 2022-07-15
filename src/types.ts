@@ -48,6 +48,7 @@ export type BandcampType = components['schemas']['BandcampType'];
 export type Image = components['schemas']['Image'];
 export type ImageSize = components['schemas']['ImageSize'];
 export type Video = components['schemas']['Video'];
+export type Interactions = components['schemas']['Interactions'];
 export type Masquerade = components['schemas']['Masquerade'];
 export type DataMessageSend = components['schemas']['DataMessageSend'];
 export type Reply = components['schemas']['Reply'];
