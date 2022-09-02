@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@insertish/oapi@0.1.16":
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/@insertish/oapi/-/oapi-0.1.16.tgz#1149547a3ded6c1c087318bf9649e231836408ed"
-  integrity sha512-dxuLdNKBmnbVw8BBRzE1APZ3d7wErhNWQepXdNM3ueeQrheo6Sjg8FGFCQG7zCrEKns08lg5ITmxhqbYXVXZBQ==
+"@insertish/oapi@0.1.17":
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/@insertish/oapi/-/oapi-0.1.17.tgz#30c283cfed5d5a338677611a6a49c4830e3f2b84"
+  integrity sha512-CzNv3SUucrqnvYKe/4JSxjrHGOohp5O4C1EFEBQrT5ZIXuzuKxmncXhJAQhIfNdxBM1vl90ZDLyrQzl8V8JuZw==
   dependencies:
     typescript "^4.6.2"
   optionalDependencies:
