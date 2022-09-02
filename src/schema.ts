@@ -1100,6 +1100,8 @@ export interface components {
       icon?: string | null;
       /** @description Whether this channel is age-restricted */
       nsfw?: boolean | null;
+      /** @description Whether this channel is archived */
+      archived?: boolean | null;
       remove?: components["schemas"]["FieldsChannel"][] | null;
     };
     /**
@@ -2738,6 +2740,10 @@ export interface operations {
       path: {
         target: components["schemas"]["Id"];
       };
+      query: {
+        /** Whether to not send a leave message */
+        leave_silently?: boolean | null;
+      };
     };
     responses: {
       /** Success */
@@ -3299,6 +3305,10 @@ export interface operations {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
+      };
+      query: {
+        /** Whether to not send a leave message */
+        leave_silently?: boolean | null;
       };
     };
     responses: {

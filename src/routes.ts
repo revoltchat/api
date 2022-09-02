@@ -41,8 +41,8 @@ export type APIRoutes =
 | { method: 'put', path: '-/channels/{target}/ack/{message}', parts: 4, params: undefined, response: undefined }
 | { method: 'get', path: `/channels/${string}`, parts: 2, params: undefined, response: paths['/channels/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/channels/{target}', parts: 2, params: undefined, response: paths['/channels/{target}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'delete', path: `/channels/${string}`, parts: 2, params: undefined, response: undefined }
-| { method: 'delete', path: '-/channels/{target}', parts: 2, params: undefined, response: undefined }
+| { method: 'delete', path: `/channels/${string}`, parts: 2, params: paths['/channels/{target}']['delete']['parameters']['query'], response: undefined }
+| { method: 'delete', path: '-/channels/{target}', parts: 2, params: paths['/channels/{target}']['delete']['parameters']['query'], response: undefined }
 | { method: 'patch', path: `/channels/${string}`, parts: 2, params: paths['/channels/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/channels/{target}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'patch', path: '-/channels/{target}', parts: 2, params: paths['/channels/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/channels/{target}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/channels/${string}/members`, parts: 3, params: undefined, response: paths['/channels/{target}/members']['get']['responses']['200']['content']['application/json'] }
@@ -85,8 +85,8 @@ export type APIRoutes =
 | { method: 'post', path: `/servers/create`, parts: 2, params: paths['/servers/create']['post']['requestBody']['content']['application/json'], response: paths['/servers/create']['post']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/servers/${string}`, parts: 2, params: undefined, response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/servers/{target}', parts: 2, params: undefined, response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'delete', path: `/servers/${string}`, parts: 2, params: undefined, response: undefined }
-| { method: 'delete', path: '-/servers/{target}', parts: 2, params: undefined, response: undefined }
+| { method: 'delete', path: `/servers/${string}`, parts: 2, params: paths['/servers/{target}']['delete']['parameters']['query'], response: undefined }
+| { method: 'delete', path: '-/servers/{target}', parts: 2, params: paths['/servers/{target}']['delete']['parameters']['query'], response: undefined }
 | { method: 'patch', path: `/servers/${string}`, parts: 2, params: paths['/servers/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/servers/{target}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'patch', path: '-/servers/{target}', parts: 2, params: paths['/servers/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/servers/{target}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/servers/${string}/ack`, parts: 3, params: undefined, response: undefined }

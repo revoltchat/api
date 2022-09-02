@@ -1110,6 +1110,16 @@
             "schema": {
               "$ref": "#/components/schemas/Id"
             }
+          },
+          {
+            "name": "leave_silently",
+            "in": "query",
+            "description": "Whether to not send a leave message",
+            "schema": {
+              "description": "Whether to not send a leave message",
+              "type": "boolean",
+              "nullable": true
+            }
           }
         ],
         "responses": {
@@ -2381,6 +2391,16 @@
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "leave_silently",
+            "in": "query",
+            "description": "Whether to not send a leave message",
+            "schema": {
+              "description": "Whether to not send a leave message",
+              "type": "boolean",
+              "nullable": true
             }
           }
         ],
@@ -6761,6 +6781,11 @@
           },
           "nsfw": {
             "description": "Whether this channel is age-restricted",
+            "type": "boolean",
+            "nullable": true
+          },
+          "archived": {
+            "description": "Whether this channel is archived",
             "type": "boolean",
             "nullable": true
           },
