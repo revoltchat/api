@@ -819,7 +819,7 @@ export interface components {
      * @description Presence status
      * @enum {string}
      */
-    Presence: "Online" | "Idle" | "Busy" | "Invisible";
+    Presence: "Online" | "Idle" | "Focus" | "Busy" | "Invisible";
     /** @description User's profile */
     UserProfile: {
       /** @description Text content on user's profile */
@@ -1424,8 +1424,6 @@ export interface components {
        * @description Replace the display role colour shown on this message
        *
        * Must have `ManageRole` permission to use
-       *
-       * This can be any valid CSS colour
        */
       colour?: string | null;
     };
