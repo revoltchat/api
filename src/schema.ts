@@ -1911,6 +1911,11 @@ export interface components {
           server_icon?: components["schemas"]["File"] | null;
           /** @description Attachment for server banner */
           server_banner?: components["schemas"]["File"] | null;
+          /**
+           * Format: int32
+           * @description Enum of server flags
+           */
+          server_flags?: number | null;
           /** @description Id of server channel */
           channel_id: string;
           /** @description Name of server channel */
