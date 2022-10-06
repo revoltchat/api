@@ -3383,7 +3383,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InviteResponse"
+                  "$ref": "#/components/schemas/
+                  "
                 }
               }
             }
@@ -9007,6 +9008,12 @@
                 ],
                 "nullable": true
               },
+              "server_flags": {
+                "description": "Additional server properties"
+                "type": "integer",
+                "format": "int32",
+                "nullable": true
+              }
               "channel_id": {
                 "description": "Id of server channel",
                 "type": "string"
