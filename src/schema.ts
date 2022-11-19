@@ -2044,6 +2044,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "LockedOut";
+        }
+      | {
+          /** @enum {string} */
           type: "TotpAlreadyEnabled";
         }
       | {
@@ -2091,12 +2095,35 @@ export interface components {
       /** @description Current password */
       current_password: string;
     };
+    ResponseVerify:
+      | unknown
+      | {
+          /** @description Authorised MFA ticket, can be used to log in */
+          ticket: components["schemas"]["MFATicket"];
+        };
+    /** @description Multi-factor auth ticket */
+    MFATicket: {
+      /** @description Unique Id */
+      _id: string;
+      /** @description Account Id */
+      account_id: string;
+      /** @description Unique Token */
+      token: string;
+      /** @description Whether this ticket has been validated (can be used for account actions) */
+      validated: boolean;
+      /** @description Whether this ticket is authorised (can be used to log a user in) */
+      authorised: boolean;
+      /** @description TOTP code at time of ticket creation */
+      last_totp_code?: string | null;
+    };
     /** Password Reset */
     DataPasswordReset: {
       /** @description Reset token */
       token: string;
       /** @description New password */
       password: string;
+      /** @description Whether to logout all sessions */
+      remove_sessions?: boolean;
     };
     /** Reset Information */
     DataSendPasswordReset: {
@@ -2144,14 +2171,12 @@ export interface components {
           email: string;
           /** @description Password */
           password: string;
-          /** @description Captcha verification code */
-          captcha?: string | null;
           /** @description Friendly name used for the session */
           friendly_name?: string | null;
         }
       | {
           /**
-           * @description Unvalidated MFA ticket
+           * @description Unvalidated or authorised MFA ticket
            *
            * Used to resolve the correct account
            */
@@ -2161,7 +2186,7 @@ export interface components {
            *
            * This will take precedence over the `password` field where applicable
            */
-          mfa_response: components["schemas"]["MFAResponse"];
+          mfa_response?: components["schemas"]["MFAResponse"] | null;
           /** @description Friendly name used for the session */
           friendly_name?: string | null;
         };
@@ -2184,17 +2209,6 @@ export interface components {
     DataEditSession: {
       /** @description Session friendly name */
       friendly_name: string;
-    };
-    /** @description Multi-factor auth ticket */
-    MFATicket: {
-      /** @description Unique Id */
-      _id: string;
-      /** @description Account Id */
-      account_id: string;
-      /** @description Unique Token */
-      token: string;
-      /** @description Whether this ticket has been validated */
-      validated: boolean;
     };
     MultiFactorStatus: {
       email_otp: boolean;
@@ -3929,8 +3943,11 @@ export interface operations {
       };
     };
     responses: {
-      /** Success */
-      204: never;
+      200: {
+        content: {
+          "application/json": components["schemas"]["ResponseVerify"];
+        };
+      };
       /** An error occurred. */
       default: {
         content: {

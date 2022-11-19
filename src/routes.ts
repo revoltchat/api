@@ -141,8 +141,8 @@ export type APIRoutes =
 | { method: 'post', path: `/auth/account/disable`, parts: 3, params: undefined, response: undefined }
 | { method: 'patch', path: `/auth/account/change/password`, parts: 4, params: paths['/auth/account/change/password']['patch']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'patch', path: `/auth/account/change/email`, parts: 4, params: paths['/auth/account/change/email']['patch']['requestBody']['content']['application/json'], response: undefined }
-| { method: 'post', path: `/auth/account/verify/${string}`, parts: 4, params: undefined, response: undefined }
-| { method: 'post', path: '-/auth/account/verify/{code}', parts: 4, params: undefined, response: undefined }
+| { method: 'post', path: `/auth/account/verify/${string}`, parts: 4, params: undefined, response: paths['/auth/account/verify/{code}']['post']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: '-/auth/account/verify/{code}', parts: 4, params: undefined, response: paths['/auth/account/verify/{code}']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/auth/account/reset_password`, parts: 3, params: paths['/auth/account/reset_password']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'patch', path: `/auth/account/reset_password`, parts: 3, params: paths['/auth/account/reset_password']['patch']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/session/login`, parts: 3, params: paths['/auth/session/login']['post']['requestBody']['content']['application/json'], response: paths['/auth/session/login']['post']['responses']['200']['content']['application/json'] }

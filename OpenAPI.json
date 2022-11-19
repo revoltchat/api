@@ -3929,8 +3929,15 @@
               }
             }
           },
-          "204": {
-            "description": "Success"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseVerify"
+                }
+              }
+            }
           }
         }
       }
@@ -9447,6 +9454,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "LockedOut"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "TotpAlreadyEnabled"
                 ]
               }
@@ -9578,6 +9599,67 @@
           }
         }
       },
+      "ResponseVerify": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "required": [
+              "ticket"
+            ],
+            "properties": {
+              "ticket": {
+                "description": "Authorised MFA ticket, can be used to log in",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MFATicket"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "MFATicket": {
+        "description": "Multi-factor auth ticket",
+        "type": "object",
+        "required": [
+          "_id",
+          "account_id",
+          "authorised",
+          "token",
+          "validated"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique Id",
+            "type": "string"
+          },
+          "account_id": {
+            "description": "Account Id",
+            "type": "string"
+          },
+          "token": {
+            "description": "Unique Token",
+            "type": "string"
+          },
+          "validated": {
+            "description": "Whether this ticket has been validated (can be used for account actions)",
+            "type": "boolean"
+          },
+          "authorised": {
+            "description": "Whether this ticket is authorised (can be used to log a user in)",
+            "type": "boolean"
+          },
+          "last_totp_code": {
+            "description": "TOTP code at time of ticket creation",
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "DataPasswordReset": {
         "title": "Password Reset",
         "type": "object",
@@ -9593,6 +9675,11 @@
           "password": {
             "description": "New password",
             "type": "string"
+          },
+          "remove_sessions": {
+            "description": "Whether to logout all sessions",
+            "default": false,
+            "type": "boolean"
           }
         }
       },
@@ -9734,11 +9821,6 @@
                 "description": "Password",
                 "type": "string"
               },
-              "captcha": {
-                "description": "Captcha verification code",
-                "type": "string",
-                "nullable": true
-              },
               "friendly_name": {
                 "description": "Friendly name used for the session",
                 "type": "string",
@@ -9749,12 +9831,11 @@
           {
             "type": "object",
             "required": [
-              "mfa_response",
               "mfa_ticket"
             ],
             "properties": {
               "mfa_ticket": {
-                "description": "Unvalidated MFA ticket\n\nUsed to resolve the correct account",
+                "description": "Unvalidated or authorised MFA ticket\n\nUsed to resolve the correct account",
                 "type": "string"
               },
               "mfa_response": {
@@ -9763,7 +9844,8 @@
                   {
                     "$ref": "#/components/schemas/MFAResponse"
                   }
-                ]
+                ],
+                "nullable": true
               },
               "friendly_name": {
                 "description": "Friendly name used for the session",
@@ -9837,34 +9919,6 @@
           "friendly_name": {
             "description": "Session friendly name",
             "type": "string"
-          }
-        }
-      },
-      "MFATicket": {
-        "description": "Multi-factor auth ticket",
-        "type": "object",
-        "required": [
-          "_id",
-          "account_id",
-          "token",
-          "validated"
-        ],
-        "properties": {
-          "_id": {
-            "description": "Unique Id",
-            "type": "string"
-          },
-          "account_id": {
-            "description": "Account Id",
-            "type": "string"
-          },
-          "token": {
-            "description": "Unique Token",
-            "type": "string"
-          },
-          "validated": {
-            "description": "Whether this ticket has been validated",
-            "type": "boolean"
           }
         }
       },
