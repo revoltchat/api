@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.5"
+    "version": "0.5.7"
   },
   "servers": [
     {
@@ -185,6 +185,48 @@
             "Session Token": []
           }
         ]
+      }
+    },
+    "/users/{target}/flags": {
+      "get": {
+        "tags": [
+          "User Information"
+        ],
+        "summary": "Fetch User Flags",
+        "description": "Retrieve a user's flags.",
+        "operationId": "fetch_user_flags_fetch_user_flags",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlagResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/users/@me/username": {
@@ -4156,6 +4198,9 @@
         "security": [
           {
             "Session Token": []
+          },
+          {
+            "Session Token": []
           }
         ]
       }
@@ -4873,6 +4918,7 @@
         "type": "object",
         "required": [
           "app",
+          "build",
           "features",
           "revolt",
           "vapid",
@@ -4902,6 +4948,14 @@
           "vapid": {
             "description": "Web Push VAPID public key",
             "type": "string"
+          },
+          "build": {
+            "description": "Build information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BuildInformation"
+              }
+            ]
           }
         }
       },
@@ -5014,6 +5068,39 @@
           },
           "ws": {
             "description": "URL pointing to the voice WebSocket server",
+            "type": "string"
+          }
+        }
+      },
+      "BuildInformation": {
+        "title": "Build Information",
+        "type": "object",
+        "required": [
+          "commit_sha",
+          "commit_timestamp",
+          "origin_url",
+          "semver",
+          "timestamp"
+        ],
+        "properties": {
+          "commit_sha": {
+            "description": "Commit Hash",
+            "type": "string"
+          },
+          "commit_timestamp": {
+            "description": "Commit Timestamp",
+            "type": "string"
+          },
+          "semver": {
+            "description": "Git Semver",
+            "type": "string"
+          },
+          "origin_url": {
+            "description": "Git Origin URL",
+            "type": "string"
+          },
+          "timestamp": {
+            "description": "Build Timestamp",
             "type": "string"
           }
         }
@@ -5667,6 +5754,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "InvalidProperty"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "InvalidSession"
                 ]
               }
@@ -6103,6 +6204,20 @@
       },
       "Id": {
         "type": "string"
+      },
+      "FlagResponse": {
+        "title": "Flag Response",
+        "type": "object",
+        "required": [
+          "flags"
+        ],
+        "properties": {
+          "flags": {
+            "description": "Flags",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       },
       "DataEditUser": {
         "title": "User Data",
@@ -7602,6 +7717,25 @@
                 "type": "string"
               }
             }
+          },
+          {
+            "description": "Streamable Video",
+            "type": "object",
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Streamable"
+                ]
+              },
+              "id": {
+                "type": "string"
+              }
+            }
           }
         ]
       },
@@ -7710,7 +7844,7 @@
             "nullable": true
           },
           "restrict_reactions": {
-            "description": "Whether reactions should be restricted to the given list",
+            "description": "Whether reactions should be restricted to the given list\n\nCan only be set to true if reactions list is of at least length 1",
             "type": "boolean"
           }
         }
@@ -7729,7 +7863,7 @@
           "avatar": {
             "description": "Replace the avatar shown on this message (URL to image file)",
             "type": "string",
-            "maxLength": 128,
+            "maxLength": 256,
             "minLength": 1,
             "nullable": true
           },
@@ -9014,6 +9148,12 @@
                 ],
                 "nullable": true
               },
+              "server_flags": {
+                "description": "Enum of server flags",
+                "type": "integer",
+                "format": "int32",
+                "nullable": true
+              },
               "channel_id": {
                 "description": "Id of server channel",
                 "type": "string"
@@ -9164,7 +9304,7 @@
           }
         }
       },
-      "RAuth Error": {
+      "Authifier Error": {
         "title": "Error",
         "oneOf": [
           {
@@ -9273,6 +9413,20 @@
                 "type": "string",
                 "enum": [
                   "CaptchaFailed"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "BlockedByShield"
                 ]
               }
             }
@@ -9399,20 +9553,6 @@
                 "type": "string",
                 "enum": [
                   "CompromisedPassword"
-                ]
-              }
-            }
-          },
-          {
-            "type": "object",
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "DisabledAccount"
                 ]
               }
             }
@@ -9769,6 +9909,24 @@
                 "items": {
                   "$ref": "#/components/schemas/MFAMethod"
                 }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "result",
+              "user_id"
+            ],
+            "properties": {
+              "result": {
+                "type": "string",
+                "enum": [
+                  "Disabled"
+                ]
+              },
+              "user_id": {
+                "type": "string"
               }
             }
           }
