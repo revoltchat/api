@@ -1,0 +1,52 @@
+name: Build and Publish API
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v3
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: "yarn"
+      - name: Install packages
+        run: yarn install
+      - name: Build package
+        run: yarn build
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v4
+        with:
+          add: "*.md"
+          message: "chore: build library from latest spec"
+
+      - name: Find current API version
+        run: echo "api_version={jq -r .info.version OpenAPI.json}" >> $GITHUB_ENV
+      - name: Check if tag exists for current version
+        uses: mukunku/tag-exists-action@v1.2.0
+        id: checkTag
+        with:
+          tag: ${{ env.api_version }}
+      - name: Update version in package.json
+        if: ${{ steps.checkTag.outputs.exists }} != true
+        run: |
+          jq '.version="${{ env.api_version }}"' package.json > temp.json
+          mv temp.json package.json
+      - name: Commit changes
+        if: ${{ steps.checkTag.outputs.exists }} != true
+        uses: EndBug/add-and-commit@v4
+        with:
+          add: "*.md"
+          tag: "${{ env.api_version }} --force"
+          message: "chore: bump version to ${{ env.api_version }}"
+      - name: Publish to NPM
+        if: ${{ steps.checkTag.outputs.exists }} != true
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
