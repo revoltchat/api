@@ -27,7 +27,7 @@ jobs:
           message: "chore: build library from latest spec"
 
       - name: Find current API version
-        run: echo "api_version={jq -r .info.version OpenAPI.json}" >> $GITHUB_ENV
+        run: echo "api_version=${jq -r .info.version OpenAPI.json}" >> $GITHUB_ENV
       - name: Check if tag exists for current version
         uses: mukunku/tag-exists-action@v1.2.0
         id: checkTag
