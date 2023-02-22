@@ -6,6 +6,8 @@ export type APIRoutes =
 | { method: 'patch', path: `/users/@me`, parts: 2, params: paths['/users/@me']['patch']['requestBody']['content']['application/json'], response: paths['/users/@me']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/${string}`, parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/users/{target}', parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/users/${string}/flags`, parts: 3, params: undefined, response: paths['/users/{target}/flags']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: '-/users/{target}/flags', parts: 3, params: undefined, response: paths['/users/{target}/flags']['get']['responses']['200']['content']['application/json'] }
 | { method: 'patch', path: `/users/@me/username`, parts: 3, params: paths['/users/@me/username']['patch']['requestBody']['content']['application/json'], response: paths['/users/@me/username']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/${string}/default_avatar`, parts: 3, params: undefined, response: paths['/users/{target}/default_avatar']['get']['responses']['200']['content']['image/png'] }
 | { method: 'get', path: '-/users/{target}/default_avatar', parts: 3, params: undefined, response: paths['/users/{target}/default_avatar']['get']['responses']['200']['content']['image/png'] }
@@ -133,6 +135,7 @@ export type APIRoutes =
 | { method: 'put', path: '-/custom/emoji/{id}', parts: 3, params: paths['/custom/emoji/{id}']['put']['requestBody']['content']['application/json'], response: paths['/custom/emoji/{id}']['put']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/custom/emoji/${string}`, parts: 3, params: undefined, response: undefined }
 | { method: 'delete', path: '-/custom/emoji/{id}', parts: 3, params: undefined, response: undefined }
+| { method: 'post', path: `/safety/report`, parts: 2, params: paths['/safety/report']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/account/create`, parts: 3, params: paths['/auth/account/create']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/account/reverify`, parts: 3, params: paths['/auth/account/reverify']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'put', path: `/auth/account/delete`, parts: 3, params: paths['/auth/account/delete']['put']['requestBody']['content']['application/json'], response: undefined }

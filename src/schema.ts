@@ -18,6 +18,10 @@ export interface paths {
     /** Retrieve a user's information. */
     get: operations["fetch_user_req"];
   };
+  "/users/{target}/flags": {
+    /** Retrieve a user's flags. */
+    get: operations["fetch_user_flags_fetch_user_flags"];
+  };
   "/users/@me/username": {
     /** Change your username. */
     patch: operations["change_username_req"];
@@ -284,6 +288,10 @@ export interface paths {
     /** Delete an emoji by its id. */
     delete: operations["emoji_delete_delete_emoji"];
   };
+  "/safety/report": {
+    /** Report a piece of content to the moderation team. */
+    post: operations["report_content_report_content"];
+  };
   "/auth/account/create": {
     /** Create a new account. */
     post: operations["create_account_create_account"];
@@ -422,6 +430,8 @@ export interface components {
       app: string;
       /** @description Web Push VAPID public key */
       vapid: string;
+      /** @description Build information */
+      build: components["schemas"]["BuildInformation"];
     };
     /** Feature Configuration */
     RevoltFeatures: {
@@ -460,6 +470,19 @@ export interface components {
       url: string;
       /** @description URL pointing to the voice WebSocket server */
       ws: string;
+    };
+    /** Build Information */
+    BuildInformation: {
+      /** @description Commit Hash */
+      commit_sha: string;
+      /** @description Commit Timestamp */
+      commit_timestamp: string;
+      /** @description Git Semver */
+      semver: string;
+      /** @description Git Origin URL */
+      origin_url: string;
+      /** @description Build Timestamp */
+      timestamp: string;
     };
     /**
      * @description Permission value on Revolt
@@ -639,6 +662,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "CannotReportYourself";
+        }
+      | {
+          /** @enum {string} */
           type: "MissingPermission";
           permission: components["schemas"]["Permission"];
         }
@@ -676,6 +703,10 @@ export interface components {
       | {
           /** @enum {string} */
           type: "InvalidCredentials";
+        }
+      | {
+          /** @enum {string} */
+          type: "InvalidProperty";
         }
       | {
           /** @enum {string} */
@@ -833,6 +864,14 @@ export interface components {
       owner: string;
     };
     Id: string;
+    /** Flag Response */
+    FlagResponse: {
+      /**
+       * Format: int32
+       * @description Flags
+       */
+      flags: number;
+    };
     /** User Data */
     DataEditUser: {
       /** @description New user status */
@@ -1354,6 +1393,11 @@ export interface components {
           type: "Bandcamp";
           content_type: components["schemas"]["BandcampType"];
           id: string;
+        }
+      | {
+          /** @enum {string} */
+          type: "Streamable";
+          id: string;
         };
     /**
      * @description Type of remote Lightspeed.tv content
@@ -1411,7 +1455,11 @@ export interface components {
     Interactions: {
       /** @description Reactions which should always appear and be distinct */
       reactions?: string[] | null;
-      /** @description Whether reactions should be restricted to the given list */
+      /**
+       * @description Whether reactions should be restricted to the given list
+       *
+       * Can only be set to true if reactions list is of at least length 1
+       */
       restrict_reactions?: boolean;
     };
     /** @description Name and / or avatar override information */
@@ -1911,6 +1959,11 @@ export interface components {
           server_icon?: components["schemas"]["File"] | null;
           /** @description Attachment for server banner */
           server_banner?: components["schemas"]["File"] | null;
+          /**
+           * Format: int32
+           * @description Enum of server flags
+           */
+          server_flags?: number | null;
           /** @description Id of server channel */
           channel_id: string;
           /** @description Name of server channel */
@@ -1961,8 +2014,62 @@ export interface components {
       /** @description Whether the emoji is mature */
       nsfw?: boolean;
     };
+    /** Report Data */
+    DataReportContent: {
+      /** @description Content being reported */
+      content: components["schemas"]["ReportedContent"];
+      /** @description Additional report description */
+      additional_context?: string;
+    };
+    ReportedContent:
+      | {
+          /** @enum {string} */
+          type: "Message";
+          /** @description ID of the message */
+          id: string;
+          /** @description Reason for reporting message */
+          report_reason: components["schemas"]["ContentReportReason"];
+        }
+      | {
+          /** @enum {string} */
+          type: "Server";
+          /** @description ID of the server */
+          id: string;
+          /** @description Reason for reporting server */
+          report_reason: components["schemas"]["ContentReportReason"];
+        }
+      | {
+          /** @enum {string} */
+          type: "User";
+          /** @description ID of the user */
+          id: string;
+          /** @description Reason for reporting a user */
+          report_reason: components["schemas"]["UserReportReason"];
+        };
+    /**
+     * @description Reason for reporting content (message or server)
+     * @enum {string}
+     */
+    ContentReportReason:
+      | "NoneSpecified"
+      | "Illegal"
+      | "PromotesHarm"
+      | "SpamAbuse"
+      | "Malware"
+      | "Harassment";
+    /**
+     * @description Reason for reporting a user
+     * @enum {string}
+     */
+    UserReportReason:
+      | "NoneSpecified"
+      | "SpamAbuse"
+      | "InappropriateProfile"
+      | "Impersonation"
+      | "BanEvasion"
+      | "Underage";
     /** Error */
-    "RAuth Error":
+    "Authifier Error":
       | {
           /** @enum {string} */
           type: "IncorrectData";
@@ -1993,6 +2100,10 @@ export interface components {
       | {
           /** @enum {string} */
           type: "CaptchaFailed";
+        }
+      | {
+          /** @enum {string} */
+          type: "BlockedByShield";
         }
       | {
           /** @enum {string} */
@@ -2029,10 +2140,6 @@ export interface components {
       | {
           /** @enum {string} */
           type: "CompromisedPassword";
-        }
-      | {
-          /** @enum {string} */
-          type: "DisabledAccount";
         }
       | {
           /** @enum {string} */
@@ -2152,6 +2259,11 @@ export interface components {
           result: "MFA";
           ticket: string;
           allowed_methods: components["schemas"]["MFAMethod"][];
+        }
+      | {
+          /** @enum {string} */
+          result: "Disabled";
+          user_id: string;
         };
     /** @description Web Push subscription */
     WebPushSubscription: {
@@ -2321,6 +2433,27 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["User"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Retrieve a user's flags. */
+  fetch_user_flags_fetch_user_flags: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FlagResponse"];
         };
       };
       /** An error occurred. */
@@ -3800,6 +3933,23 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Error"];
         };
+      };
+    };
+  };
+  /** Report a piece of content to the moderation team. */
+  report_content_report_content: {
+    responses: {
+      200: unknown;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataReportContent"];
       };
     };
   };
