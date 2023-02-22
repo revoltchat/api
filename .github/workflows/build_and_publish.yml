@@ -52,3 +52,22 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Checkout revolt.js repository
+        if: ${{ steps.checkTag.outputs.exists }} != true
+        uses: actions/checkout@v3
+        with:
+          repository: revoltchat/revolt.js
+          path: api
+          token: ${{ secrets.PAT }}
+      - name: Update revolt-api dependency
+        if: ${{ steps.checkTag.outputs.exists }} != true
+        run: cd revolt.js && yarn add revolt-api@${{ env.api_version }}
+      - name: Commit changes
+        if: ${{ steps.checkTag.outputs.exists }} != true
+        uses: EndBug/add-and-commit@v4
+        with:
+          cwd: "revolt.js"
+          author_name: Revolt CI
+          author_email: revolt-ci@users.noreply.github.com
+          message: "chore: update revolt-api to ${{ env.api_version }}"
