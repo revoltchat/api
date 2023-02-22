@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.7"
+    "version": "0.5.8"
   },
   "servers": [
     {
@@ -3656,6 +3656,46 @@
         ]
       }
     },
+    "/safety/report": {
+      "post": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Report Content",
+        "description": "Report a piece of content to the moderation team.",
+        "operationId": "report_content_report_content",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataReportContent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
     "/auth/account/create": {
       "post": {
         "tags": [
@@ -5599,6 +5639,20 @@
                 "type": "string",
                 "enum": [
                   "BotIsPrivate"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "CannotReportYourself"
                 ]
               }
             }
@@ -9304,6 +9358,145 @@
           }
         }
       },
+      "DataReportContent": {
+        "title": "Report Data",
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "description": "Content being reported",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReportedContent"
+              }
+            ]
+          },
+          "additional_context": {
+            "description": "Additional report description",
+            "default": "",
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        }
+      },
+      "ReportedContent": {
+        "oneOf": [
+          {
+            "description": "Report a message",
+            "type": "object",
+            "required": [
+              "id",
+              "report_reason",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Message"
+                ]
+              },
+              "id": {
+                "description": "ID of the message",
+                "type": "string"
+              },
+              "report_reason": {
+                "description": "Reason for reporting message",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ContentReportReason"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "description": "Report a server",
+            "type": "object",
+            "required": [
+              "id",
+              "report_reason",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Server"
+                ]
+              },
+              "id": {
+                "description": "ID of the server",
+                "type": "string"
+              },
+              "report_reason": {
+                "description": "Reason for reporting server",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ContentReportReason"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "description": "Report a user",
+            "type": "object",
+            "required": [
+              "id",
+              "report_reason",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "User"
+                ]
+              },
+              "id": {
+                "description": "ID of the user",
+                "type": "string"
+              },
+              "report_reason": {
+                "description": "Reason for reporting a user",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UserReportReason"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ContentReportReason": {
+        "description": "Reason for reporting content (message or server)",
+        "type": "string",
+        "enum": [
+          "NoneSpecified",
+          "Illegal",
+          "PromotesHarm",
+          "SpamAbuse",
+          "Malware",
+          "Harassment"
+        ]
+      },
+      "UserReportReason": {
+        "description": "Reason for reporting a user",
+        "type": "string",
+        "enum": [
+          "NoneSpecified",
+          "SpamAbuse",
+          "InappropriateProfile",
+          "Impersonation",
+          "BanEvasion",
+          "Underage"
+        ]
+      },
       "Authifier Error": {
         "title": "Error",
         "oneOf": [
@@ -10297,6 +10490,12 @@
       "name": "Customisation",
       "tags": [
         "Emojis"
+      ]
+    },
+    {
+      "name": "Platform Moderation",
+      "tags": [
+        "User Safety"
       ]
     },
     {
