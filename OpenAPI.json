@@ -3696,6 +3696,42 @@
         ]
       }
     },
+    "/ci/test": {
+      "post": {
+        "summary": "Ignore this entry",
+        "operationId": "report_content_report_content",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataReportContent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
     "/auth/account/create": {
       "post": {
         "tags": [

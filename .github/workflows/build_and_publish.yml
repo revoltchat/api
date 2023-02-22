@@ -23,6 +23,8 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
+          author_name: Revolt CI
+          author_email: revolt-ci@users.noreply.github.com
           message: "chore: build library from latest spec [skip ci]"
 
       - name: Find current API version
@@ -41,6 +43,8 @@ jobs:
         if: ${{ steps.checkTag.outputs.exists }} != true
         uses: EndBug/add-and-commit@v9
         with:
+          author_name: Revolt CI
+          author_email: revolt-ci@users.noreply.github.com
           tag: "${{ env.api_version }} --force"
           message: "chore: bump version to ${{ env.api_version }} [skip ci]"
       - name: Publish to NPM
