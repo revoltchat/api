@@ -23,7 +23,7 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          message: "chore: build library from latest spec"
+          message: "chore: build library from latest spec [skip ci]"
 
       - name: Find current API version
         run: echo "api_version=$(jq -r .info.version OpenAPI.json)" >> $GITHUB_ENV
@@ -42,7 +42,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           tag: "${{ env.api_version }} --force"
-          message: "chore: bump version to ${{ env.api_version }}"
+          message: "chore: bump version to ${{ env.api_version }} [skip ci]"
       - name: Publish to NPM
         if: ${{ steps.checkTag.outputs.exists }} != true
         uses: JS-DevTools/npm-publish@v1
