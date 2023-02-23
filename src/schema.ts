@@ -292,9 +292,6 @@ export interface paths {
     /** Report a piece of content to the moderation team. */
     post: operations["report_content_report_content"];
   };
-  "/ci/test": {
-    post: operations["report_content_report_content"];
-  };
   "/auth/account/create": {
     /** Create a new account. */
     post: operations["create_account_create_account"];
@@ -3939,6 +3936,7 @@ export interface operations {
       };
     };
   };
+  /** Report a piece of content to the moderation team. */
   report_content_report_content: {
     responses: {
       200: unknown;

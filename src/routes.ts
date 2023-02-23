@@ -136,7 +136,6 @@ export type APIRoutes =
 | { method: 'delete', path: `/custom/emoji/${string}`, parts: 3, params: undefined, response: undefined }
 | { method: 'delete', path: '-/custom/emoji/{id}', parts: 3, params: undefined, response: undefined }
 | { method: 'post', path: `/safety/report`, parts: 2, params: paths['/safety/report']['post']['requestBody']['content']['application/json'], response: undefined }
-| { method: 'post', path: `/ci/test`, parts: 2, params: paths['/ci/test']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/account/create`, parts: 3, params: paths['/auth/account/create']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/account/reverify`, parts: 3, params: paths['/auth/account/reverify']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'put', path: `/auth/account/delete`, parts: 3, params: paths['/auth/account/delete']['put']['requestBody']['content']['application/json'], response: undefined }
