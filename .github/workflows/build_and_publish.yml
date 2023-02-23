@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: revoltchat/revolt.js
-          path: api
+          path: revolt.js
           token: ${{ secrets.PAT }}
       - name: Update revolt-api dependency
         if: ${{ steps.checkTag.outputs.exists }} != true
