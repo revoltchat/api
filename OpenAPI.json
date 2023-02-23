@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.8"
+    "version": "0.5.9"
   },
   "servers": [
     {
@@ -3663,42 +3663,6 @@
         ],
         "summary": "Report Content",
         "description": "Report a piece of content to the moderation team.",
-        "operationId": "report_content_report_content",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataReportContent"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/ci/test": {
-      "post": {
-        "summary": "Ignore this entry",
         "operationId": "report_content_report_content",
         "requestBody": {
           "content": {
