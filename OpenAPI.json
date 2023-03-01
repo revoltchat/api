@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.9"
+    "version": "0.5.10"
   },
   "servers": [
     {
@@ -3696,6 +3696,93 @@
         ]
       }
     },
+    "/safety/reports": {
+      "get": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Fetch Reports",
+        "description": "Fetch all available reports",
+        "operationId": "fetch_reports_fetch_reports",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/safety/snapshot/{report_id}": {
+      "get": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Fetch Snapshot",
+        "description": "Fetch a snapshot for a given report",
+        "operationId": "fetch_snapshot_fetch_snapshot",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnapshotWithContext"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
     "/auth/account/create": {
       "post": {
         "tags": [
@@ -5703,6 +5790,20 @@
                 "type": "string",
                 "enum": [
                   "NotElevated"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "NotPrivileged"
                 ]
               }
             }
@@ -9383,6 +9484,7 @@
         }
       },
       "ReportedContent": {
+        "description": "The content being reported",
         "oneOf": [
           {
             "description": "Report a message",
@@ -9495,6 +9597,488 @@
           "Impersonation",
           "BanEvasion",
           "Underage"
+        ]
+      },
+      "Report": {
+        "description": "User-generated platform moderation report.",
+        "type": "object",
+        "oneOf": [
+          {
+            "description": "Report is waiting for triage / action",
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Created"
+                ]
+              }
+            }
+          },
+          {
+            "description": "Report was rejected",
+            "type": "object",
+            "required": [
+              "rejection_reason",
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Rejected"
+                ]
+              },
+              "rejection_reason": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Report was actioned and resolved",
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Resolved"
+                ]
+              }
+            }
+          }
+        ],
+        "required": [
+          "_id",
+          "additional_context",
+          "author_id",
+          "content"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Unique Id",
+            "type": "string"
+          },
+          "author_id": {
+            "description": "Id of the user creating this report",
+            "type": "string"
+          },
+          "content": {
+            "description": "Reported content",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReportedContent"
+              }
+            ]
+          },
+          "additional_context": {
+            "description": "Additional report context",
+            "type": "string"
+          }
+        }
+      },
+      "SnapshotWithContext": {
+        "description": "Snapshot of some content with required data to render",
+        "type": "object",
+        "required": [
+          "_channels",
+          "_id",
+          "_users",
+          "content",
+          "report_id"
+        ],
+        "properties": {
+          "_users": {
+            "description": "Users involved in snapshot",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "_channels": {
+            "description": "Channels involved in snapshot",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Channel"
+            }
+          },
+          "_server": {
+            "description": "Server involved in snapshot",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Server"
+              }
+            ],
+            "nullable": true
+          },
+          "_id": {
+            "description": "Unique Id",
+            "type": "string"
+          },
+          "report_id": {
+            "description": "Report parent Id",
+            "type": "string"
+          },
+          "content": {
+            "description": "Snapshot of content",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SnapshotContent"
+              }
+            ]
+          }
+        }
+      },
+      "SnapshotContent": {
+        "description": "Enum to map into different models that can be saved in a snapshot",
+        "oneOf": [
+          {
+            "description": "Representation of a Message on Revolt",
+            "type": "object",
+            "required": [
+              "_id",
+              "_type",
+              "author",
+              "channel"
+            ],
+            "properties": {
+              "_type": {
+                "type": "string",
+                "enum": [
+                  "Message"
+                ]
+              },
+              "_prior_context": {
+                "description": "Context before the message",
+                "default": [],
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              },
+              "_leading_context": {
+                "description": "Context after the message",
+                "default": [],
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              },
+              "_id": {
+                "description": "Unique Id",
+                "type": "string"
+              },
+              "nonce": {
+                "description": "Unique value generated by client sending this message",
+                "type": "string",
+                "nullable": true
+              },
+              "channel": {
+                "description": "Id of the channel this message was sent in",
+                "type": "string"
+              },
+              "author": {
+                "description": "Id of the user that sent this message",
+                "type": "string"
+              },
+              "content": {
+                "description": "Message content",
+                "type": "string",
+                "nullable": true
+              },
+              "system": {
+                "description": "System message",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SystemMessage"
+                  }
+                ],
+                "nullable": true
+              },
+              "attachments": {
+                "description": "Array of attachments",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/File"
+                },
+                "nullable": true
+              },
+              "edited": {
+                "description": "Time at which this message was last edited",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ISO8601 Timestamp"
+                  }
+                ],
+                "nullable": true
+              },
+              "embeds": {
+                "description": "Attached embeds to this message",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Embed"
+                },
+                "nullable": true
+              },
+              "mentions": {
+                "description": "Array of user ids mentioned in this message",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              "replies": {
+                "description": "Array of message ids this message is replying to",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true
+              },
+              "reactions": {
+                "description": "Hashmap of emoji IDs to array of user IDs",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "interactions": {
+                "description": "Information about how this message should be interacted with",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Interactions"
+                  }
+                ]
+              },
+              "masquerade": {
+                "description": "Name and / or avatar overrides for this message",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Masquerade"
+                  }
+                ],
+                "nullable": true
+              }
+            }
+          },
+          {
+            "description": "Representation of a server on Revolt",
+            "type": "object",
+            "required": [
+              "_id",
+              "_type",
+              "channels",
+              "default_permissions",
+              "name",
+              "owner"
+            ],
+            "properties": {
+              "_type": {
+                "type": "string",
+                "enum": [
+                  "Server"
+                ]
+              },
+              "_id": {
+                "description": "Unique Id",
+                "type": "string"
+              },
+              "owner": {
+                "description": "User id of the owner",
+                "type": "string"
+              },
+              "name": {
+                "description": "Name of the server",
+                "type": "string"
+              },
+              "description": {
+                "description": "Description for the server",
+                "type": "string",
+                "nullable": true
+              },
+              "channels": {
+                "description": "Channels within this server",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "categories": {
+                "description": "Categories for this server",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Category"
+                },
+                "nullable": true
+              },
+              "system_messages": {
+                "description": "Configuration for sending system event messages",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SystemMessageChannels"
+                  }
+                ],
+                "nullable": true
+              },
+              "roles": {
+                "description": "Roles for this server",
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              },
+              "default_permissions": {
+                "description": "Default set of server and channel permissions",
+                "type": "integer",
+                "format": "int64"
+              },
+              "icon": {
+                "description": "Icon attachment",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/File"
+                  }
+                ],
+                "nullable": true
+              },
+              "banner": {
+                "description": "Banner attachment",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/File"
+                  }
+                ],
+                "nullable": true
+              },
+              "flags": {
+                "description": "Enum of server flags",
+                "type": "integer",
+                "format": "int32",
+                "nullable": true
+              },
+              "nsfw": {
+                "description": "Whether this server is flagged as not safe for work",
+                "type": "boolean"
+              },
+              "analytics": {
+                "description": "Whether to enable analytics",
+                "type": "boolean"
+              },
+              "discoverable": {
+                "description": "Whether this server should be publicly discoverable",
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "description": "Representiation of a User on Revolt.",
+            "type": "object",
+            "required": [
+              "_id",
+              "_type",
+              "username"
+            ],
+            "properties": {
+              "_type": {
+                "type": "string",
+                "enum": [
+                  "User"
+                ]
+              },
+              "_id": {
+                "description": "Unique Id",
+                "type": "string"
+              },
+              "username": {
+                "description": "Username",
+                "type": "string"
+              },
+              "avatar": {
+                "description": "Avatar attachment",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/File"
+                  }
+                ],
+                "nullable": true
+              },
+              "relations": {
+                "description": "Relationships with other users",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Relationship"
+                },
+                "nullable": true
+              },
+              "badges": {
+                "description": "Bitfield of user badges",
+                "type": "integer",
+                "format": "int32",
+                "nullable": true
+              },
+              "status": {
+                "description": "User's current status",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UserStatus"
+                  }
+                ],
+                "nullable": true
+              },
+              "profile": {
+                "description": "User's profile page",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/UserProfile"
+                  }
+                ],
+                "nullable": true
+              },
+              "flags": {
+                "description": "Enum of user flags",
+                "type": "integer",
+                "format": "int32",
+                "nullable": true
+              },
+              "privileged": {
+                "description": "Whether this user is privileged",
+                "type": "boolean"
+              },
+              "bot": {
+                "description": "Bot information",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/BotInformation"
+                  }
+                ],
+                "nullable": true
+              },
+              "relationship": {
+                "description": "Current session user's relationship with this user",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/RelationshipStatus"
+                  }
+                ],
+                "nullable": true
+              },
+              "online": {
+                "description": "Whether this user is currently online",
+                "type": "boolean",
+                "nullable": true
+              }
+            }
+          }
         ]
       },
       "Authifier Error": {
