@@ -296,6 +296,10 @@ export interface paths {
     /** Fetch all available reports */
     get: operations["fetch_reports_fetch_reports"];
   };
+  "/safety/reports/{report}": {
+    /** Edit a report. */
+    patch: operations["edit_report_edit_report"];
+  };
   "/safety/snapshot/{report_id}": {
     /** Fetch a snapshot for a given report */
     get: operations["fetch_snapshot_fetch_snapshot"];
@@ -2105,7 +2109,31 @@ export interface components {
       content: components["schemas"]["ReportedContent"];
       /** @description Additional report context */
       additional_context: string;
+      /** @description Additional notes included on the report */
+      notes?: string;
     };
+    /** Report Data */
+    DataEditReport: {
+      /** @description New report status */
+      status?: components["schemas"]["ReportStatus"] | null;
+      /** @description Report notes */
+      notes?: string | null;
+    };
+    /** @description Status of the report */
+    ReportStatus:
+      | {
+          /** @enum {string} */
+          status: "Created";
+        }
+      | {
+          /** @enum {string} */
+          status: "Rejected";
+          rejection_reason: string;
+        }
+      | {
+          /** @enum {string} */
+          status: "Resolved";
+        };
     /** @description Snapshot of some content with required data to render */
     SnapshotWithContext: {
       /** @description Users involved in snapshot */
@@ -4139,6 +4167,32 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Error"];
         };
+      };
+    };
+  };
+  /** Edit a report. */
+  edit_report_edit_report: {
+    parameters: {
+      path: {
+        report: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Report"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataEditReport"];
       };
     };
   };

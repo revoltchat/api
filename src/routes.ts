@@ -137,6 +137,8 @@ export type APIRoutes =
 | { method: 'delete', path: '-/custom/emoji/{id}', parts: 3, params: undefined, response: undefined }
 | { method: 'post', path: `/safety/report`, parts: 2, params: paths['/safety/report']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'get', path: `/safety/reports`, parts: 2, params: undefined, response: paths['/safety/reports']['get']['responses']['200']['content']['application/json'] }
+| { method: 'patch', path: `/safety/reports/${string}`, parts: 3, params: paths['/safety/reports/{report}']['patch']['requestBody']['content']['application/json'], response: paths['/safety/reports/{report}']['patch']['responses']['200']['content']['application/json'] }
+| { method: 'patch', path: '-/safety/reports/{report}', parts: 3, params: paths['/safety/reports/{report}']['patch']['requestBody']['content']['application/json'], response: paths['/safety/reports/{report}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/safety/snapshot/${string}`, parts: 3, params: undefined, response: paths['/safety/snapshot/{report_id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/safety/snapshot/{report_id}', parts: 3, params: undefined, response: paths['/safety/snapshot/{report_id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/auth/account/create`, parts: 3, params: paths['/auth/account/create']['post']['requestBody']['content']['application/json'], response: undefined }
