@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.10"
+    "version": "0.5.11"
   },
   "servers": [
     {
@@ -3724,6 +3724,63 @@
                   "items": {
                     "$ref": "#/components/schemas/Report"
                   }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/safety/reports/{report}": {
+      "patch": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Edit Report",
+        "description": "Edit a report.",
+        "operationId": "edit_report_edit_report",
+        "parameters": [
+          {
+            "name": "report",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataEditReport"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Report"
                 }
               }
             }
@@ -9679,8 +9736,87 @@
           "additional_context": {
             "description": "Additional report context",
             "type": "string"
+          },
+          "notes": {
+            "description": "Additional notes included on the report",
+            "default": "",
+            "type": "string"
           }
         }
+      },
+      "DataEditReport": {
+        "title": "Report Data",
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "New report status",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReportStatus"
+              }
+            ],
+            "nullable": true
+          },
+          "notes": {
+            "description": "Report notes",
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ReportStatus": {
+        "description": "Status of the report",
+        "oneOf": [
+          {
+            "description": "Report is waiting for triage / action",
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Created"
+                ]
+              }
+            }
+          },
+          {
+            "description": "Report was rejected",
+            "type": "object",
+            "required": [
+              "rejection_reason",
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Rejected"
+                ]
+              },
+              "rejection_reason": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Report was actioned and resolved",
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Resolved"
+                ]
+              }
+            }
+          }
+        ]
       },
       "SnapshotWithContext": {
         "description": "Snapshot of some content with required data to render",
