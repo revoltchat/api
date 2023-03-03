@@ -288,17 +288,21 @@ export interface paths {
     /** Delete an emoji by its id. */
     delete: operations["emoji_delete_delete_emoji"];
   };
-  "/safety/report": {
-    /** Report a piece of content to the moderation team. */
-    post: operations["report_content_report_content"];
+  "/safety/reports/{report}": {
+    /** Edit a report. */
+    patch: operations["edit_report_edit_report"];
+  };
+  "/safety/report/{id}": {
+    /** Fetch a report by its ID */
+    get: operations["fetch_report_fetch_report"];
   };
   "/safety/reports": {
     /** Fetch all available reports */
     get: operations["fetch_reports_fetch_reports"];
   };
-  "/safety/reports/{report}": {
-    /** Edit a report. */
-    patch: operations["edit_report_edit_report"];
+  "/safety/report": {
+    /** Report a piece of content to the moderation team. */
+    post: operations["report_content_report_content"];
   };
   "/safety/snapshot/{report_id}": {
     /** Fetch a snapshot for a given report */
@@ -2030,12 +2034,32 @@ export interface components {
       /** @description Whether the emoji is mature */
       nsfw?: boolean;
     };
-    /** Report Data */
-    DataReportContent: {
-      /** @description Content being reported */
+    /** @description User-generated platform moderation report. */
+    Report: (
+      | {
+          /** @enum {string} */
+          status: "Created";
+        }
+      | {
+          /** @enum {string} */
+          status: "Rejected";
+          rejection_reason: string;
+        }
+      | {
+          /** @enum {string} */
+          status: "Resolved";
+        }
+    ) & {
+      /** @description Unique Id */
+      _id: string;
+      /** @description Id of the user creating this report */
+      author_id: string;
+      /** @description Reported content */
       content: components["schemas"]["ReportedContent"];
-      /** @description Additional report description */
-      additional_context?: string;
+      /** @description Additional report context */
+      additional_context: string;
+      /** @description Additional notes included on the report */
+      notes?: string;
     };
     /** @description The content being reported */
     ReportedContent:
@@ -2085,33 +2109,6 @@ export interface components {
       | "Impersonation"
       | "BanEvasion"
       | "Underage";
-    /** @description User-generated platform moderation report. */
-    Report: (
-      | {
-          /** @enum {string} */
-          status: "Created";
-        }
-      | {
-          /** @enum {string} */
-          status: "Rejected";
-          rejection_reason: string;
-        }
-      | {
-          /** @enum {string} */
-          status: "Resolved";
-        }
-    ) & {
-      /** @description Unique Id */
-      _id: string;
-      /** @description Id of the user creating this report */
-      author_id: string;
-      /** @description Reported content */
-      content: components["schemas"]["ReportedContent"];
-      /** @description Additional report context */
-      additional_context: string;
-      /** @description Additional notes included on the report */
-      notes?: string;
-    };
     /** Report Data */
     DataEditReport: {
       /** @description New report status */
@@ -2134,6 +2131,13 @@ export interface components {
           /** @enum {string} */
           status: "Resolved";
         };
+    /** Report Data */
+    DataReportContent: {
+      /** @description Content being reported */
+      content: components["schemas"]["ReportedContent"];
+      /** @description Additional report description */
+      additional_context?: string;
+    };
     /** @description Snapshot of some content with required data to render */
     SnapshotWithContext: {
       /** @description Users involved in snapshot */
@@ -4137,39 +4141,6 @@ export interface operations {
       };
     };
   };
-  /** Report a piece of content to the moderation team. */
-  report_content_report_content: {
-    responses: {
-      200: unknown;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataReportContent"];
-      };
-    };
-  };
-  /** Fetch all available reports */
-  fetch_reports_fetch_reports: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Report"][];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
   /** Edit a report. */
   edit_report_edit_report: {
     parameters: {
@@ -4193,6 +4164,60 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataEditReport"];
+      };
+    };
+  };
+  /** Fetch a report by its ID */
+  fetch_report_fetch_report: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Report"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Fetch all available reports */
+  fetch_reports_fetch_reports: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Report"][];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Report a piece of content to the moderation team. */
+  report_content_report_content: {
+    responses: {
+      200: unknown;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataReportContent"];
       };
     };
   };
