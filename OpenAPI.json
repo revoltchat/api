@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.11"
+    "version": "0.5.12"
   },
   "servers": [
     {
@@ -3656,19 +3656,29 @@
         ]
       }
     },
-    "/safety/report": {
-      "post": {
+    "/safety/reports/{report}": {
+      "patch": {
         "tags": [
           "User Safety"
         ],
-        "summary": "Report Content",
-        "description": "Report a piece of content to the moderation team.",
-        "operationId": "report_content_report_content",
+        "summary": "Edit Report",
+        "description": "Edit a report.",
+        "operationId": "edit_report_edit_report",
+        "parameters": [
+          {
+            "name": "report",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataReportContent"
+                "$ref": "#/components/schemas/DataEditReport"
               }
             }
           },
@@ -3686,7 +3696,61 @@
             }
           },
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/safety/report/{id}": {
+      "get": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Fetch Report",
+        "description": "Fetch a report by its ID",
+        "operationId": "fetch_report_fetch_report",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Report"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -3736,29 +3800,19 @@
         ]
       }
     },
-    "/safety/reports/{report}": {
-      "patch": {
+    "/safety/report": {
+      "post": {
         "tags": [
           "User Safety"
         ],
-        "summary": "Edit Report",
-        "description": "Edit a report.",
-        "operationId": "edit_report_edit_report",
-        "parameters": [
-          {
-            "name": "report",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          }
-        ],
+        "summary": "Report Content",
+        "description": "Report a piece of content to the moderation team.",
+        "operationId": "report_content_report_content",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataEditReport"
+                "$ref": "#/components/schemas/DataReportContent"
               }
             }
           },
@@ -3776,14 +3830,7 @@
             }
           },
           "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Report"
-                }
-              }
-            }
+            "description": ""
           }
         },
         "security": [
@@ -9516,15 +9563,77 @@
           }
         }
       },
-      "DataReportContent": {
-        "title": "Report Data",
+      "Report": {
+        "description": "User-generated platform moderation report.",
         "type": "object",
+        "oneOf": [
+          {
+            "description": "Report is waiting for triage / action",
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Created"
+                ]
+              }
+            }
+          },
+          {
+            "description": "Report was rejected",
+            "type": "object",
+            "required": [
+              "rejection_reason",
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Rejected"
+                ]
+              },
+              "rejection_reason": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "description": "Report was actioned and resolved",
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Resolved"
+                ]
+              }
+            }
+          }
+        ],
         "required": [
+          "_id",
+          "additional_context",
+          "author_id",
           "content"
         ],
         "properties": {
+          "_id": {
+            "description": "Unique Id",
+            "type": "string"
+          },
+          "author_id": {
+            "description": "Id of the user creating this report",
+            "type": "string"
+          },
           "content": {
-            "description": "Content being reported",
+            "description": "Reported content",
             "allOf": [
               {
                 "$ref": "#/components/schemas/ReportedContent"
@@ -9532,11 +9641,13 @@
             ]
           },
           "additional_context": {
-            "description": "Additional report description",
+            "description": "Additional report context",
+            "type": "string"
+          },
+          "notes": {
+            "description": "Additional notes included on the report",
             "default": "",
-            "type": "string",
-            "maxLength": 1000,
-            "minLength": 0
+            "type": "string"
           }
         }
       },
@@ -9656,94 +9767,6 @@
           "Underage"
         ]
       },
-      "Report": {
-        "description": "User-generated platform moderation report.",
-        "type": "object",
-        "oneOf": [
-          {
-            "description": "Report is waiting for triage / action",
-            "type": "object",
-            "required": [
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "type": "string",
-                "enum": [
-                  "Created"
-                ]
-              }
-            }
-          },
-          {
-            "description": "Report was rejected",
-            "type": "object",
-            "required": [
-              "rejection_reason",
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "type": "string",
-                "enum": [
-                  "Rejected"
-                ]
-              },
-              "rejection_reason": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "description": "Report was actioned and resolved",
-            "type": "object",
-            "required": [
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "type": "string",
-                "enum": [
-                  "Resolved"
-                ]
-              }
-            }
-          }
-        ],
-        "required": [
-          "_id",
-          "additional_context",
-          "author_id",
-          "content"
-        ],
-        "properties": {
-          "_id": {
-            "description": "Unique Id",
-            "type": "string"
-          },
-          "author_id": {
-            "description": "Id of the user creating this report",
-            "type": "string"
-          },
-          "content": {
-            "description": "Reported content",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ReportedContent"
-              }
-            ]
-          },
-          "additional_context": {
-            "description": "Additional report context",
-            "type": "string"
-          },
-          "notes": {
-            "description": "Additional notes included on the report",
-            "default": "",
-            "type": "string"
-          }
-        }
-      },
       "DataEditReport": {
         "title": "Report Data",
         "type": "object",
@@ -9817,6 +9840,30 @@
             }
           }
         ]
+      },
+      "DataReportContent": {
+        "title": "Report Data",
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "description": "Content being reported",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReportedContent"
+              }
+            ]
+          },
+          "additional_context": {
+            "description": "Additional report description",
+            "default": "",
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        }
       },
       "SnapshotWithContext": {
         "description": "Snapshot of some content with required data to render",
