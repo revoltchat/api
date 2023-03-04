@@ -8,6 +8,10 @@ export interface paths {
     /** Fetch the server configuration for this Revolt instance. */
     get: operations["root_root"];
   };
+  "/stats": {
+    /** Fetch various technical statistics. */
+    get: operations["stats_stats"];
+  };
   "/users/@me": {
     /** Retrieve your user information. */
     get: operations["fetch_self_req"];
@@ -752,6 +756,98 @@ export interface components {
           /** @enum {string} */
           type: "FailedValidation";
         };
+    /** @description Server Stats */
+    Stats: {
+      /** @description Index usage information */
+      indices: { [key: string]: components["schemas"]["Index"][] };
+      /** @description Collection stats */
+      coll_stats: { [key: string]: components["schemas"]["CollectionStats"] };
+    };
+    /** @description Collection index */
+    Index: {
+      /** @description Index name */
+      name: string;
+      /** @description Access information */
+      accesses: components["schemas"]["IndexAccess"];
+    };
+    /** @description Index access information */
+    IndexAccess: {
+      /**
+       * Format: int32
+       * @description Operations since timestamp
+       */
+      ops: number;
+      /** @description Timestamp at which data keeping begun */
+      since: components["schemas"]["ISO8601 Timestamp"];
+    };
+    /**
+     * Format: date-time
+     * @description ISO8601 formatted timestamp
+     * @example 1970-01-01T00:00:00Z
+     */
+    "ISO8601 Timestamp": string;
+    /** @description Collection stats */
+    CollectionStats: {
+      /** @description Namespace */
+      ns: string;
+      /** @description Local time */
+      localTime: components["schemas"]["ISO8601 Timestamp"];
+      /** @description Latency stats */
+      latencyStats: { [key: string]: components["schemas"]["LatencyStats"] };
+      /** @description Query exec stats */
+      queryExecStats: components["schemas"]["QueryExecStats"];
+      /**
+       * Format: uint64
+       * @description Number of documents in collection
+       */
+      count: number;
+    };
+    /** @description Collection latency stats */
+    LatencyStats: {
+      /**
+       * Format: int64
+       * @description Total operations
+       */
+      ops: number;
+      /**
+       * Format: int64
+       * @description Timestamp at which data keeping begun
+       */
+      latency: number;
+      /** @description Histogram representation of latency data */
+      histogram: components["schemas"]["LatencyHistogramEntry"][];
+    };
+    /** @description Histogram entry */
+    LatencyHistogramEntry: {
+      /**
+       * Format: int64
+       * @description Time
+       */
+      micros: number;
+      /**
+       * Format: int64
+       * @description Count
+       */
+      count: number;
+    };
+    /** @description Collection query execution stats */
+    QueryExecStats: {
+      /** @description Stats regarding collection scans */
+      collectionScans: components["schemas"]["CollectionScans"];
+    };
+    /** @description Query collection scan stats */
+    CollectionScans: {
+      /**
+       * Format: int64
+       * @description Number of total collection scans
+       */
+      total: number;
+      /**
+       * Format: int64
+       * @description Number of total collection scans not using a tailable cursor
+       */
+      nonTailable: number;
+    };
     /** @description Representiation of a User on Revolt. */
     User: {
       /** @description Unique Id */
@@ -1284,12 +1380,6 @@ export interface components {
           from: string;
           to: string;
         };
-    /**
-     * Format: date-time
-     * @description ISO8601 formatted timestamp
-     * @example 1970-01-01T00:00:00Z
-     */
-    "ISO8601 Timestamp": string;
     /** @description Embed */
     Embed:
       | {
@@ -2590,6 +2680,22 @@ export interface operations {
       };
     };
   };
+  /** Fetch various technical statistics. */
+  stats_stats: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Stats"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
   /** Retrieve your user information. */
   fetch_self_req: {
     responses: {
@@ -3350,7 +3456,7 @@ export interface operations {
   message_edit_req: {
     parameters: {
       path: {
-        target: string;
+        target: components["schemas"]["Id"];
         msg: components["schemas"]["Id"];
       };
     };
