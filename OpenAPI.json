@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.13"
+    "version": "0.5.14"
   },
   "servers": [
     {
@@ -51,6 +51,38 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RevoltConfig"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats": {
+      "get": {
+        "tags": [
+          "Core"
+        ],
+        "summary": "Query Stats",
+        "description": "Fetch various technical statistics.",
+        "operationId": "stats_stats",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Stats"
                 }
               }
             }
@@ -1737,7 +1769,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           },
           {
@@ -6104,6 +6136,215 @@
           }
         ]
       },
+      "Stats": {
+        "description": "Server Stats",
+        "type": "object",
+        "required": [
+          "coll_stats",
+          "indices"
+        ],
+        "properties": {
+          "indices": {
+            "description": "Index usage information",
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Index"
+              }
+            }
+          },
+          "coll_stats": {
+            "description": "Collection stats",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CollectionStats"
+            }
+          }
+        }
+      },
+      "Index": {
+        "description": "Collection index",
+        "type": "object",
+        "required": [
+          "accesses",
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "description": "Index name",
+            "type": "string"
+          },
+          "accesses": {
+            "description": "Access information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IndexAccess"
+              }
+            ]
+          }
+        }
+      },
+      "IndexAccess": {
+        "description": "Index access information",
+        "type": "object",
+        "required": [
+          "ops",
+          "since"
+        ],
+        "properties": {
+          "ops": {
+            "description": "Operations since timestamp",
+            "type": "integer",
+            "format": "int32"
+          },
+          "since": {
+            "description": "Timestamp at which data keeping begun",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ISO8601 Timestamp"
+              }
+            ]
+          }
+        }
+      },
+      "ISO8601 Timestamp": {
+        "description": "ISO8601 formatted timestamp",
+        "type": "string",
+        "format": "date-time",
+        "example": "1970-01-01T00:00:00Z"
+      },
+      "CollectionStats": {
+        "description": "Collection stats",
+        "type": "object",
+        "required": [
+          "count",
+          "latencyStats",
+          "localTime",
+          "ns",
+          "queryExecStats"
+        ],
+        "properties": {
+          "ns": {
+            "description": "Namespace",
+            "type": "string"
+          },
+          "localTime": {
+            "description": "Local time",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ISO8601 Timestamp"
+              }
+            ]
+          },
+          "latencyStats": {
+            "description": "Latency stats",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LatencyStats"
+            }
+          },
+          "queryExecStats": {
+            "description": "Query exec stats",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/QueryExecStats"
+              }
+            ]
+          },
+          "count": {
+            "description": "Number of documents in collection",
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
+          }
+        }
+      },
+      "LatencyStats": {
+        "description": "Collection latency stats",
+        "type": "object",
+        "required": [
+          "histogram",
+          "latency",
+          "ops"
+        ],
+        "properties": {
+          "ops": {
+            "description": "Total operations",
+            "type": "integer",
+            "format": "int64"
+          },
+          "latency": {
+            "description": "Timestamp at which data keeping begun",
+            "type": "integer",
+            "format": "int64"
+          },
+          "histogram": {
+            "description": "Histogram representation of latency data",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LatencyHistogramEntry"
+            }
+          }
+        }
+      },
+      "LatencyHistogramEntry": {
+        "description": "Histogram entry",
+        "type": "object",
+        "required": [
+          "count",
+          "micros"
+        ],
+        "properties": {
+          "micros": {
+            "description": "Time",
+            "type": "integer",
+            "format": "int64"
+          },
+          "count": {
+            "description": "Count",
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "QueryExecStats": {
+        "description": "Collection query execution stats",
+        "type": "object",
+        "required": [
+          "collectionScans"
+        ],
+        "properties": {
+          "collectionScans": {
+            "description": "Stats regarding collection scans",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CollectionScans"
+              }
+            ]
+          }
+        }
+      },
+      "CollectionScans": {
+        "description": "Query collection scan stats",
+        "type": "object",
+        "required": [
+          "nonTailable",
+          "total"
+        ],
+        "properties": {
+          "total": {
+            "description": "Number of total collection scans",
+            "type": "integer",
+            "format": "int64"
+          },
+          "nonTailable": {
+            "description": "Number of total collection scans not using a tailable cursor",
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "User": {
         "description": "Representiation of a User on Revolt.",
         "type": "object",
@@ -7589,12 +7830,6 @@
             }
           }
         ]
-      },
-      "ISO8601 Timestamp": {
-        "description": "ISO8601 formatted timestamp",
-        "type": "string",
-        "format": "date-time",
-        "example": "1970-01-01T00:00:00Z"
       },
       "Embed": {
         "description": "Embed",
