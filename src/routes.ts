@@ -2,11 +2,13 @@
 import { paths } from './schema';
 export type APIRoutes =
 | { method: 'get', path: `/`, parts: 1, params: undefined, response: paths['/']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/stats`, parts: 1, params: undefined, response: paths['/stats']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/admin/stats`, parts: 2, params: undefined, response: paths['/admin/stats']['get']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: `/admin/messages`, parts: 2, params: paths['/admin/messages']['post']['requestBody']['content']['application/json'], response: paths['/admin/messages']['post']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/@me`, parts: 2, params: undefined, response: paths['/users/@me']['get']['responses']['200']['content']['application/json'] }
-| { method: 'patch', path: `/users/@me`, parts: 2, params: paths['/users/@me']['patch']['requestBody']['content']['application/json'], response: paths['/users/@me']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/${string}`, parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/users/{target}', parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'patch', path: `/users/${string}`, parts: 2, params: paths['/users/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/users/{target}']['patch']['responses']['200']['content']['application/json'] }
+| { method: 'patch', path: '-/users/{target}', parts: 2, params: paths['/users/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/users/{target}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/${string}/flags`, parts: 3, params: undefined, response: paths['/users/{target}/flags']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/users/{target}/flags', parts: 3, params: undefined, response: paths['/users/{target}/flags']['get']['responses']['200']['content']['application/json'] }
 | { method: 'patch', path: `/users/@me/username`, parts: 3, params: paths['/users/@me/username']['patch']['requestBody']['content']['application/json'], response: paths['/users/@me/username']['patch']['responses']['200']['content']['application/json'] }
