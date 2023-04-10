@@ -5690,6 +5690,7 @@
           {
             "type": "object",
             "required": [
+              "max",
               "type"
             ],
             "properties": {
@@ -5698,12 +5699,18 @@
                 "enum": [
                   "TooManyAttachments"
                 ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
               }
             }
           },
           {
             "type": "object",
             "required": [
+              "max",
               "type"
             ],
             "properties": {
@@ -5712,6 +5719,31 @@
                 "enum": [
                   "TooManyReplies"
                 ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "max",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "TooManyChannels"
+                ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
               }
             }
           },
@@ -5870,6 +5902,7 @@
           {
             "type": "object",
             "required": [
+              "max",
               "type"
             ],
             "properties": {
@@ -5878,6 +5911,31 @@
                 "enum": [
                   "TooManyEmoji"
                 ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "max",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "TooManyRoles"
+                ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
               }
             }
           },
