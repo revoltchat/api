@@ -619,10 +619,20 @@ export interface components {
       | {
           /** @enum {string} */
           type: "TooManyAttachments";
+          /** Format: uint */
+          max: number;
         }
       | {
           /** @enum {string} */
           type: "TooManyReplies";
+          /** Format: uint */
+          max: number;
+        }
+      | {
+          /** @enum {string} */
+          type: "TooManyChannels";
+          /** Format: uint */
+          max: number;
         }
       | {
           /** @enum {string} */
@@ -671,6 +681,14 @@ export interface components {
       | {
           /** @enum {string} */
           type: "TooManyEmoji";
+          /** Format: uint */
+          max: number;
+        }
+      | {
+          /** @enum {string} */
+          type: "TooManyRoles";
+          /** Format: uint */
+          max: number;
         }
       | {
           /** @enum {string} */
