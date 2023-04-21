@@ -16,6 +16,9 @@ jobs:
         with:
           node-version: 18.x
           cache: "yarn"
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7
       - name: Install packages
         run: yarn install
       - name: Build package
