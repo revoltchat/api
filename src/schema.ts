@@ -560,6 +560,236 @@ export interface components {
           /** @enum {string} */
           type: "LabelMe";
         }
+      | ((
+          | {
+              /** @enum {string} */
+              type: "LabelMe";
+            }
+          | {
+              /** @enum {string} */
+              type: "AlreadyOnboarded";
+            }
+          | {
+              /** @enum {string} */
+              type: "UsernameTaken";
+            }
+          | {
+              /** @enum {string} */
+              type: "InvalidUsername";
+            }
+          | {
+              /** @enum {string} */
+              type: "UnknownUser";
+            }
+          | {
+              /** @enum {string} */
+              type: "AlreadyFriends";
+            }
+          | {
+              /** @enum {string} */
+              type: "AlreadySentRequest";
+            }
+          | {
+              /** @enum {string} */
+              type: "Blocked";
+            }
+          | {
+              /** @enum {string} */
+              type: "BlockedByOther";
+            }
+          | {
+              /** @enum {string} */
+              type: "NotFriends";
+            }
+          | {
+              /** @enum {string} */
+              type: "UnknownChannel";
+            }
+          | {
+              /** @enum {string} */
+              type: "UnknownAttachment";
+            }
+          | {
+              /** @enum {string} */
+              type: "UnknownMessage";
+            }
+          | {
+              /** @enum {string} */
+              type: "CannotEditMessage";
+            }
+          | {
+              /** @enum {string} */
+              type: "CannotJoinCall";
+            }
+          | {
+              /** @enum {string} */
+              type: "TooManyAttachments";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "TooManyReplies";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "TooManyChannels";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "EmptyMessage";
+            }
+          | {
+              /** @enum {string} */
+              type: "PayloadTooLarge";
+            }
+          | {
+              /** @enum {string} */
+              type: "CannotRemoveYourself";
+            }
+          | {
+              /** @enum {string} */
+              type: "GroupTooLarge";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "AlreadyInGroup";
+            }
+          | {
+              /** @enum {string} */
+              type: "NotInGroup";
+            }
+          | {
+              /** @enum {string} */
+              type: "UnknownServer";
+            }
+          | {
+              /** @enum {string} */
+              type: "InvalidRole";
+            }
+          | {
+              /** @enum {string} */
+              type: "Banned";
+            }
+          | {
+              /** @enum {string} */
+              type: "TooManyServers";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "TooManyEmoji";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "TooManyRoles";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "ReachedMaximumBots";
+            }
+          | {
+              /** @enum {string} */
+              type: "IsBot";
+            }
+          | {
+              /** @enum {string} */
+              type: "BotIsPrivate";
+            }
+          | {
+              /** @enum {string} */
+              type: "CannotReportYourself";
+            }
+          | {
+              /** @enum {string} */
+              type: "MissingPermission";
+              permission: string;
+            }
+          | {
+              /** @enum {string} */
+              type: "MissingUserPermission";
+              permission: string;
+            }
+          | {
+              /** @enum {string} */
+              type: "NotElevated";
+            }
+          | {
+              /** @enum {string} */
+              type: "NotPrivileged";
+            }
+          | {
+              /** @enum {string} */
+              type: "CannotGiveMissingPermissions";
+            }
+          | {
+              /** @enum {string} */
+              type: "NotOwner";
+            }
+          | {
+              /** @enum {string} */
+              type: "DatabaseError";
+              operation: string;
+              collection: string;
+            }
+          | {
+              /** @enum {string} */
+              type: "InternalError";
+            }
+          | {
+              /** @enum {string} */
+              type: "InvalidOperation";
+            }
+          | {
+              /** @enum {string} */
+              type: "InvalidCredentials";
+            }
+          | {
+              /** @enum {string} */
+              type: "InvalidProperty";
+            }
+          | {
+              /** @enum {string} */
+              type: "InvalidSession";
+            }
+          | {
+              /** @enum {string} */
+              type: "DuplicateNonce";
+            }
+          | {
+              /** @enum {string} */
+              type: "NotFound";
+            }
+          | {
+              /** @enum {string} */
+              type: "NoEffect";
+            }
+          | {
+              /** @enum {string} */
+              type: "FailedValidation";
+              error: string;
+            }
+          | {
+              /** @enum {string} */
+              type: "VosoUnavailable";
+            }
+        ) & {
+          /** @enum {string} */
+          type: "Core";
+          /** @description Where this error occurred */
+          location: string;
+        })
       | {
           /** @enum {string} */
           type: "AlreadyOnboarded";
@@ -1603,11 +1833,14 @@ export interface components {
       /** @description Bot Username */
       username: string;
       /** @description Profile Avatar */
-      avatar?: components["schemas"]["File"] | null;
+      avatar: string;
       /** @description Profile Description */
-      description?: string | null;
+      description: string;
     };
-    /** Bot Response */
+    /**
+     * Bot Response
+     * @description TODO: move to revolt-models
+     */
     BotResponse: {
       /** @description Bot object */
       bot: components["schemas"]["Bot"];
