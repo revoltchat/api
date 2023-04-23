@@ -88,17 +88,19 @@ export interface paths {
     /** Invite a bot to a server or group by its id.` */
     post: operations["invite_invite_bot"];
   };
-  "/bots/{target}": {
+  "/bots/{bot}": {
     /** Fetch details of a bot you own by its id. */
     get: operations["fetch_fetch_bot"];
-    /** Delete a bot by its id. */
-    delete: operations["delete_delete_bot"];
-    /** Edit bot details by its id. */
-    patch: operations["edit_edit_bot"];
   };
   "/bots/@me": {
     /** Fetch all of the bots that you have control over. */
     get: operations["fetch_owned_fetch_owned_bots"];
+  };
+  "/bots/{target}": {
+    /** Delete a bot by its id. */
+    delete: operations["delete_delete_bot"];
+    /** Edit bot details by its id. */
+    patch: operations["edit_edit_bot"];
   };
   "/channels/{target}/ack/{message}": {
     /** Lets the server and all other clients know that we've seen this message id in this channel. */
@@ -1826,7 +1828,7 @@ export interface components {
           /** @description Group Id */
           group: string;
         };
-    /** Public Bot */
+    /** @description Public Bot */
     PublicBot: {
       /** @description Bot Id */
       _id: string;
@@ -1837,11 +1839,8 @@ export interface components {
       /** @description Profile Description */
       description: string;
     };
-    /**
-     * Bot Response
-     * @description TODO: move to revolt-models
-     */
-    BotResponse: {
+    /** @description Bot Response */
+    FetchBotResponse: {
       /** @description Bot object */
       bot: components["schemas"]["Bot"];
       /** @description User object */
@@ -3405,13 +3404,29 @@ export interface operations {
   fetch_fetch_bot: {
     parameters: {
       path: {
-        target: components["schemas"]["Id"];
+        bot: components["schemas"]["Id"];
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["BotResponse"];
+          "application/json": components["schemas"]["FetchBotResponse"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Fetch all of the bots that you have control over. */
+  fetch_owned_fetch_owned_bots: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["OwnedBotsResponse"];
         };
       };
       /** An error occurred. */
@@ -3463,22 +3478,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataEditBot"];
-      };
-    };
-  };
-  /** Fetch all of the bots that you have control over. */
-  fetch_owned_fetch_owned_bots: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["OwnedBotsResponse"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
       };
     };
   };

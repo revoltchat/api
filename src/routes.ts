@@ -35,13 +35,13 @@ export type APIRoutes =
 | { method: 'get', path: '-/bots/{target}/invite', parts: 3, params: undefined, response: paths['/bots/{target}/invite']['get']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/bots/${string}/invite`, parts: 3, params: paths['/bots/{target}/invite']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: '-/bots/{target}/invite', parts: 3, params: paths['/bots/{target}/invite']['post']['requestBody']['content']['application/json'], response: undefined }
-| { method: 'get', path: `/bots/${string}`, parts: 2, params: undefined, response: paths['/bots/{target}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: '-/bots/{target}', parts: 2, params: undefined, response: paths['/bots/{target}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/bots/${string}`, parts: 2, params: undefined, response: paths['/bots/{bot}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: '-/bots/{bot}', parts: 2, params: undefined, response: paths['/bots/{bot}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/bots/@me`, parts: 2, params: undefined, response: paths['/bots/@me']['get']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/bots/${string}`, parts: 2, params: undefined, response: undefined }
 | { method: 'delete', path: '-/bots/{target}', parts: 2, params: undefined, response: undefined }
 | { method: 'patch', path: `/bots/${string}`, parts: 2, params: paths['/bots/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/bots/{target}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'patch', path: '-/bots/{target}', parts: 2, params: paths['/bots/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/bots/{target}']['patch']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/bots/@me`, parts: 2, params: undefined, response: paths['/bots/@me']['get']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/channels/${string}/ack/${string}`, parts: 4, params: undefined, response: undefined }
 | { method: 'put', path: '-/channels/{target}/ack/{message}', parts: 4, params: undefined, response: undefined }
 | { method: 'get', path: `/channels/${string}`, parts: 2, params: undefined, response: paths['/channels/{target}']['get']['responses']['200']['content']['application/json'] }
