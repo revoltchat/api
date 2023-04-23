@@ -955,7 +955,7 @@
         ]
       }
     },
-    "/bots/{target}": {
+    "/bots/{bot}": {
       "get": {
         "tags": [
           "Bots"
@@ -965,7 +965,7 @@
         "operationId": "fetch_fetch_bot",
         "parameters": [
           {
-            "name": "target",
+            "name": "bot",
             "in": "path",
             "required": true,
             "schema": {
@@ -989,7 +989,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BotResponse"
+                  "$ref": "#/components/schemas/FetchBotResponse"
                 }
               }
             }
@@ -1000,7 +1000,46 @@
             "Session Token": []
           }
         ]
-      },
+      }
+    },
+    "/bots/@me": {
+      "get": {
+        "tags": [
+          "Bots"
+        ],
+        "summary": "Fetch Owned Bots",
+        "description": "Fetch all of the bots that you have control over.",
+        "operationId": "fetch_owned_fetch_owned_bots",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OwnedBotsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/bots/{target}": {
       "delete": {
         "tags": [
           "Bots"
@@ -1083,43 +1122,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Bot"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/bots/@me": {
-      "get": {
-        "tags": [
-          "Bots"
-        ],
-        "summary": "Fetch Owned Bots",
-        "description": "Fetch all of the bots that you have control over.",
-        "operationId": "fetch_owned_fetch_owned_bots",
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OwnedBotsResponse"
                 }
               }
             }
@@ -9231,7 +9233,7 @@
         ]
       },
       "PublicBot": {
-        "title": "Public Bot",
+        "description": "Public Bot",
         "type": "object",
         "required": [
           "_id",
@@ -9258,9 +9260,8 @@
           }
         }
       },
-      "BotResponse": {
-        "title": "Bot Response",
-        "description": "TODO: move to revolt-models",
+      "FetchBotResponse": {
+        "description": "Bot Response",
         "type": "object",
         "required": [
           "bot",
