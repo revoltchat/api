@@ -13,12 +13,16 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.20"
+    "version": "0.5.21"
   },
   "servers": [
     {
       "url": "https://api.revolt.chat",
-      "description": "Revolt API"
+      "description": "Revolt Production"
+    },
+    {
+      "url": "https://revolt.chat/api",
+      "description": "Revolt Staging"
     },
     {
       "url": "http://local.revolt.chat:8000",
@@ -4078,6 +4082,53 @@
                   "items": {
                     "$ref": "#/components/schemas/SnapshotWithContext"
                   }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/safety/strikes": {
+      "post": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Create Strike",
+        "description": "Create a new account strike",
+        "operationId": "create_strike_create_strike",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataCreateStrike"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountStrike"
                 }
               }
             }
@@ -11948,7 +11999,25 @@
             "type": "string"
           },
           "user_id": {
-            "description": "User Id of reported user",
+            "description": "Id of reported user",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Attached reason",
+            "type": "string"
+          }
+        }
+      },
+      "DataCreateStrike": {
+        "description": "New strike information",
+        "type": "object",
+        "required": [
+          "reason",
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "description": "Id of reported user",
             "type": "string"
           },
           "reason": {
@@ -11958,7 +12027,7 @@
         }
       },
       "DataEditAccountStrike": {
-        "title": "Strike Data",
+        "description": "New strike information",
         "type": "object",
         "required": [
           "reason"
