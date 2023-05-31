@@ -322,6 +322,10 @@ export interface paths {
     /** Fetch a snapshots for a given report */
     get: operations["fetch_snapshots_fetch_snapshots"];
   };
+  "/safety/strikes": {
+    /** Create a new account strike */
+    post: operations["create_strike_create_strike"];
+  };
   "/safety/strikes/{user_id}": {
     /** Fetch strikes for a user by their ID */
     get: operations["fetch_strikes_fetch_strikes"];
@@ -2756,12 +2760,19 @@ export interface components {
     AccountStrike: {
       /** @description Strike Id */
       _id: string;
-      /** @description User Id of reported user */
+      /** @description Id of reported user */
       user_id: string;
       /** @description Attached reason */
       reason: string;
     };
-    /** Strike Data */
+    /** @description New strike information */
+    DataCreateStrike: {
+      /** @description Id of reported user */
+      user_id: string;
+      /** @description Attached reason */
+      reason: string;
+    };
+    /** @description New strike information */
     DataEditAccountStrike: {
       /** @description New attached reason */
       reason: string;
@@ -4815,6 +4826,27 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Error"];
         };
+      };
+    };
+  };
+  /** Create a new account strike */
+  create_strike_create_strike: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["AccountStrike"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataCreateStrike"];
       };
     };
   };

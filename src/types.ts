@@ -118,6 +118,7 @@ export type DataReportContent = components['schemas']['DataReportContent'];
 export type SnapshotWithContext = components['schemas']['SnapshotWithContext'];
 export type SnapshotContent = components['schemas']['SnapshotContent'];
 export type AccountStrike = components['schemas']['AccountStrike'];
+export type DataCreateStrike = components['schemas']['DataCreateStrike'];
 export type DataEditAccountStrike = components['schemas']['DataEditAccountStrike'];
 export type Authifier_Error = components['schemas']['Authifier Error'];
 export type DataCreateAccount = components['schemas']['DataCreateAccount'];

@@ -148,6 +148,7 @@ export type APIRoutes =
 | { method: 'post', path: `/safety/report`, parts: 2, params: paths['/safety/report']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'get', path: `/safety/snapshot/${string}`, parts: 3, params: undefined, response: paths['/safety/snapshot/{report_id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/safety/snapshot/{report_id}', parts: 3, params: undefined, response: paths['/safety/snapshot/{report_id}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: `/safety/strikes`, parts: 2, params: paths['/safety/strikes']['post']['requestBody']['content']['application/json'], response: paths['/safety/strikes']['post']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/safety/strikes/${string}`, parts: 3, params: undefined, response: paths['/safety/strikes/{user_id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/safety/strikes/{user_id}', parts: 3, params: undefined, response: paths['/safety/strikes/{user_id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/safety/strikes/${string}`, parts: 3, params: paths['/safety/strikes/{strike_id}']['post']['requestBody']['content']['application/json'], response: undefined }
