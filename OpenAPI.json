@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.19"
+    "version": "0.5.20"
   },
   "servers": [
     {
@@ -2480,6 +2480,16 @@
             "schema": {
               "$ref": "#/components/schemas/Id"
             }
+          },
+          {
+            "name": "include_channels",
+            "in": "query",
+            "description": "Whether to include channels",
+            "schema": {
+              "description": "Whether to include channels",
+              "type": "boolean",
+              "nullable": true
+            }
           }
         ],
         "responses": {
@@ -2498,7 +2508,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Server"
+                  "$ref": "#/components/schemas/FetchServerResponse"
                 }
               }
             }
@@ -2922,6 +2932,73 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Member"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/servers/{target}/members_experimental_query": {
+      "get": {
+        "tags": [
+          "Server Members"
+        ],
+        "summary": "Query members by name",
+        "description": "Query members by a given name, this API is not stable and will be removed in the future.",
+        "operationId": "member_experimental_query_member_experimental_query",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "String to search for",
+            "required": true,
+            "schema": {
+              "description": "String to search for",
+              "type": "string"
+            }
+          },
+          {
+            "name": "experimental_api",
+            "in": "query",
+            "description": "Discourage use of this API",
+            "required": true,
+            "schema": {
+              "description": "Discourage use of this API",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberQueryResponse"
                 }
               }
             }
@@ -3859,6 +3936,38 @@
         "summary": "Fetch Reports",
         "description": "Fetch all available reports",
         "operationId": "fetch_reports_fetch_reports",
+        "parameters": [
+          {
+            "name": "content_id",
+            "in": "query",
+            "description": "Find reports against messages, servers, or users",
+            "schema": {
+              "description": "Find reports against messages, servers, or users",
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "author_id",
+            "in": "query",
+            "description": "Find reports created by user",
+            "schema": {
+              "description": "Find reports created by user",
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Report status to include in search",
+            "schema": {
+              "description": "Report status to include in search",
+              "$ref": "#/components/schemas/ReportStatusString",
+              "nullable": true
+            }
+          }
+        ],
         "responses": {
           "default": {
             "description": "An error occurred.",
@@ -3936,9 +4045,9 @@
         "tags": [
           "User Safety"
         ],
-        "summary": "Fetch Snapshot",
-        "description": "Fetch a snapshot for a given report",
-        "operationId": "fetch_snapshot_fetch_snapshot",
+        "summary": "Fetch Snapshots",
+        "description": "Fetch a snapshots for a given report",
+        "operationId": "fetch_snapshots_fetch_snapshots",
         "parameters": [
           {
             "name": "report_id",
@@ -3965,10 +4074,151 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SnapshotWithContext"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SnapshotWithContext"
+                  }
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/safety/strikes/{user_id}": {
+      "get": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Fetch Strikes",
+        "description": "Fetch strikes for a user by their ID",
+        "operationId": "fetch_strikes_fetch_strikes",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccountStrike"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/safety/strikes/{strike_id}": {
+      "post": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Edit Strike",
+        "description": "Edit a strike by its ID",
+        "operationId": "edit_strike_edit_strike",
+        "parameters": [
+          {
+            "name": "strike_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataEditAccountStrike"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User Safety"
+        ],
+        "summary": "Delete Strike",
+        "description": "Delete a strike by its ID",
+        "operationId": "delete_strike_delete_strike",
+        "parameters": [
+          {
+            "name": "strike_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
           }
         },
         "security": [
@@ -10092,6 +10342,116 @@
           }
         }
       },
+      "FetchServerResponse": {
+        "title": "Fetch server route response",
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Server"
+          },
+          {
+            "description": "Representation of a server on Revolt",
+            "type": "object",
+            "required": [
+              "_id",
+              "channels",
+              "default_permissions",
+              "name",
+              "owner"
+            ],
+            "properties": {
+              "channels": {
+                "description": "Channels within this server",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "_id": {
+                "description": "Unique Id",
+                "type": "string"
+              },
+              "owner": {
+                "description": "User id of the owner",
+                "type": "string"
+              },
+              "name": {
+                "description": "Name of the server",
+                "type": "string"
+              },
+              "description": {
+                "description": "Description for the server",
+                "type": "string",
+                "nullable": true
+              },
+              "categories": {
+                "description": "Categories for this server",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Category"
+                },
+                "nullable": true
+              },
+              "system_messages": {
+                "description": "Configuration for sending system event messages",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SystemMessageChannels"
+                  }
+                ],
+                "nullable": true
+              },
+              "roles": {
+                "description": "Roles for this server",
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              },
+              "default_permissions": {
+                "description": "Default set of server and channel permissions",
+                "type": "integer",
+                "format": "int64"
+              },
+              "icon": {
+                "description": "Icon attachment",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/File"
+                  }
+                ],
+                "nullable": true
+              },
+              "banner": {
+                "description": "Banner attachment",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/File"
+                  }
+                ],
+                "nullable": true
+              },
+              "flags": {
+                "description": "Bitfield of server flags",
+                "type": "integer",
+                "format": "int32",
+                "nullable": true
+              },
+              "nsfw": {
+                "description": "Whether this server is flagged as not safe for work",
+                "type": "boolean"
+              },
+              "analytics": {
+                "description": "Whether to enable analytics",
+                "type": "boolean"
+              },
+              "discoverable": {
+                "description": "Whether this server should be publicly discoverable",
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
       "DataEditServer": {
         "title": "Server Data",
         "type": "object",
@@ -10297,6 +10657,30 @@
           "Roles",
           "Timeout"
         ]
+      },
+      "MemberQueryResponse": {
+        "title": "Query members by name",
+        "type": "object",
+        "required": [
+          "members",
+          "users"
+        ],
+        "properties": {
+          "members": {
+            "description": "List of members",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Member"
+            }
+          },
+          "users": {
+            "description": "List of users",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
       },
       "ServerBan": {
         "description": "Representation of a server ban on Revolt",
@@ -10829,6 +11213,14 @@
               },
               "rejection_reason": {
                 "type": "string"
+              },
+              "closed_at": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ISO8601 Timestamp"
+                  }
+                ],
+                "nullable": true
               }
             }
           },
@@ -10844,6 +11236,14 @@
                 "enum": [
                   "Resolved"
                 ]
+              },
+              "closed_at": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ISO8601 Timestamp"
+                  }
+                ],
+                "nullable": true
               }
             }
           }
@@ -10969,6 +11369,11 @@
                     "$ref": "#/components/schemas/UserReportReason"
                   }
                 ]
+              },
+              "message_id": {
+                "description": "Message context",
+                "type": "string",
+                "nullable": true
               }
             }
           }
@@ -10980,8 +11385,16 @@
         "enum": [
           "NoneSpecified",
           "Illegal",
+          "IllegalGoods",
+          "IllegalExtortion",
+          "IllegalPornography",
+          "IllegalHacking",
+          "ExtremeViolence",
           "PromotesHarm",
+          "UnsolicitedSpam",
+          "Raid",
           "SpamAbuse",
+          "ScamsFraud",
           "Malware",
           "Harassment"
         ]
@@ -10991,6 +11404,7 @@
         "type": "string",
         "enum": [
           "NoneSpecified",
+          "UnsolicitedSpam",
           "SpamAbuse",
           "InappropriateProfile",
           "Impersonation",
@@ -11052,6 +11466,14 @@
               },
               "rejection_reason": {
                 "type": "string"
+              },
+              "closed_at": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ISO8601 Timestamp"
+                  }
+                ],
+                "nullable": true
               }
             }
           },
@@ -11067,9 +11489,26 @@
                 "enum": [
                   "Resolved"
                 ]
+              },
+              "closed_at": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ISO8601 Timestamp"
+                  }
+                ],
+                "nullable": true
               }
             }
           }
+        ]
+      },
+      "ReportStatusString": {
+        "description": "Just the status of the report",
+        "type": "string",
+        "enum": [
+          "Created",
+          "Rejected",
+          "Resolved"
         ]
       },
       "DataReportContent": {
@@ -11494,6 +11933,42 @@
             }
           }
         ]
+      },
+      "AccountStrike": {
+        "description": "Account Strike",
+        "type": "object",
+        "required": [
+          "_id",
+          "reason",
+          "user_id"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Strike Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "User Id of reported user",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Attached reason",
+            "type": "string"
+          }
+        }
+      },
+      "DataEditAccountStrike": {
+        "title": "Strike Data",
+        "type": "object",
+        "required": [
+          "reason"
+        ],
+        "properties": {
+          "reason": {
+            "description": "New attached reason",
+            "type": "string"
+          }
+        }
       },
       "Authifier Error": {
         "title": "Error",
