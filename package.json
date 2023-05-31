@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.5.19",
+  "version": "0.5.20",
   "description": "Revolt API Library",
   "main": "dist/index.js",
   "module": "esm/index.js",
