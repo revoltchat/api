@@ -246,6 +246,10 @@ export interface paths {
     /** Edit a member by their id. */
     patch: operations["member_edit_req"];
   };
+  "/servers/{target}/members_experimental_query": {
+    /** Query members by a given name, this API is not stable and will be removed in the future. */
+    get: operations["member_experimental_query_member_experimental_query"];
+  };
   "/servers/{server}/bans/{target}": {
     /** Ban a user by their id. */
     put: operations["ban_create_req"];
@@ -315,8 +319,18 @@ export interface paths {
     post: operations["report_content_report_content"];
   };
   "/safety/snapshot/{report_id}": {
-    /** Fetch a snapshot for a given report */
-    get: operations["fetch_snapshot_fetch_snapshot"];
+    /** Fetch a snapshots for a given report */
+    get: operations["fetch_snapshots_fetch_snapshots"];
+  };
+  "/safety/strikes/{user_id}": {
+    /** Fetch strikes for a user by their ID */
+    get: operations["fetch_strikes_fetch_strikes"];
+  };
+  "/safety/strikes/{strike_id}": {
+    /** Edit a strike by its ID */
+    post: operations["edit_strike_edit_strike"];
+    /** Delete a strike by its ID */
+    delete: operations["delete_strike_delete_strike"];
   };
   "/auth/account/create": {
     /** Create a new account. */
@@ -2160,6 +2174,49 @@ export interface components {
       /** @description Whether this server is age-restricted */
       nsfw?: boolean | null;
     };
+    /** Fetch server route response */
+    FetchServerResponse:
+      | components["schemas"]["Server"]
+      | {
+          /** @description Channels within this server */
+          channels: string[];
+          /** @description Unique Id */
+          _id: string;
+          /** @description User id of the owner */
+          owner: string;
+          /** @description Name of the server */
+          name: string;
+          /** @description Description for the server */
+          description?: string | null;
+          /** @description Categories for this server */
+          categories?: components["schemas"]["Category"][] | null;
+          /** @description Configuration for sending system event messages */
+          system_messages?:
+            | components["schemas"]["SystemMessageChannels"]
+            | null;
+          /** @description Roles for this server */
+          roles?: { [key: string]: components["schemas"]["Role"] };
+          /**
+           * Format: int64
+           * @description Default set of server and channel permissions
+           */
+          default_permissions: number;
+          /** @description Icon attachment */
+          icon?: components["schemas"]["File"] | null;
+          /** @description Banner attachment */
+          banner?: components["schemas"]["File"] | null;
+          /**
+           * Format: int32
+           * @description Bitfield of server flags
+           */
+          flags?: number | null;
+          /** @description Whether this server is flagged as not safe for work */
+          nsfw?: boolean;
+          /** @description Whether to enable analytics */
+          analytics?: boolean;
+          /** @description Whether this server should be publicly discoverable */
+          discoverable?: boolean;
+        };
     /** Server Data */
     DataEditServer: {
       /** @description Server name */
@@ -2247,6 +2304,13 @@ export interface components {
      * @enum {string}
      */
     FieldsMember: "Nickname" | "Avatar" | "Roles" | "Timeout";
+    /** Query members by name */
+    MemberQueryResponse: {
+      /** @description List of members */
+      members: components["schemas"]["Member"][];
+      /** @description List of users */
+      users: components["schemas"]["User"][];
+    };
     /** @description Representation of a server ban on Revolt */
     ServerBan: {
       /** @description Unique member id */
@@ -2439,10 +2503,12 @@ export interface components {
           /** @enum {string} */
           status: "Rejected";
           rejection_reason: string;
+          closed_at?: components["schemas"]["ISO8601 Timestamp"] | null;
         }
       | {
           /** @enum {string} */
           status: "Resolved";
+          closed_at?: components["schemas"]["ISO8601 Timestamp"] | null;
         }
     ) & {
       /** @description Unique Id */
@@ -2481,6 +2547,8 @@ export interface components {
           id: string;
           /** @description Reason for reporting a user */
           report_reason: components["schemas"]["UserReportReason"];
+          /** @description Message context */
+          message_id?: string | null;
         };
     /**
      * @description Reason for reporting content (message or server)
@@ -2489,8 +2557,16 @@ export interface components {
     ContentReportReason:
       | "NoneSpecified"
       | "Illegal"
+      | "IllegalGoods"
+      | "IllegalExtortion"
+      | "IllegalPornography"
+      | "IllegalHacking"
+      | "ExtremeViolence"
       | "PromotesHarm"
+      | "UnsolicitedSpam"
+      | "Raid"
       | "SpamAbuse"
+      | "ScamsFraud"
       | "Malware"
       | "Harassment";
     /**
@@ -2499,6 +2575,7 @@ export interface components {
      */
     UserReportReason:
       | "NoneSpecified"
+      | "UnsolicitedSpam"
       | "SpamAbuse"
       | "InappropriateProfile"
       | "Impersonation"
@@ -2521,11 +2598,18 @@ export interface components {
           /** @enum {string} */
           status: "Rejected";
           rejection_reason: string;
+          closed_at?: components["schemas"]["ISO8601 Timestamp"] | null;
         }
       | {
           /** @enum {string} */
           status: "Resolved";
+          closed_at?: components["schemas"]["ISO8601 Timestamp"] | null;
         };
+    /**
+     * @description Just the status of the report
+     * @enum {string}
+     */
+    ReportStatusString: "Created" | "Rejected" | "Resolved";
     /** Report Data */
     DataReportContent: {
       /** @description Content being reported */
@@ -2668,6 +2752,20 @@ export interface components {
           /** @description Whether this user is currently online */
           online?: boolean | null;
         };
+    /** @description Account Strike */
+    AccountStrike: {
+      /** @description Strike Id */
+      _id: string;
+      /** @description User Id of reported user */
+      user_id: string;
+      /** @description Attached reason */
+      reason: string;
+    };
+    /** Strike Data */
+    DataEditAccountStrike: {
+      /** @description New attached reason */
+      reason: string;
+    };
     /** Error */
     "Authifier Error":
       | {
@@ -4072,11 +4170,15 @@ export interface operations {
       path: {
         target: components["schemas"]["Id"];
       };
+      query: {
+        /** Whether to include channels */
+        include_channels?: boolean | null;
+      };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Server"];
+          "application/json": components["schemas"]["FetchServerResponse"];
         };
       };
       /** An error occurred. */
@@ -4269,6 +4371,33 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataMemberEdit"];
+      };
+    };
+  };
+  /** Query members by a given name, this API is not stable and will be removed in the future. */
+  member_experimental_query_member_experimental_query: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+      };
+      query: {
+        /** String to search for */
+        query: string;
+        /** Discourage use of this API */
+        experimental_api: boolean;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["MemberQueryResponse"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
       };
     };
   };
@@ -4627,6 +4756,16 @@ export interface operations {
   };
   /** Fetch all available reports */
   fetch_reports_fetch_reports: {
+    parameters: {
+      query: {
+        /** Find reports against messages, servers, or users */
+        content_id?: string | null;
+        /** Find reports created by user */
+        author_id?: string | null;
+        /** Report status to include in search */
+        status?: components["schemas"]["ReportStatusString"] | null;
+      };
+    };
     responses: {
       200: {
         content: {
@@ -4658,8 +4797,8 @@ export interface operations {
       };
     };
   };
-  /** Fetch a snapshot for a given report */
-  fetch_snapshot_fetch_snapshot: {
+  /** Fetch a snapshots for a given report */
+  fetch_snapshots_fetch_snapshots: {
     parameters: {
       path: {
         report_id: string;
@@ -4668,9 +4807,69 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["SnapshotWithContext"];
+          "application/json": components["schemas"]["SnapshotWithContext"][];
         };
       };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Fetch strikes for a user by their ID */
+  fetch_strikes_fetch_strikes: {
+    parameters: {
+      path: {
+        user_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["AccountStrike"][];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Edit a strike by its ID */
+  edit_strike_edit_strike: {
+    parameters: {
+      path: {
+        strike_id: string;
+      };
+    };
+    responses: {
+      200: unknown;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataEditAccountStrike"];
+      };
+    };
+  };
+  /** Delete a strike by its ID */
+  delete_strike_delete_strike: {
+    parameters: {
+      path: {
+        strike_id: string;
+      };
+    };
+    responses: {
+      200: unknown;
       /** An error occurred. */
       default: {
         content: {

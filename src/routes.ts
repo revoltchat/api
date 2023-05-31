@@ -88,8 +88,8 @@ export type APIRoutes =
 | { method: 'delete', path: `/channels/${string}/messages/${string}/reactions`, parts: 5, params: undefined, response: undefined }
 | { method: 'delete', path: '-/channels/{target}/messages/{msg}/reactions', parts: 5, params: undefined, response: undefined }
 | { method: 'post', path: `/servers/create`, parts: 2, params: paths['/servers/create']['post']['requestBody']['content']['application/json'], response: paths['/servers/create']['post']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/servers/${string}`, parts: 2, params: undefined, response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: '-/servers/{target}', parts: 2, params: undefined, response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/servers/${string}`, parts: 2, params: paths['/servers/{target}']['get']['parameters']['query'], response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: '-/servers/{target}', parts: 2, params: paths['/servers/{target}']['get']['parameters']['query'], response: paths['/servers/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/servers/${string}`, parts: 2, params: paths['/servers/{target}']['delete']['parameters']['query'], response: undefined }
 | { method: 'delete', path: '-/servers/{target}', parts: 2, params: paths['/servers/{target}']['delete']['parameters']['query'], response: undefined }
 | { method: 'patch', path: `/servers/${string}`, parts: 2, params: paths['/servers/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/servers/{target}']['patch']['responses']['200']['content']['application/json'] }
@@ -106,6 +106,8 @@ export type APIRoutes =
 | { method: 'delete', path: '-/servers/{target}/members/{member}', parts: 4, params: undefined, response: undefined }
 | { method: 'patch', path: `/servers/${string}/members/${string}`, parts: 4, params: paths['/servers/{server}/members/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/servers/{server}/members/{target}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'patch', path: '-/servers/{server}/members/{target}', parts: 4, params: paths['/servers/{server}/members/{target}']['patch']['requestBody']['content']['application/json'], response: paths['/servers/{server}/members/{target}']['patch']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/servers/${string}/members_experimental_query`, parts: 3, params: paths['/servers/{target}/members_experimental_query']['get']['parameters']['query'], response: paths['/servers/{target}/members_experimental_query']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: '-/servers/{target}/members_experimental_query', parts: 3, params: paths['/servers/{target}/members_experimental_query']['get']['parameters']['query'], response: paths['/servers/{target}/members_experimental_query']['get']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/servers/${string}/bans/${string}`, parts: 4, params: paths['/servers/{server}/bans/{target}']['put']['requestBody']['content']['application/json'], response: paths['/servers/{server}/bans/{target}']['put']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: '-/servers/{server}/bans/{target}', parts: 4, params: paths['/servers/{server}/bans/{target}']['put']['requestBody']['content']['application/json'], response: paths['/servers/{server}/bans/{target}']['put']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/servers/${string}/bans/${string}`, parts: 4, params: undefined, response: undefined }
@@ -142,10 +144,16 @@ export type APIRoutes =
 | { method: 'patch', path: '-/safety/reports/{report}', parts: 3, params: paths['/safety/reports/{report}']['patch']['requestBody']['content']['application/json'], response: paths['/safety/reports/{report}']['patch']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/safety/report/${string}`, parts: 3, params: undefined, response: paths['/safety/report/{id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/safety/report/{id}', parts: 3, params: undefined, response: paths['/safety/report/{id}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/safety/reports`, parts: 2, params: undefined, response: paths['/safety/reports']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/safety/reports`, parts: 2, params: paths['/safety/reports']['get']['parameters']['query'], response: paths['/safety/reports']['get']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/safety/report`, parts: 2, params: paths['/safety/report']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'get', path: `/safety/snapshot/${string}`, parts: 3, params: undefined, response: paths['/safety/snapshot/{report_id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/safety/snapshot/{report_id}', parts: 3, params: undefined, response: paths['/safety/snapshot/{report_id}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/safety/strikes/${string}`, parts: 3, params: undefined, response: paths['/safety/strikes/{user_id}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: '-/safety/strikes/{user_id}', parts: 3, params: undefined, response: paths['/safety/strikes/{user_id}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: `/safety/strikes/${string}`, parts: 3, params: paths['/safety/strikes/{strike_id}']['post']['requestBody']['content']['application/json'], response: undefined }
+| { method: 'post', path: '-/safety/strikes/{strike_id}', parts: 3, params: paths['/safety/strikes/{strike_id}']['post']['requestBody']['content']['application/json'], response: undefined }
+| { method: 'delete', path: `/safety/strikes/${string}`, parts: 3, params: undefined, response: undefined }
+| { method: 'delete', path: '-/safety/strikes/{strike_id}', parts: 3, params: undefined, response: undefined }
 | { method: 'post', path: `/auth/account/create`, parts: 3, params: paths['/auth/account/create']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/account/reverify`, parts: 3, params: paths['/auth/account/reverify']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'put', path: `/auth/account/delete`, parts: 3, params: paths['/auth/account/delete']['put']['requestBody']['content']['application/json'], response: undefined }
