@@ -212,6 +212,14 @@ export interface paths {
      */
     delete: operations["message_clear_reactions_clear_reactions"];
   };
+  "/channels/{target}/webhooks": {
+    /** Creates a webhook which 3rd party platforms can use to send messages */
+    post: operations["webhook_create_req"];
+  };
+  "/channels/{channel_id}/webhooks": {
+    /** Gets all webhooks inside the channel */
+    get: operations["webhook_fetch_all_req"];
+  };
   "/servers/create": {
     /** Create a new server. */
     post: operations["server_create_req"];
@@ -457,6 +465,28 @@ export interface paths {
   "/sync/unreads": {
     /** Fetch information about unread state on channels. */
     get: operations["get_unreads_req"];
+  };
+  "/webhooks/{webhook_id}/{token}": {
+    /** Gets a webhook with a token */
+    get: operations["webhook_fetch_token_webhook_fetch_token"];
+    /** Executes a webhook and sends a message */
+    post: operations["webhook_execute_webhook_execute"];
+    /** Deletes a webhook with a token */
+    delete: operations["webhook_delete_token_webhook_delete_token"];
+    /** Edits a webhook with a token */
+    patch: operations["webhook_edit_token_webhook_edit_token"];
+  };
+  "/webhooks/{webhook_id}": {
+    /** Gets a webhook */
+    get: operations["webhook_fetch_webhook_fetch"];
+    /** Deletes a webhook */
+    delete: operations["webhook_delete_webhook_delete"];
+    /** Edits a webhook */
+    patch: operations["webhook_edit_webhook_edit"];
+  };
+  "/webhooks/{webhook_id}/{token}/github": {
+    /** Executes a webhook specific to github and sends a message containing the relevant info about the event */
+    post: operations["webhook_execute_github_webhook_execute_github"];
   };
 }
 
@@ -1142,8 +1172,10 @@ export interface components {
       nonce?: string | null;
       /** @description Id of the channel this message was sent in */
       channel: string;
-      /** @description Id of the user that sent this message */
+      /** @description Id of the user or webhook that sent this message */
       author: string;
+      /** @description The webhook that sent this message */
+      webhook?: components["schemas"]["MessageWebhook"] | null;
       /** @description Message content */
       content?: string | null;
       /** @description System message */
@@ -1164,6 +1196,11 @@ export interface components {
       interactions?: components["schemas"]["Interactions"];
       /** @description Name and / or avatar overrides for this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
+    };
+    /** @description Information about the webhook bundled with Message */
+    MessageWebhook: {
+      name: string;
+      avatar?: string | null;
     };
     /** @description Representation of a system event message */
     SystemMessage:
@@ -1954,16 +1991,20 @@ export interface components {
       nonce?: string | null;
       /** @description Message content to send */
       content?: string | null;
-      /** @description Attachments to include in message */
-      attachments?: string[] | null;
+      /**
+       * @description Attachments to include in message
+       * @default
+       */
+      attachments?: string[];
       /** @description Messages to reply to */
       replies?: components["schemas"]["Reply"][] | null;
       /**
        * @description Embeds to include in message
        *
        * Text embed content contributes to the content length cap
+       * @default
        */
-      embeds?: components["schemas"]["SendableEmbed"][] | null;
+      embeds?: components["schemas"]["SendableEmbed"][];
       /** @description Masquerade to apply to this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
       /** @description Information about how this message should be interacted with */
@@ -2083,6 +2124,23 @@ export interface components {
           /** @description Allow / deny values to set for members in this `TextChannel` or `VoiceChannel` */
           permissions: components["schemas"]["Override"];
         };
+    /** @description Webhook */
+    Webhook: {
+      /** @description Webhook Id */
+      id: string;
+      /** @description The name of the webhook */
+      name: string;
+      /** @description The avatar of the webhook */
+      avatar?: components["schemas"]["File"] | null;
+      /** @description The channel this webhook belongs to */
+      channel_id: string;
+      /** @description The private token for the webhook */
+      token?: string | null;
+    };
+    CreateWebhookBody: {
+      name: string;
+      avatar?: string | null;
+    };
     /** Create Server Response */
     CreateServerResponse: {
       /** @description Server object */
@@ -2657,8 +2715,10 @@ export interface components {
           nonce?: string | null;
           /** @description Id of the channel this message was sent in */
           channel: string;
-          /** @description Id of the user that sent this message */
+          /** @description Id of the user or webhook that sent this message */
           author: string;
+          /** @description The webhook that sent this message */
+          webhook?: components["schemas"]["MessageWebhook"] | null;
           /** @description Message content */
           content?: string | null;
           /** @description System message */
@@ -3073,6 +3133,34 @@ export interface components {
       channel: string;
       /** @description User Id */
       user: string;
+    };
+    /** @description New webhook information */
+    DataEditWebhook: {
+      /** @description Webhook name */
+      name?: string | null;
+      /** @description Avatar ID */
+      avatar?: string | null;
+      /**
+       * @description Fields to remove from webhook
+       * @default
+       */
+      remove?: components["schemas"]["FieldsWebhook"][];
+    };
+    /**
+     * @description Optional fields on webhook object
+     * @enum {string}
+     */
+    FieldsWebhook: "Avatar";
+    /** @description Webhook information */
+    ResponseWebhook: {
+      /** @description Webhook Id */
+      id: string;
+      /** @description Webhook name */
+      name: string;
+      /** @description Avatar ID */
+      avatar?: string | null;
+      /** @description The channel this webhook belongs to */
+      channel_id: string;
     };
   };
 }
@@ -4146,6 +4234,53 @@ export interface operations {
     responses: {
       /** Success */
       204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Creates a webhook which 3rd party platforms can use to send messages */
+  webhook_create_req: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Webhook"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateWebhookBody"];
+      };
+    };
+  };
+  /** Gets all webhooks inside the channel */
+  webhook_fetch_all_req: {
+    parameters: {
+      path: {
+        channel_id: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Webhook"][];
+        };
+      };
       /** An error occurred. */
       default: {
         content: {
@@ -5466,6 +5601,197 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Error"];
         };
+      };
+    };
+  };
+  /** Gets a webhook with a token */
+  webhook_fetch_token_webhook_fetch_token: {
+    parameters: {
+      path: {
+        webhook_id: string;
+        token: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Webhook"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Executes a webhook and sends a message */
+  webhook_execute_webhook_execute: {
+    parameters: {
+      path: {
+        webhook_id: string;
+        token: string;
+      };
+      header: {
+        /** Unique key to prevent duplicate requests */
+        "Idempotency-Key"?: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Message"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataMessageSend"];
+      };
+    };
+  };
+  /** Deletes a webhook with a token */
+  webhook_delete_token_webhook_delete_token: {
+    parameters: {
+      path: {
+        webhook_id: string;
+        token: string;
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Edits a webhook with a token */
+  webhook_edit_token_webhook_edit_token: {
+    parameters: {
+      path: {
+        webhook_id: string;
+        token: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Webhook"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataEditWebhook"];
+      };
+    };
+  };
+  /** Gets a webhook */
+  webhook_fetch_webhook_fetch: {
+    parameters: {
+      path: {
+        webhook_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ResponseWebhook"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Deletes a webhook */
+  webhook_delete_webhook_delete: {
+    parameters: {
+      path: {
+        webhook_id: string;
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Edits a webhook */
+  webhook_edit_webhook_edit: {
+    parameters: {
+      path: {
+        webhook_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Webhook"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataEditWebhook"];
+      };
+    };
+  };
+  /** Executes a webhook specific to github and sends a message containing the relevant info about the event */
+  webhook_execute_github_webhook_execute_github: {
+    parameters: {
+      path: {
+        webhook_id: string;
+        token: string;
+      };
+      header: {
+        /** The name of the github event */
+        "X-Github-Event": unknown;
+      };
+    };
+    responses: {
+      200: unknown;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/octet-stream": string;
       };
     };
   };

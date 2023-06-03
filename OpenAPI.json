@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.5.21"
+    "version": "0.6.0-rc.1"
   },
   "servers": [
     {
@@ -2412,6 +2412,113 @@
           },
           "204": {
             "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/channels/{target}/webhooks": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Creates a webhook",
+        "description": "Creates a webhook which 3rd party platforms can use to send messages",
+        "operationId": "webhook_create_req",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/channels/{channel_id}/webhooks": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Gets all webhooks",
+        "description": "Gets all webhooks inside the channel",
+        "operationId": "webhook_fetch_all_req",
+        "parameters": [
+          {
+            "name": "channel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Webhook"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -5532,6 +5639,425 @@
           }
         ]
       }
+    },
+    "/webhooks/{webhook_id}/{token}": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Gets a webhook",
+        "description": "Gets a webhook with a token",
+        "operationId": "webhook_fetch_token_webhook_fetch_token",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Executes a webhook",
+        "description": "Executes a webhook and sends a message",
+        "operationId": "webhook_execute_webhook_execute",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Unique key to prevent duplicate requests",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataMessageSend"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Deletes a webhook",
+        "description": "Deletes a webhook with a token",
+        "operationId": "webhook_delete_token_webhook_delete_token",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Edits a webhook",
+        "description": "Edits a webhook with a token",
+        "operationId": "webhook_edit_token_webhook_edit_token",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataEditWebhook"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/{webhook_id}": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Gets a webhook",
+        "description": "Gets a webhook",
+        "operationId": "webhook_fetch_webhook_fetch",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWebhook"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Deletes a webhook",
+        "description": "Deletes a webhook",
+        "operationId": "webhook_delete_webhook_delete",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Edits a webhook",
+        "description": "Edits a webhook",
+        "operationId": "webhook_edit_webhook_edit",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataEditWebhook"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhook"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/webhooks/{webhook_id}/{token}/github": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Executes a webhook specific to github",
+        "description": "Executes a webhook specific to github and sends a message containing the relevant info about the event",
+        "operationId": "webhook_execute_github_webhook_execute_github",
+        "parameters": [
+          {
+            "name": "webhook_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Github-Event",
+            "in": "header",
+            "description": "The name of the github event",
+            "required": true,
+            "content": {
+              "X-Github-Event": {
+                "schema": {}
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
@@ -7628,8 +8154,17 @@
             "type": "string"
           },
           "author": {
-            "description": "Id of the user that sent this message",
+            "description": "Id of the user or webhook that sent this message",
             "type": "string"
+          },
+          "webhook": {
+            "description": "The webhook that sent this message",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MessageWebhook"
+              }
+            ],
+            "nullable": true
           },
           "content": {
             "description": "Message content",
@@ -7712,6 +8247,22 @@
                 "$ref": "#/components/schemas/Masquerade"
               }
             ],
+            "nullable": true
+          }
+        }
+      },
+      "MessageWebhook": {
+        "description": "Information about the webhook bundled with Message",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string",
             "nullable": true
           }
         }
@@ -9808,13 +10359,11 @@
           },
           "attachments": {
             "description": "Attachments to include in message",
+            "default": [],
             "type": "array",
             "items": {
               "type": "string"
-            },
-            "maxItems": 128,
-            "minItems": 1,
-            "nullable": true
+            }
           },
           "replies": {
             "description": "Messages to reply to",
@@ -9826,13 +10375,13 @@
           },
           "embeds": {
             "description": "Embeds to include in message\n\nText embed content contributes to the content length cap",
+            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SendableEmbed"
             },
             "maxItems": 10,
-            "minItems": 1,
-            "nullable": true
+            "minItems": 1
           },
           "masquerade": {
             "description": "Masquerade to apply to this message",
@@ -9885,6 +10434,8 @@
           },
           "url": {
             "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
             "nullable": true
           },
           "title": {
@@ -10145,6 +10696,62 @@
             }
           }
         ]
+      },
+      "Webhook": {
+        "description": "Webhook",
+        "type": "object",
+        "required": [
+          "channel_id",
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "description": "Webhook Id",
+            "type": "string"
+          },
+          "name": {
+            "description": "The name of the webhook",
+            "type": "string"
+          },
+          "avatar": {
+            "description": "The avatar of the webhook",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              }
+            ],
+            "nullable": true
+          },
+          "channel_id": {
+            "description": "The channel this webhook belongs to",
+            "type": "string"
+          },
+          "token": {
+            "description": "The private token for the webhook",
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateWebhookBody": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1
+          },
+          "avatar": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "nullable": true
+          }
+        }
       },
       "CreateServerResponse": {
         "title": "Create Server Response",
@@ -11687,8 +12294,17 @@
                 "type": "string"
               },
               "author": {
-                "description": "Id of the user that sent this message",
+                "description": "Id of the user or webhook that sent this message",
                 "type": "string"
+              },
+              "webhook": {
+                "description": "The webhook that sent this message",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MessageWebhook"
+                  }
+                ],
+                "nullable": true
               },
               "content": {
                 "description": "Message content",
@@ -12950,6 +13566,69 @@
             "type": "string"
           }
         }
+      },
+      "DataEditWebhook": {
+        "description": "New webhook information",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Webhook name",
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "nullable": true
+          },
+          "avatar": {
+            "description": "Avatar ID",
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "nullable": true
+          },
+          "remove": {
+            "description": "Fields to remove from webhook",
+            "default": [],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldsWebhook"
+            }
+          }
+        }
+      },
+      "FieldsWebhook": {
+        "description": "Optional fields on webhook object",
+        "type": "string",
+        "enum": [
+          "Avatar"
+        ]
+      },
+      "ResponseWebhook": {
+        "description": "Webhook information",
+        "type": "object",
+        "required": [
+          "channel_id",
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "description": "Webhook Id",
+            "type": "string"
+          },
+          "name": {
+            "description": "Webhook name",
+            "type": "string"
+          },
+          "avatar": {
+            "description": "Avatar ID",
+            "type": "string",
+            "nullable": true
+          },
+          "channel_id": {
+            "description": "The channel this webhook belongs to",
+            "type": "string"
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -13011,7 +13690,8 @@
         "Messaging",
         "Interactions",
         "Groups",
-        "Voice"
+        "Voice",
+        "Webhooks"
       ]
     },
     {
