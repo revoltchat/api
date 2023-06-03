@@ -10381,7 +10381,7 @@
               "$ref": "#/components/schemas/SendableEmbed"
             },
             "maxItems": 10,
-            "minItems": 1
+            "minItems": 0
           },
           "masquerade": {
             "description": "Masquerade to apply to this message",
