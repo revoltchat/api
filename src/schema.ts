@@ -916,6 +916,12 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "TooManyEmbeds";
+          /** Format: uint */
+          max: number;
+        }
+      | {
+          /** @enum {string} */
           type: "EmptyMessage";
         }
       | {
@@ -1991,20 +1997,16 @@ export interface components {
       nonce?: string | null;
       /** @description Message content to send */
       content?: string | null;
-      /**
-       * @description Attachments to include in message
-       * @default
-       */
-      attachments?: string[];
+      /** @description Attachments to include in message */
+      attachments?: string[] | null;
       /** @description Messages to reply to */
       replies?: components["schemas"]["Reply"][] | null;
       /**
        * @description Embeds to include in message
        *
        * Text embed content contributes to the content length cap
-       * @default
        */
-      embeds?: components["schemas"]["SendableEmbed"][];
+      embeds?: components["schemas"]["SendableEmbed"][] | null;
       /** @description Masquerade to apply to this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
       /** @description Information about how this message should be interacted with */
