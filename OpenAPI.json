@@ -7378,6 +7378,26 @@
           {
             "type": "object",
             "required": [
+              "max",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "TooManyEmbeds"
+                ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
               "type"
             ],
             "properties": {
@@ -10359,11 +10379,11 @@
           },
           "attachments": {
             "description": "Attachments to include in message",
-            "default": [],
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "nullable": true
           },
           "replies": {
             "description": "Messages to reply to",
@@ -10375,13 +10395,11 @@
           },
           "embeds": {
             "description": "Embeds to include in message\n\nText embed content contributes to the content length cap",
-            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SendableEmbed"
             },
-            "maxItems": 10,
-            "minItems": 0
+            "nullable": true
           },
           "masquerade": {
             "description": "Masquerade to apply to this message",
