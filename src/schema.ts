@@ -2451,12 +2451,9 @@ export interface components {
       /** @description Allow / deny values for the role in this server. */
       permissions: components["schemas"]["Override"];
     };
-    /** Permission Value */
-    DataSetServerDefaultPermission: {
-      /**
-       * Format: uint64
-       * @description Default member permission value
-       */
+    /** @description Data permissions Value - contains allow */
+    DataPermissionsValue: {
+      /** Format: uint64 */
       permissions: number;
     };
     /** @description Representation of an Emoji on Revolt */
@@ -4165,7 +4162,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["DataSetServerDefaultPermission"];
+        "application/json": components["schemas"]["DataPermissionsValue"];
       };
     };
   };
@@ -5608,7 +5605,7 @@ export interface operations {
   webhook_fetch_token_webhook_fetch_token: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
         token: string;
       };
     };
@@ -5630,7 +5627,7 @@ export interface operations {
   webhook_execute_webhook_execute: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
         token: string;
       };
       header: {
@@ -5661,7 +5658,7 @@ export interface operations {
   webhook_delete_token_webhook_delete_token: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
         token: string;
       };
     };
@@ -5680,7 +5677,7 @@ export interface operations {
   webhook_edit_token_webhook_edit_token: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
         token: string;
       };
     };
@@ -5707,7 +5704,7 @@ export interface operations {
   webhook_fetch_webhook_fetch: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -5728,7 +5725,7 @@ export interface operations {
   webhook_delete_webhook_delete: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -5746,7 +5743,7 @@ export interface operations {
   webhook_edit_webhook_edit: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -5772,7 +5769,7 @@ export interface operations {
   webhook_execute_github_webhook_execute_github: {
     parameters: {
       path: {
-        webhook_id: string;
+        webhook_id: components["schemas"]["Id"];
         token: string;
       };
       header: {
