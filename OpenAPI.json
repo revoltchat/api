@@ -3585,7 +3585,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataSetServerDefaultPermission"
+                "$ref": "#/components/schemas/DataPermissionsValue"
               }
             }
           },
@@ -5654,7 +5654,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           },
           {
@@ -5702,7 +5702,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           },
           {
@@ -5768,7 +5768,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           },
           {
@@ -5809,7 +5809,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           },
           {
@@ -5869,7 +5869,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           }
         ],
@@ -5914,7 +5914,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           }
         ],
@@ -5952,7 +5952,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           }
         ],
@@ -6009,7 +6009,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           },
           {
@@ -11535,15 +11535,14 @@
           }
         }
       },
-      "DataSetServerDefaultPermission": {
-        "title": "Permission Value",
+      "DataPermissionsValue": {
+        "description": "Data permissions Value - contains allow",
         "type": "object",
         "required": [
           "permissions"
         ],
         "properties": {
           "permissions": {
-            "description": "Default member permission value",
             "type": "integer",
             "format": "uint64",
             "minimum": 0.0
