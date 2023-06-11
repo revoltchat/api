@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.6.0"
+    "version": "0.6.1"
   },
   "servers": [
     {
@@ -9165,7 +9165,7 @@
         "title": "User Data",
         "type": "object",
         "properties": {
-          "displayName": {
+          "display_name": {
             "description": "New display name",
             "type": "string",
             "maxLength": 32,
@@ -9249,7 +9249,8 @@
           "StatusText",
           "StatusPresence",
           "ProfileContent",
-          "ProfileBackground"
+          "ProfileBackground",
+          "DisplayName"
         ]
       },
       "DataChangeUsername": {
