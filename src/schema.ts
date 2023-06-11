@@ -1663,7 +1663,7 @@ export interface components {
     /** User Data */
     DataEditUser: {
       /** @description New display name */
-      displayName?: string | null;
+      display_name?: string | null;
       /** @description Attachment Id for avatar */
       avatar?: string | null;
       /** @description New user status */
@@ -1703,7 +1703,8 @@ export interface components {
       | "StatusText"
       | "StatusPresence"
       | "ProfileContent"
-      | "ProfileBackground";
+      | "ProfileBackground"
+      | "DisplayName";
     /** Username Information */
     DataChangeUsername: {
       /** @description New username */
