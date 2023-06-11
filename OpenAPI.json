@@ -8803,7 +8803,6 @@
         "required": [
           "_id",
           "discriminator",
-          "display_name",
           "username"
         ],
         "properties": {
@@ -8821,7 +8820,8 @@
           },
           "display_name": {
             "description": "Display name",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "avatar": {
             "description": "Avatar attachment",
@@ -12124,7 +12124,6 @@
               "_id",
               "_type",
               "discriminator",
-              "display_name",
               "username"
             ],
             "properties": {
@@ -12148,7 +12147,8 @@
               },
               "display_name": {
                 "description": "Display name",
-                "type": "string"
+                "type": "string",
+                "nullable": true
               },
               "avatar": {
                 "description": "Avatar attachment",
