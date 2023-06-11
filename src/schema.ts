@@ -1518,7 +1518,7 @@ export interface components {
       /** @description Discriminator */
       discriminator: string;
       /** @description Display name */
-      display_name: string;
+      display_name?: string | null;
       /** @description Avatar attachment */
       avatar?: components["schemas"]["File"] | null;
       /** @description Relationships with other users */
@@ -2776,7 +2776,7 @@ export interface components {
           /** @description Discriminator */
           discriminator: string;
           /** @description Display name */
-          display_name: string;
+          display_name?: string | null;
           /** @description Avatar attachment */
           avatar?: components["schemas"]["File"] | null;
           /** @description Relationships with other users */
