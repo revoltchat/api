@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.6.2"
+    "version": "0.6.3"
   },
   "servers": [
     {
@@ -7170,6 +7170,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "DiscriminatorChangeRatelimited"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "UnknownUser"
                 ]
               }
@@ -11443,6 +11457,7 @@
         "type": "object",
         "required": [
           "_id",
+          "discriminator",
           "username"
         ],
         "properties": {
@@ -11452,6 +11467,10 @@
           },
           "username": {
             "description": "Username of the banned user",
+            "type": "string"
+          },
+          "discriminator": {
+            "description": "Discriminator of the banned user",
             "type": "string"
           },
           "avatar": {
