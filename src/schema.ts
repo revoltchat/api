@@ -854,6 +854,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "DiscriminatorChangeRatelimited";
+        }
+      | {
+          /** @enum {string} */
           type: "UnknownUser";
         }
       | {
@@ -2411,6 +2415,8 @@ export interface components {
       _id: string;
       /** @description Username of the banned user */
       username: string;
+      /** @description Discriminator of the banned user */
+      discriminator: string;
       /** @description Avatar of the banned user */
       avatar?: components["schemas"]["File"] | null;
     };
