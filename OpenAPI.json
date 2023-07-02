@@ -10755,7 +10755,8 @@
         "required": [
           "channel_id",
           "id",
-          "name"
+          "name",
+          "permissions"
         ],
         "properties": {
           "id": {
@@ -10778,6 +10779,12 @@
           "channel_id": {
             "description": "The channel this webhook belongs to",
             "type": "string"
+          },
+          "permissions": {
+            "description": "The permissions for the webhook",
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
           },
           "token": {
             "description": "The private token for the webhook",
@@ -13651,6 +13658,13 @@
             "minLength": 1,
             "nullable": true
           },
+          "permissions": {
+            "description": "Webhook permissions",
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0,
+            "nullable": true
+          },
           "remove": {
             "description": "Fields to remove from webhook",
             "default": [],
@@ -13674,7 +13688,8 @@
         "required": [
           "channel_id",
           "id",
-          "name"
+          "name",
+          "permissions"
         ],
         "properties": {
           "id": {
@@ -13693,6 +13708,12 @@
           "channel_id": {
             "description": "The channel this webhook belongs to",
             "type": "string"
+          },
+          "permissions": {
+            "description": "The permissions for the webhook",
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
           }
         }
       }
