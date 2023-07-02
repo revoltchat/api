@@ -2148,6 +2148,11 @@ export interface components {
       avatar?: components["schemas"]["File"] | null;
       /** @description The channel this webhook belongs to */
       channel_id: string;
+      /**
+       * Format: uint64
+       * @description The permissions for the webhook
+       */
+      permissions: number;
       /** @description The private token for the webhook */
       token?: string | null;
     };
@@ -3158,6 +3163,11 @@ export interface components {
       /** @description Avatar ID */
       avatar?: string | null;
       /**
+       * Format: uint64
+       * @description Webhook permissions
+       */
+      permissions?: number | null;
+      /**
        * @description Fields to remove from webhook
        * @default
        */
@@ -3178,6 +3188,11 @@ export interface components {
       avatar?: string | null;
       /** @description The channel this webhook belongs to */
       channel_id: string;
+      /**
+       * Format: uint64
+       * @description The permissions for the webhook
+       */
+      permissions: number;
     };
   };
 }
