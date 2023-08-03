@@ -3,7 +3,6 @@ import { paths } from './schema';
 export type APIRoutes =
 | { method: 'get', path: `/`, parts: 1, params: undefined, response: paths['/']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/admin/stats`, parts: 2, params: undefined, response: paths['/admin/stats']['get']['responses']['200']['content']['application/json'] }
-| { method: 'post', path: `/admin/messages`, parts: 2, params: paths['/admin/messages']['post']['requestBody']['content']['application/json'], response: paths['/admin/messages']['post']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/@me`, parts: 2, params: undefined, response: paths['/users/@me']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/${string}`, parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/users/{target}', parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
