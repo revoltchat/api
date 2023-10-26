@@ -59,8 +59,6 @@ export type APIRoutes =
 | { method: 'post', path: '-/channels/{target}/messages', parts: 3, params: paths['/channels/{target}/messages']['post']['requestBody']['content']['application/json'], response: paths['/channels/{target}/messages']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/channels/${string}/search`, parts: 3, params: paths['/channels/{target}/search']['post']['requestBody']['content']['application/json'], response: paths['/channels/{target}/search']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: '-/channels/{target}/search', parts: 3, params: paths['/channels/{target}/search']['post']['requestBody']['content']['application/json'], response: paths['/channels/{target}/search']['post']['responses']['200']['content']['application/json'] }
-| { method: 'post', path: `/channels/${string}/messages/stale`, parts: 4, params: paths['/channels/{_target}/messages/stale']['post']['requestBody']['content']['application/json'], response: undefined }
-| { method: 'post', path: '-/channels/{_target}/messages/stale', parts: 4, params: paths['/channels/{_target}/messages/stale']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'get', path: `/channels/${string}/messages/${string}`, parts: 4, params: undefined, response: paths['/channels/{target}/messages/{msg}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/channels/{target}/messages/{msg}', parts: 4, params: undefined, response: paths['/channels/{target}/messages/{msg}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/channels/${string}/messages/${string}`, parts: 4, params: undefined, response: undefined }
@@ -71,7 +69,7 @@ export type APIRoutes =
 | { method: 'delete', path: '-/channels/{target}/messages/bulk', parts: 4, params: paths['/channels/{target}/messages/bulk']['delete']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/channels/create`, parts: 2, params: paths['/channels/create']['post']['requestBody']['content']['application/json'], response: paths['/channels/create']['post']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/channels/${string}/recipients/${string}`, parts: 4, params: undefined, response: undefined }
-| { method: 'put', path: '-/channels/{target}/recipients/{member}', parts: 4, params: undefined, response: undefined }
+| { method: 'put', path: '-/channels/{group_id}/recipients/{member_id}', parts: 4, params: undefined, response: undefined }
 | { method: 'delete', path: `/channels/${string}/recipients/${string}`, parts: 4, params: undefined, response: undefined }
 | { method: 'delete', path: '-/channels/{target}/recipients/{member}', parts: 4, params: undefined, response: undefined }
 | { method: 'post', path: `/channels/${string}/join_call`, parts: 3, params: undefined, response: paths['/channels/{target}/join_call']['post']['responses']['200']['content']['application/json'] }
@@ -137,12 +135,12 @@ export type APIRoutes =
 | { method: 'post', path: '-/invites/{target}', parts: 2, params: undefined, response: paths['/invites/{target}']['post']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/invites/${string}`, parts: 2, params: undefined, response: undefined }
 | { method: 'delete', path: '-/invites/{target}', parts: 2, params: undefined, response: undefined }
-| { method: 'get', path: `/custom/emoji/${string}`, parts: 3, params: undefined, response: paths['/custom/emoji/{id}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: '-/custom/emoji/{id}', parts: 3, params: undefined, response: paths['/custom/emoji/{id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: `/custom/emoji/${string}`, parts: 3, params: paths['/custom/emoji/{id}']['put']['requestBody']['content']['application/json'], response: paths['/custom/emoji/{id}']['put']['responses']['200']['content']['application/json'] }
 | { method: 'put', path: '-/custom/emoji/{id}', parts: 3, params: paths['/custom/emoji/{id}']['put']['requestBody']['content']['application/json'], response: paths['/custom/emoji/{id}']['put']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: `/custom/emoji/${string}`, parts: 3, params: undefined, response: paths['/custom/emoji/{emoji_id}']['get']['responses']['200']['content']['application/json'] }
+| { method: 'get', path: '-/custom/emoji/{emoji_id}', parts: 3, params: undefined, response: paths['/custom/emoji/{emoji_id}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/custom/emoji/${string}`, parts: 3, params: undefined, response: undefined }
-| { method: 'delete', path: '-/custom/emoji/{id}', parts: 3, params: undefined, response: undefined }
+| { method: 'delete', path: '-/custom/emoji/{emoji_id}', parts: 3, params: undefined, response: undefined }
 | { method: 'post', path: `/safety/report`, parts: 2, params: paths['/safety/report']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/account/create`, parts: 3, params: paths['/auth/account/create']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/auth/account/reverify`, parts: 3, params: paths['/auth/account/reverify']['post']['requestBody']['content']['application/json'], response: undefined }
@@ -173,7 +171,7 @@ export type APIRoutes =
 | { method: 'post', path: `/auth/mfa/totp`, parts: 3, params: undefined, response: paths['/auth/mfa/totp']['post']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/auth/mfa/totp`, parts: 3, params: undefined, response: undefined }
 | { method: 'get', path: `/onboard/hello`, parts: 2, params: undefined, response: paths['/onboard/hello']['get']['responses']['200']['content']['application/json'] }
-| { method: 'post', path: `/onboard/complete`, parts: 2, params: paths['/onboard/complete']['post']['requestBody']['content']['application/json'], response: undefined }
+| { method: 'post', path: `/onboard/complete`, parts: 2, params: paths['/onboard/complete']['post']['requestBody']['content']['application/json'], response: paths['/onboard/complete']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/push/subscribe`, parts: 2, params: paths['/push/subscribe']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/push/unsubscribe`, parts: 2, params: undefined, response: undefined }
 | { method: 'post', path: `/sync/settings/fetch`, parts: 3, params: paths['/sync/settings/fetch']['post']['requestBody']['content']['application/json'], response: paths['/sync/settings/fetch']['post']['responses']['200']['content']['application/json'] }

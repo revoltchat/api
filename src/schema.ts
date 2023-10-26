@@ -104,7 +104,7 @@ export interface paths {
   };
   "/channels/{target}": {
     /** Fetch channel by its id. */
-    get: operations["channel_fetch_req"];
+    get: operations["channel_fetch_fetch_channel"];
     /** Deletes a server channel, leaves a group or closes a group. */
     delete: operations["channel_delete_req"];
     /** Edit a channel object by its id. */
@@ -132,16 +132,6 @@ export interface paths {
     /** This route searches for messages within the given parameters. */
     post: operations["message_search_req"];
   };
-  "/channels/{_target}/messages/stale": {
-    /**
-     * This route returns any changed message objects and tells you if any have been deleted.
-     *
-     * Don't actually poll this route, instead use this to update your local database.
-     *
-     * **DEPRECATED**
-     */
-    post: operations["message_query_stale_req"];
-  };
   "/channels/{target}/messages/{msg}": {
     /** Retrieves a message by its id. */
     get: operations["message_fetch_req"];
@@ -162,11 +152,13 @@ export interface paths {
   };
   "/channels/create": {
     /** Create a new group channel. */
-    post: operations["group_create_req"];
+    post: operations["group_create_create_group"];
   };
-  "/channels/{target}/recipients/{member}": {
+  "/channels/{group_id}/recipients/{member_id}": {
     /** Adds another user to the group. */
     put: operations["group_add_member_req"];
+  };
+  "/channels/{target}/recipients/{member}": {
     /** Removes a user from the group. */
     delete: operations["group_remove_member_req"];
   };
@@ -299,10 +291,12 @@ export interface paths {
     delete: operations["invite_delete_req"];
   };
   "/custom/emoji/{id}": {
-    /** Fetch an emoji by its id. */
-    get: operations["emoji_fetch_fetch_emoji"];
     /** Create an emoji by its Autumn upload id. */
     put: operations["emoji_create_create_emoji"];
+  };
+  "/custom/emoji/{emoji_id}": {
+    /** Fetch an emoji by its id. */
+    get: operations["emoji_fetch_fetch_emoji"];
     /** Delete an emoji by its id. */
     delete: operations["emoji_delete_delete_emoji"];
   };
@@ -595,6 +589,10 @@ export interface components {
             }
           | {
               /** @enum {string} */
+              type: "DiscriminatorChangeRatelimited";
+            }
+          | {
+              /** @enum {string} */
               type: "UnknownUser";
             }
           | {
@@ -640,6 +638,12 @@ export interface components {
           | {
               /** @enum {string} */
               type: "TooManyAttachments";
+              /** Format: uint */
+              max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "TooManyEmbeds";
               /** Format: uint */
               max: number;
             }
@@ -710,6 +714,10 @@ export interface components {
               type: "TooManyRoles";
               /** Format: uint */
               max: number;
+            }
+          | {
+              /** @enum {string} */
+              type: "AlreadyInServer";
             }
           | {
               /** @enum {string} */
@@ -1440,13 +1448,9 @@ export interface components {
       /** @description Username and discriminator combo separated by # */
       username: string;
     };
-    /** @description Representation of a bot on Revolt */
+    /** @description Bot */
     Bot: {
-      /**
-       * @description Bot Id
-       *
-       * This equals the associated bot user's id.
-       */
+      /** @description Bot Id */
       _id: string;
       /** @description User Id of the bot owner */
       owner: string;
@@ -1459,23 +1463,23 @@ export interface components {
       /** @description Whether this bot should be publicly discoverable */
       discoverable?: boolean;
       /** @description Reserved; URL for handling interactions */
-      interactions_url?: string | null;
+      interactions_url?: string;
       /** @description URL for terms of service */
-      terms_of_service_url?: string | null;
+      terms_of_service_url?: string;
       /** @description URL for privacy policy */
-      privacy_policy_url?: string | null;
+      privacy_policy_url?: string;
       /**
-       * Format: int32
+       * Format: uint32
        * @description Enum of bot flags
        */
-      flags?: number | null;
+      flags?: number;
     };
-    /** Bot Details */
+    /** @description Bot Details */
     DataCreateBot: {
       /** @description Bot username */
       name: string;
     };
-    /** Invite Destination */
+    /** @description Where we are inviting a bot to */
     InviteBotDestination:
       | {
           /** @description Server Id */
@@ -1492,9 +1496,9 @@ export interface components {
       /** @description Bot Username */
       username: string;
       /** @description Profile Avatar */
-      avatar: string;
+      avatar?: string;
       /** @description Profile Description */
-      description: string;
+      description?: string;
     };
     /** @description Bot Response */
     FetchBotResponse: {
@@ -1504,8 +1508,11 @@ export interface components {
       user: components["schemas"]["User"];
     };
     /**
-     * Owned Bots Response
-     * @description Both lists are sorted by their IDs.
+     * @description Owned Bots Response
+     *
+     * Both lists are sorted by their IDs.
+     *
+     * TODO: user should be in bot object
      */
     OwnedBotsResponse: {
       /** @description Bot objects */
@@ -1513,7 +1520,7 @@ export interface components {
       /** @description User objects */
       users: components["schemas"]["User"][];
     };
-    /** Bot Details */
+    /** @description New Bot Details */
     DataEditBot: {
       /** @description Bot username */
       name?: string | null;
@@ -1584,7 +1591,7 @@ export interface components {
           /** @description Id of the group channel this invite points to */
           channel: string;
         };
-    /** @description Representation of a Message on Revolt */
+    /** @description Message */
     Message: {
       /** @description Unique Id */
       _id: string;
@@ -1622,7 +1629,7 @@ export interface components {
       name: string;
       avatar?: string | null;
     };
-    /** @description Representation of a system event message */
+    /** @description System Event */
     SystemMessage:
       | {
           /** @enum {string} */
@@ -1888,6 +1895,7 @@ export interface components {
        */
       colour?: string | null;
     };
+    /** @description Message to send */
     DataMessageSend: {
       /**
        * @description Unique token to prevent duplicate message sending
@@ -1900,7 +1908,7 @@ export interface components {
       /** @description Attachments to include in message */
       attachments?: string[] | null;
       /** @description Messages to reply to */
-      replies?: components["schemas"]["Reply"][] | null;
+      replies?: components["schemas"]["ReplyIntent"][] | null;
       /**
        * @description Embeds to include in message
        *
@@ -1912,11 +1920,8 @@ export interface components {
       /** @description Information about how this message should be interacted with */
       interactions?: components["schemas"]["Interactions"] | null;
     };
-    /**
-     * Reply
-     * @description Representation of a message reply before it is sent.
-     */
-    Reply: {
+    /** @description What this message should reply to and how */
+    ReplyIntent: {
       /** @description Message Id */
       id: string;
       /** @description Whether this reply should mention the message's author */
@@ -2000,11 +2005,6 @@ export interface components {
       /** @description Whether to include user (and member, if server channel) objects */
       include_users?: boolean | null;
     };
-    /** Query Parameters */
-    OptionsQueryStale: {
-      /** @description Array of message IDs */
-      ids: string[];
-    };
     /** Message Details */
     DataEditMessage: {
       /** @description New message content */
@@ -2017,18 +2017,21 @@ export interface components {
       /** @description Message IDs */
       ids: string[];
     };
-    /** Group Data */
+    /** @description Create new group */
     DataCreateGroup: {
       /** @description Group name */
       name: string;
       /** @description Group description */
       description?: string | null;
+      /** @description Group icon */
+      icon?: string | null;
       /**
        * @description Array of user IDs to add to the group
        *
        * Must be friends with these users.
+       * @default
        */
-      users: string[];
+      users?: string[];
       /** @description Whether this group is age-restricted */
       nsfw?: boolean | null;
     };
@@ -2086,6 +2089,7 @@ export interface components {
       /** @description The private token for the webhook */
       token?: string | null;
     };
+    /** @description Information for the webhook */
     CreateWebhookBody: {
       name: string;
       avatar?: string | null;
@@ -2494,7 +2498,7 @@ export interface components {
       /** @description Server we are joining */
       server: components["schemas"]["Server"];
     };
-    /** Emoji Data */
+    /** @description Create a new emoji */
     DataCreateEmoji: {
       /** @description Server name */
       name: string;
@@ -3419,7 +3423,7 @@ export interface operations {
     };
   };
   /** Fetch channel by its id. */
-  channel_fetch_req: {
+  channel_fetch_fetch_channel: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3632,34 +3636,6 @@ export interface operations {
       };
     };
   };
-  /**
-   * This route returns any changed message objects and tells you if any have been deleted.
-   *
-   * Don't actually poll this route, instead use this to update your local database.
-   *
-   * **DEPRECATED**
-   */
-  message_query_stale_req: {
-    parameters: {
-      path: {
-        _target: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: unknown;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OptionsQueryStale"];
-      };
-    };
-  };
   /** Retrieves a message by its id. */
   message_fetch_req: {
     parameters: {
@@ -3758,7 +3734,7 @@ export interface operations {
     };
   };
   /** Create a new group channel. */
-  group_create_req: {
+  group_create_create_group: {
     responses: {
       200: {
         content: {
@@ -3782,8 +3758,8 @@ export interface operations {
   group_add_member_req: {
     parameters: {
       path: {
-        target: components["schemas"]["Id"];
-        member: components["schemas"]["Id"];
+        group_id: components["schemas"]["Id"];
+        member_id: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -4509,27 +4485,6 @@ export interface operations {
       };
     };
   };
-  /** Fetch an emoji by its id. */
-  emoji_fetch_fetch_emoji: {
-    parameters: {
-      path: {
-        id: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Emoji"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
   /** Create an emoji by its Autumn upload id. */
   emoji_create_create_emoji: {
     parameters: {
@@ -4556,11 +4511,32 @@ export interface operations {
       };
     };
   };
+  /** Fetch an emoji by its id. */
+  emoji_fetch_fetch_emoji: {
+    parameters: {
+      path: {
+        emoji_id: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Emoji"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
   /** Delete an emoji by its id. */
   emoji_delete_delete_emoji: {
     parameters: {
       path: {
-        id: components["schemas"]["Id"];
+        emoji_id: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -5031,8 +5007,11 @@ export interface operations {
   /** This sets a new username, completes onboarding and allows a user to start using Revolt. */
   complete_req: {
     responses: {
-      /** Success */
-      204: never;
+      200: {
+        content: {
+          "application/json": components["schemas"]["User"];
+        };
+      };
       /** An error occurred. */
       default: {
         content: {
