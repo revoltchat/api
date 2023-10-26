@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.6.7"
+    "version": "0.6.8"
   },
   "servers": [
     {
@@ -1146,7 +1146,7 @@
         ],
         "summary": "Fetch Channel",
         "description": "Fetch channel by its id.",
-        "operationId": "channel_fetch_req",
+        "operationId": "channel_fetch_fetch_channel",
         "parameters": [
           {
             "name": "target",
@@ -1622,56 +1622,6 @@
         ]
       }
     },
-    "/channels/{_target}/messages/stale": {
-      "post": {
-        "tags": [
-          "Messaging"
-        ],
-        "summary": "Poll Message Changes",
-        "description": "This route returns any changed message objects and tells you if any have been deleted.\n\nDon't actually poll this route, instead use this to update your local database.\n\n**DEPRECATED**",
-        "operationId": "message_query_stale_req",
-        "parameters": [
-          {
-            "name": "_target",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OptionsQueryStale"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "Session Token": []
-          }
-        ]
-      }
-    },
     "/channels/{target}/messages/{msg}": {
       "get": {
         "tags": [
@@ -1893,7 +1843,7 @@
         ],
         "summary": "Create Group",
         "description": "Create a new group channel.",
-        "operationId": "group_create_req",
+        "operationId": "group_create_create_group",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1933,7 +1883,7 @@
         ]
       }
     },
-    "/channels/{target}/recipients/{member}": {
+    "/channels/{group_id}/recipients/{member_id}": {
       "put": {
         "tags": [
           "Groups"
@@ -1943,7 +1893,7 @@
         "operationId": "group_add_member_req",
         "parameters": [
           {
-            "name": "target",
+            "name": "group_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -1951,7 +1901,7 @@
             }
           },
           {
-            "name": "member",
+            "name": "member_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -1979,7 +1929,9 @@
             "Session Token": []
           }
         ]
-      },
+      }
+    },
+    "/channels/{target}/recipients/{member}": {
       "delete": {
         "tags": [
           "Groups"
@@ -3749,51 +3701,6 @@
       }
     },
     "/custom/emoji/{id}": {
-      "get": {
-        "tags": [
-          "Emojis"
-        ],
-        "summary": "Fetch Emoji",
-        "description": "Fetch an emoji by its id.",
-        "operationId": "emoji_fetch_fetch_emoji",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Emoji"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Session Token": []
-          }
-        ]
-      },
       "put": {
         "tags": [
           "Emojis"
@@ -3848,6 +3755,48 @@
             "Session Token": []
           }
         ]
+      }
+    },
+    "/custom/emoji/{emoji_id}": {
+      "get": {
+        "tags": [
+          "Emojis"
+        ],
+        "summary": "Fetch Emoji",
+        "description": "Fetch an emoji by its id.",
+        "operationId": "emoji_fetch_fetch_emoji",
+        "parameters": [
+          {
+            "name": "emoji_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Emoji"
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
         "tags": [
@@ -3858,7 +3807,7 @@
         "operationId": "emoji_delete_delete_emoji",
         "parameters": [
           {
-            "name": "id",
+            "name": "emoji_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -4941,8 +4890,15 @@
               }
             }
           },
-          "204": {
-            "description": "Success"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -5932,6 +5888,20 @@
                   "type": {
                     "type": "string",
                     "enum": [
+                      "DiscriminatorChangeRatelimited"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
                       "UnknownUser"
                     ]
                   }
@@ -6088,6 +6058,26 @@
                     "type": "string",
                     "enum": [
                       "TooManyAttachments"
+                    ]
+                  },
+                  "max": {
+                    "type": "integer",
+                    "format": "uint",
+                    "minimum": 0.0
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "max",
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "TooManyEmbeds"
                     ]
                   },
                   "max": {
@@ -6326,6 +6316,20 @@
                     "type": "integer",
                     "format": "uint",
                     "minimum": 0.0
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "AlreadyInServer"
+                    ]
                   }
                 }
               },
@@ -8489,7 +8493,7 @@
         }
       },
       "Bot": {
-        "description": "Representation of a bot on Revolt",
+        "description": "Bot",
         "type": "object",
         "required": [
           "_id",
@@ -8499,7 +8503,7 @@
         ],
         "properties": {
           "_id": {
-            "description": "Bot Id\n\nThis equals the associated bot user's id.",
+            "description": "Bot Id",
             "type": "string"
           },
           "owner": {
@@ -8524,29 +8528,26 @@
           },
           "interactions_url": {
             "description": "Reserved; URL for handling interactions",
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "terms_of_service_url": {
             "description": "URL for terms of service",
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "privacy_policy_url": {
             "description": "URL for privacy policy",
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "flags": {
             "description": "Enum of bot flags",
             "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "format": "uint32",
+            "minimum": 0.0
           }
         }
       },
       "DataCreateBot": {
-        "title": "Bot Details",
+        "description": "Bot Details",
         "type": "object",
         "required": [
           "name"
@@ -8562,7 +8563,7 @@
         }
       },
       "InviteBotDestination": {
-        "title": "Invite Destination",
+        "description": "Where we are inviting a bot to",
         "anyOf": [
           {
             "description": "Invite to a server",
@@ -8597,8 +8598,6 @@
         "type": "object",
         "required": [
           "_id",
-          "avatar",
-          "description",
           "username"
         ],
         "properties": {
@@ -8647,8 +8646,7 @@
         }
       },
       "OwnedBotsResponse": {
-        "title": "Owned Bots Response",
-        "description": "Both lists are sorted by their IDs.",
+        "description": "Owned Bots Response\n\nBoth lists are sorted by their IDs.\n\nTODO: user should be in bot object",
         "type": "object",
         "required": [
           "bots",
@@ -8672,7 +8670,7 @@
         }
       },
       "DataEditBot": {
-        "title": "Bot Details",
+        "description": "New Bot Details",
         "type": "object",
         "properties": {
           "name": {
@@ -8849,7 +8847,7 @@
         ]
       },
       "Message": {
-        "description": "Representation of a Message on Revolt",
+        "description": "Message",
         "type": "object",
         "required": [
           "_id",
@@ -8985,7 +8983,7 @@
         }
       },
       "SystemMessage": {
-        "description": "Representation of a system event message",
+        "description": "System Event",
         "oneOf": [
           {
             "type": "object",
@@ -9722,28 +9720,22 @@
           "name": {
             "description": "Replace the display name shown on this message",
             "type": "string",
-            "maxLength": 32,
-            "minLength": 1,
             "nullable": true
           },
           "avatar": {
             "description": "Replace the avatar shown on this message (URL to image file)",
             "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
             "nullable": true
           },
           "colour": {
             "description": "Replace the display role colour shown on this message\n\nMust have `ManageRole` permission to use",
             "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "(?i)^(?:[a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|(repeating-)?(linear|conic|radial)-gradient\\(([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|\\d+deg)([ ]+(\\d{1,3}%|0))?(,[ ]*([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+)([ ]+(\\d{1,3}%|0))?)+\\))$",
             "nullable": true
           }
         }
       },
       "DataMessageSend": {
+        "description": "Message to send",
         "type": "object",
         "properties": {
           "nonce": {
@@ -9772,7 +9764,7 @@
             "description": "Messages to reply to",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Reply"
+              "$ref": "#/components/schemas/ReplyIntent"
             },
             "nullable": true
           },
@@ -9804,9 +9796,8 @@
           }
         }
       },
-      "Reply": {
-        "title": "Reply",
-        "description": "Representation of a message reply before it is sent.",
+      "ReplyIntent": {
+        "description": "What this message should reply to and how",
         "type": "object",
         "required": [
           "id",
@@ -10042,24 +10033,6 @@
           }
         }
       },
-      "OptionsQueryStale": {
-        "title": "Query Parameters",
-        "type": "object",
-        "required": [
-          "ids"
-        ],
-        "properties": {
-          "ids": {
-            "description": "Array of message IDs",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 150,
-            "minItems": 0
-          }
-        }
-      },
       "DataEditMessage": {
         "title": "Message Details",
         "type": "object",
@@ -10102,11 +10075,10 @@
         }
       },
       "DataCreateGroup": {
-        "title": "Group Data",
+        "description": "Create new group",
         "type": "object",
         "required": [
-          "name",
-          "users"
+          "name"
         ],
         "properties": {
           "name": {
@@ -10122,14 +10094,23 @@
             "minLength": 0,
             "nullable": true
           },
+          "icon": {
+            "description": "Group icon",
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "nullable": true
+          },
           "users": {
             "description": "Array of user IDs to add to the group\n\nMust be friends with these users.",
+            "default": [],
             "type": "array",
             "items": {
               "type": "string"
             },
             "maxItems": 49,
-            "minItems": 0
+            "minItems": 0,
+            "uniqueItems": true
           },
           "nsfw": {
             "description": "Whether this group is age-restricted",
@@ -10270,6 +10251,7 @@
         }
       },
       "CreateWebhookBody": {
+        "description": "Information for the webhook",
         "type": "object",
         "required": [
           "name"
@@ -11346,7 +11328,7 @@
         ]
       },
       "DataCreateEmoji": {
-        "title": "Emoji Data",
+        "description": "Create a new emoji",
         "type": "object",
         "required": [
           "name",
