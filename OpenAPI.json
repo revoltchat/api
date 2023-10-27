@@ -2680,17 +2680,17 @@
         ]
       }
     },
-    "/servers/{target}/channels": {
+    "/servers/{server}/channels": {
       "post": {
         "tags": [
           "Server Information"
         ],
         "summary": "Create Channel",
         "description": "Create a new Text or Voice channel.",
-        "operationId": "channel_create_req",
+        "operationId": "channel_create_create_server_channel",
         "parameters": [
           {
-            "name": "target",
+            "name": "server",
             "in": "path",
             "required": true,
             "schema": {
@@ -2702,7 +2702,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataCreateChannel"
+                "$ref": "#/components/schemas/DataCreateServerChannel"
               }
             }
           },
@@ -10710,8 +10710,8 @@
           "Banner"
         ]
       },
-      "DataCreateChannel": {
-        "title": "Channel Data",
+      "DataCreateServerChannel": {
+        "description": "Create new server channel",
         "type": "object",
         "required": [
           "name"
@@ -10722,7 +10722,7 @@
             "default": "Text",
             "allOf": [
               {
-                "$ref": "#/components/schemas/ChannelType"
+                "$ref": "#/components/schemas/LegacyServerChannelType"
               }
             ]
           },
@@ -10746,8 +10746,8 @@
           }
         }
       },
-      "ChannelType": {
-        "title": "Channel Type",
+      "LegacyServerChannelType": {
+        "description": "Server Channel Type",
         "type": "string",
         "enum": [
           "Text",
