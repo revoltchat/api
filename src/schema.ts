@@ -224,9 +224,9 @@ export interface paths {
     /** Mark all channels in a server as read. */
     put: operations["server_ack_req"];
   };
-  "/servers/{target}/channels": {
+  "/servers/{server}/channels": {
     /** Create a new Text or Voice channel. */
-    post: operations["channel_create_req"];
+    post: operations["channel_create_create_server_channel"];
   };
   "/servers/{target}/members": {
     /** Fetch all server members. */
@@ -2272,13 +2272,13 @@ export interface components {
       | "SystemMessages"
       | "Icon"
       | "Banner";
-    /** Channel Data */
-    DataCreateChannel: {
+    /** @description Create new server channel */
+    DataCreateServerChannel: {
       /**
        * @description Channel type
        * @default Text
        */
-      type?: components["schemas"]["ChannelType"];
+      type?: components["schemas"]["LegacyServerChannelType"];
       /** @description Channel name */
       name: string;
       /** @description Channel description */
@@ -2287,10 +2287,10 @@ export interface components {
       nsfw?: boolean | null;
     };
     /**
-     * Channel Type
+     * @description Server Channel Type
      * @enum {string}
      */
-    ChannelType: "Text" | "Voice";
+    LegacyServerChannelType: "Text" | "Voice";
     /**
      * Member List
      * @description Both lists are sorted by ID.
@@ -4099,10 +4099,10 @@ export interface operations {
     };
   };
   /** Create a new Text or Voice channel. */
-  channel_create_req: {
+  channel_create_create_server_channel: {
     parameters: {
       path: {
-        target: components["schemas"]["Id"];
+        server: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -4120,7 +4120,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["DataCreateChannel"];
+        "application/json": components["schemas"]["DataCreateServerChannel"];
       };
     };
   };
