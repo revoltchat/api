@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.6.8"
+    "version": "0.6.9"
   },
   "servers": [
     {
@@ -2440,7 +2440,7 @@
         ],
         "summary": "Create Server",
         "description": "Create a new server.",
-        "operationId": "server_create_req",
+        "operationId": "server_create_create_server",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2467,7 +2467,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateServerResponse"
+                  "$ref": "#/components/schemas/CreateServerLegacyResponse"
                 }
               }
             }
@@ -9720,16 +9720,23 @@
           "name": {
             "description": "Replace the display name shown on this message",
             "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
             "nullable": true
           },
           "avatar": {
             "description": "Replace the avatar shown on this message (URL to image file)",
             "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
             "nullable": true
           },
           "colour": {
             "description": "Replace the display role colour shown on this message\n\nMust have `ManageRole` permission to use",
             "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "(?i)^(?:[a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|(repeating-)?(linear|conic|radial)-gradient\\(([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+|\\d+deg)([ ]+(\\d{1,3}%|0))?(,[ ]*([a-z ]+|var\\(--[a-z\\d-]+\\)|rgba?\\([\\d, ]+\\)|#[a-f0-9]+)([ ]+(\\d{1,3}%|0))?)+\\))$",
             "nullable": true
           }
         }
@@ -10270,8 +10277,8 @@
           }
         }
       },
-      "CreateServerResponse": {
-        "title": "Create Server Response",
+      "CreateServerLegacyResponse": {
+        "description": "Information returned when creating server",
         "type": "object",
         "required": [
           "channels",
@@ -10296,7 +10303,7 @@
         }
       },
       "Server": {
-        "description": "Representation of a server on Revolt",
+        "description": "Server",
         "type": "object",
         "required": [
           "_id",
@@ -10380,8 +10387,8 @@
           "flags": {
             "description": "Bitfield of server flags",
             "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "format": "uint32",
+            "minimum": 0.0
           },
           "nsfw": {
             "description": "Whether this server is flagged as not safe for work",
@@ -10408,15 +10415,11 @@
         "properties": {
           "id": {
             "description": "Unique ID for this category",
-            "type": "string",
-            "maxLength": 32,
-            "minLength": 1
+            "type": "string"
           },
           "title": {
             "description": "Title for this category",
-            "type": "string",
-            "maxLength": 32,
-            "minLength": 1
+            "type": "string"
           },
           "channels": {
             "description": "Channels in this category",
@@ -10454,7 +10457,7 @@
         }
       },
       "Role": {
-        "description": "Representation of a server role",
+        "description": "Role",
         "type": "object",
         "required": [
           "name",
@@ -10491,7 +10494,7 @@
         }
       },
       "DataCreateServer": {
-        "title": "Server Data",
+        "description": "Information about new server to create",
         "type": "object",
         "required": [
           "name"
