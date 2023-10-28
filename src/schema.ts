@@ -210,7 +210,7 @@ export interface paths {
   };
   "/servers/create": {
     /** Create a new server. */
-    post: operations["server_create_req"];
+    post: operations["server_create_create_server"];
   };
   "/servers/{target}": {
     /** Fetch a server by its id. */
@@ -2094,14 +2094,14 @@ export interface components {
       name: string;
       avatar?: string | null;
     };
-    /** Create Server Response */
-    CreateServerResponse: {
+    /** @description Information returned when creating server */
+    CreateServerLegacyResponse: {
       /** @description Server object */
       server: components["schemas"]["Server"];
       /** @description Default channels */
       channels: components["schemas"]["Channel"][];
     };
-    /** @description Representation of a server on Revolt */
+    /** @description Server */
     Server: {
       /** @description Unique Id */
       _id: string;
@@ -2129,10 +2129,10 @@ export interface components {
       /** @description Banner attachment */
       banner?: components["schemas"]["File"] | null;
       /**
-       * Format: int32
+       * Format: uint32
        * @description Bitfield of server flags
        */
-      flags?: number | null;
+      flags?: number;
       /** @description Whether this server is flagged as not safe for work */
       nsfw?: boolean;
       /** @description Whether to enable analytics */
@@ -2160,7 +2160,7 @@ export interface components {
       /** @description ID of channel to send user banned messages in */
       user_banned?: string | null;
     };
-    /** @description Representation of a server role */
+    /** @description Role */
     Role: {
       /** @description Role name */
       name: string;
@@ -2180,7 +2180,7 @@ export interface components {
        */
       rank?: number;
     };
-    /** Server Data */
+    /** @description Information about new server to create */
     DataCreateServer: {
       /** @description Server name */
       name: string;
@@ -3987,11 +3987,11 @@ export interface operations {
     };
   };
   /** Create a new server. */
-  server_create_req: {
+  server_create_create_server: {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CreateServerResponse"];
+          "application/json": components["schemas"]["CreateServerLegacyResponse"];
         };
       };
       /** An error occurred. */
