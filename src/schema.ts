@@ -265,6 +265,8 @@ export interface paths {
     post: operations["roles_create_req"];
   };
   "/servers/{target}/roles/{role_id}": {
+    /** Fetch a role by its id. */
+    get: operations["roles_fetch_req"];
     /** Delete a server role by its id. */
     delete: operations["roles_delete_req"];
     /** Edit a role by its id. */
@@ -2301,6 +2303,14 @@ export interface components {
       /** @description List of users */
       users: components["schemas"]["User"][];
     };
+    MemberResponse:
+      | components["schemas"]["Member"]
+      | components["schemas"]["MemberWithRoles"];
+    /** @description Representation of a member of a server on Revolt With Role Data */
+    MemberWithRoles: {
+      member: components["schemas"]["Member"];
+      roles: { [key: string]: components["schemas"]["Role"] };
+    };
     /** Member Data */
     DataMemberEdit: {
       /** @description Member nickname */
@@ -4156,11 +4166,14 @@ export interface operations {
         target: components["schemas"]["Id"];
         member: components["schemas"]["Id"];
       };
+      query: {
+        roles?: boolean | null;
+      };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Member"];
+          "application/json": components["schemas"]["MemberResponse"];
         };
       };
       /** An error occurred. */
@@ -4355,6 +4368,28 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataCreateRole"];
+      };
+    };
+  };
+  /** Fetch a role by its id. */
+  roles_fetch_req: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+        role_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Role"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
       };
     };
   };
