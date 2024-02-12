@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.6.9"
+    "version": "0.6.12"
   },
   "servers": [
     {
@@ -2818,6 +2818,14 @@
             "schema": {
               "$ref": "#/components/schemas/Id"
             }
+          },
+          {
+            "name": "roles",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
           }
         ],
         "responses": {
@@ -2836,7 +2844,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Member"
+                  "$ref": "#/components/schemas/MemberResponse"
                 }
               }
             }
@@ -3293,6 +3301,54 @@
       }
     },
     "/servers/{target}/roles/{role_id}": {
+      "get": {
+        "tags": [
+          "Server Permissions"
+        ],
+        "summary": "Fetch Role",
+        "description": "Fetch a role by its id.",
+        "operationId": "roles_fetch_req",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Server Permissions"
@@ -10778,6 +10834,35 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "MemberResponse": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Member"
+          },
+          {
+            "$ref": "#/components/schemas/MemberWithRoles"
+          }
+        ]
+      },
+      "MemberWithRoles": {
+        "description": "Representation of a member of a server on Revolt With Role Data",
+        "type": "object",
+        "required": [
+          "member",
+          "roles"
+        ],
+        "properties": {
+          "member": {
+            "$ref": "#/components/schemas/Member"
+          },
+          "roles": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Role"
             }
           }
         }
