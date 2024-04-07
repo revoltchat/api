@@ -62,38 +62,6 @@
         }
       }
     },
-    "/admin/stats": {
-      "get": {
-        "tags": [
-          "Admin"
-        ],
-        "summary": "Query Stats",
-        "description": "Fetch various technical statistics.",
-        "operationId": "stats_stats",
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Stats"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/users/@me": {
       "get": {
         "tags": [
@@ -1393,7 +1361,7 @@
         ],
         "summary": "Fetch Messages",
         "description": "Fetch multiple messages.",
-        "operationId": "message_query_req",
+        "operationId": "message_query_query",
         "parameters": [
           {
             "name": "target",
@@ -1572,7 +1540,7 @@
         ],
         "summary": "Search for Messages",
         "description": "This route searches for messages within the given parameters.",
-        "operationId": "message_search_req",
+        "operationId": "message_search_search",
         "parameters": [
           {
             "name": "target",
@@ -1587,7 +1555,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OptionsMessageSearch"
+                "$ref": "#/components/schemas/DataMessageSearch"
               }
             }
           },
@@ -5193,425 +5161,6 @@
           }
         ]
       }
-    },
-    "/webhooks/{webhook_id}/{token}": {
-      "get": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Gets a webhook",
-        "description": "Gets a webhook with a token",
-        "operationId": "webhook_fetch_token_webhook_fetch_token",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          },
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Webhook"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Executes a webhook",
-        "description": "Executes a webhook and sends a message",
-        "operationId": "webhook_execute_webhook_execute",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          },
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "description": "Unique key to prevent duplicate requests",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataMessageSend"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Deletes a webhook",
-        "description": "Deletes a webhook with a token",
-        "operationId": "webhook_delete_token_webhook_delete_token",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          },
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "Success"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Edits a webhook",
-        "description": "Edits a webhook with a token",
-        "operationId": "webhook_edit_token_webhook_edit_token",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          },
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataEditWebhook"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Webhook"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/webhooks/{webhook_id}": {
-      "get": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Gets a webhook",
-        "description": "Gets a webhook",
-        "operationId": "webhook_fetch_webhook_fetch",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseWebhook"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Session Token": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Deletes a webhook",
-        "description": "Deletes a webhook",
-        "operationId": "webhook_delete_webhook_delete",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "Success"
-          }
-        },
-        "security": [
-          {
-            "Session Token": []
-          }
-        ]
-      },
-      "patch": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Edits a webhook",
-        "description": "Edits a webhook",
-        "operationId": "webhook_edit_webhook_edit",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataEditWebhook"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Webhook"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Session Token": []
-          }
-        ]
-      }
-    },
-    "/webhooks/{webhook_id}/{token}/github": {
-      "post": {
-        "tags": [
-          "Webhooks"
-        ],
-        "summary": "Executes a webhook specific to github",
-        "description": "Executes a webhook specific to github and sends a message containing the relevant info about the event",
-        "operationId": "webhook_execute_github_webhook_execute_github",
-        "parameters": [
-          {
-            "name": "webhook_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Id"
-            }
-          },
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-Github-Event",
-            "in": "header",
-            "description": "The name of the github event",
-            "required": true,
-            "content": {
-              "X-Github-Event": {
-                "schema": {}
-              }
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/octet-stream": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "default": {
-            "description": "An error occurred.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": ""
-          }
-        }
-      }
     }
   },
   "components": {
@@ -5808,56 +5357,10 @@
           }
         }
       },
-      "Permission": {
-        "description": "Permission value on Revolt\n\nThis should be restricted to the lower 52 bits to prevent any potential issues with Javascript. Also leave empty spaces for future permission flags to be added.",
-        "type": "string",
-        "enum": [
-          "ManageChannel",
-          "ManageServer",
-          "ManagePermissions",
-          "ManageRole",
-          "ManageCustomisation",
-          "KickMembers",
-          "BanMembers",
-          "TimeoutMembers",
-          "AssignRoles",
-          "ChangeNickname",
-          "ManageNicknames",
-          "ChangeAvatar",
-          "RemoveAvatars",
-          "ViewChannel",
-          "ReadMessageHistory",
-          "SendMessage",
-          "ManageMessages",
-          "ManageWebhooks",
-          "InviteOthers",
-          "SendEmbeds",
-          "UploadFiles",
-          "Masquerade",
-          "React",
-          "Connect",
-          "Speak",
-          "Video",
-          "MuteMembers",
-          "DeafenMembers",
-          "MoveMembers",
-          "GrantAllSafe",
-          "GrantAll"
-        ]
-      },
-      "UserPermission": {
-        "description": "User permission definitions",
-        "type": "string",
-        "enum": [
-          "Access",
-          "ViewProfile",
-          "SendMessage",
-          "Invite"
-        ]
-      },
       "Error": {
         "title": "Error",
-        "description": "Possible API Errors",
+        "description": "Error information",
+        "type": "object",
         "oneOf": [
           {
             "description": "This error was not labeled :(",
@@ -5871,853 +5374,6 @@
                 "enum": [
                   "LabelMe"
                 ]
-              }
-            }
-          },
-          {
-            "description": "Core crate error",
-            "type": "object",
-            "oneOf": [
-              {
-                "description": "This error was not labeled :(",
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "LabelMe"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "AlreadyOnboarded"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "UsernameTaken"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "InvalidUsername"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "DiscriminatorChangeRatelimited"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "UnknownUser"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "AlreadyFriends"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "AlreadySentRequest"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "Blocked"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "BlockedByOther"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "NotFriends"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "UnknownChannel"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "UnknownAttachment"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "UnknownMessage"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "CannotEditMessage"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "CannotJoinCall"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "TooManyAttachments"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "TooManyEmbeds"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "TooManyReplies"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "TooManyChannels"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "EmptyMessage"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "PayloadTooLarge"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "CannotRemoveYourself"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "GroupTooLarge"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "AlreadyInGroup"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "NotInGroup"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "UnknownServer"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "InvalidRole"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "Banned"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "TooManyServers"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "TooManyEmoji"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "max",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "TooManyRoles"
-                    ]
-                  },
-                  "max": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0.0
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "AlreadyInServer"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "ReachedMaximumBots"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "IsBot"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "BotIsPrivate"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "CannotReportYourself"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "permission",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "MissingPermission"
-                    ]
-                  },
-                  "permission": {
-                    "type": "string"
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "permission",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "MissingUserPermission"
-                    ]
-                  },
-                  "permission": {
-                    "type": "string"
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "NotElevated"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "NotPrivileged"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "CannotGiveMissingPermissions"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "NotOwner"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "collection",
-                  "operation",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "DatabaseError"
-                    ]
-                  },
-                  "operation": {
-                    "type": "string"
-                  },
-                  "collection": {
-                    "type": "string"
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "InternalError"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "InvalidOperation"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "InvalidCredentials"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "InvalidProperty"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "InvalidSession"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "DuplicateNonce"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "NotFound"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "NoEffect"
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "error",
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "FailedValidation"
-                    ]
-                  },
-                  "error": {
-                    "type": "string"
-                  }
-                }
-              },
-              {
-                "type": "object",
-                "required": [
-                  "type"
-                ],
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "VosoUnavailable"
-                    ]
-                  }
-                }
-              }
-            ],
-            "required": [
-              "location",
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "Core"
-                ]
-              },
-              "location": {
-                "description": "Where this error occurred",
-                "type": "string"
               }
             }
           },
@@ -6961,6 +5617,26 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "TooManyEmbeds"
+                ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "max",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "TooManyReplies"
                 ]
               },
@@ -6982,26 +5658,6 @@
                 "type": "string",
                 "enum": [
                   "TooManyChannels"
-                ]
-              },
-              "max": {
-                "type": "integer",
-                "format": "uint",
-                "minimum": 0.0
-              }
-            }
-          },
-          {
-            "type": "object",
-            "required": [
-              "max",
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "TooManyEmbeds"
                 ]
               },
               "max": {
@@ -7212,6 +5868,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "AlreadyInServer"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "ReachedMaximumBots"
                 ]
               }
@@ -7273,7 +5943,7 @@
                 ]
               },
               "permission": {
-                "$ref": "#/components/schemas/Permission"
+                "type": "string"
               }
             }
           },
@@ -7291,7 +5961,7 @@
                 ]
               },
               "permission": {
-                "$ref": "#/components/schemas/UserPermission"
+                "type": "string"
               }
             }
           },
@@ -7354,9 +6024,9 @@
           {
             "type": "object",
             "required": [
+              "collection",
               "operation",
-              "type",
-              "with"
+              "type"
             ],
             "properties": {
               "type": {
@@ -7368,7 +6038,7 @@
               "operation": {
                 "type": "string"
               },
-              "with": {
+              "collection": {
                 "type": "string"
               }
             }
@@ -7466,20 +6136,6 @@
               "type": {
                 "type": "string",
                 "enum": [
-                  "VosoUnavailable"
-                ]
-              }
-            }
-          },
-          {
-            "type": "object",
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
                   "NotFound"
                 ]
               }
@@ -7502,6 +6158,7 @@
           {
             "type": "object",
             "required": [
+              "error",
               "type"
             ],
             "properties": {
@@ -7510,217 +6167,34 @@
                 "enum": [
                   "FailedValidation"
                 ]
-              }
-            }
-          }
-        ]
-      },
-      "Stats": {
-        "description": "Server Stats",
-        "type": "object",
-        "required": [
-          "coll_stats",
-          "indices"
-        ],
-        "properties": {
-          "indices": {
-            "description": "Index usage information",
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Index"
+              },
+              "error": {
+                "type": "string"
               }
             }
           },
-          "coll_stats": {
-            "description": "Collection stats",
+          {
             "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/CollectionStats"
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "VosoUnavailable"
+                ]
+              }
             }
           }
-        }
-      },
-      "Index": {
-        "description": "Collection index",
-        "type": "object",
+        ],
         "required": [
-          "accesses",
-          "name"
+          "location"
         ],
         "properties": {
-          "name": {
-            "description": "Index name",
+          "location": {
+            "description": "Where this error occurred",
             "type": "string"
-          },
-          "accesses": {
-            "description": "Access information",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/IndexAccess"
-              }
-            ]
-          }
-        }
-      },
-      "IndexAccess": {
-        "description": "Index access information",
-        "type": "object",
-        "required": [
-          "ops",
-          "since"
-        ],
-        "properties": {
-          "ops": {
-            "description": "Operations since timestamp",
-            "type": "integer",
-            "format": "int32"
-          },
-          "since": {
-            "description": "Timestamp at which data keeping begun",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ISO8601 Timestamp"
-              }
-            ]
-          }
-        }
-      },
-      "ISO8601 Timestamp": {
-        "description": "ISO8601 formatted timestamp",
-        "type": "string",
-        "format": "date-time",
-        "example": "1970-01-01T00:00:00Z"
-      },
-      "CollectionStats": {
-        "description": "Collection stats",
-        "type": "object",
-        "required": [
-          "count",
-          "latencyStats",
-          "localTime",
-          "ns",
-          "queryExecStats"
-        ],
-        "properties": {
-          "ns": {
-            "description": "Namespace",
-            "type": "string"
-          },
-          "localTime": {
-            "description": "Local time",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ISO8601 Timestamp"
-              }
-            ]
-          },
-          "latencyStats": {
-            "description": "Latency stats",
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/LatencyStats"
-            }
-          },
-          "queryExecStats": {
-            "description": "Query exec stats",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/QueryExecStats"
-              }
-            ]
-          },
-          "count": {
-            "description": "Number of documents in collection",
-            "type": "integer",
-            "format": "uint64",
-            "minimum": 0.0
-          }
-        }
-      },
-      "LatencyStats": {
-        "description": "Collection latency stats",
-        "type": "object",
-        "required": [
-          "histogram",
-          "latency",
-          "ops"
-        ],
-        "properties": {
-          "ops": {
-            "description": "Total operations",
-            "type": "integer",
-            "format": "int64"
-          },
-          "latency": {
-            "description": "Timestamp at which data keeping begun",
-            "type": "integer",
-            "format": "int64"
-          },
-          "histogram": {
-            "description": "Histogram representation of latency data",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LatencyHistogramEntry"
-            }
-          }
-        }
-      },
-      "LatencyHistogramEntry": {
-        "description": "Histogram entry",
-        "type": "object",
-        "required": [
-          "count",
-          "micros"
-        ],
-        "properties": {
-          "micros": {
-            "description": "Time",
-            "type": "integer",
-            "format": "int64"
-          },
-          "count": {
-            "description": "Count",
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "QueryExecStats": {
-        "description": "Collection query execution stats",
-        "type": "object",
-        "required": [
-          "collectionScans"
-        ],
-        "properties": {
-          "collectionScans": {
-            "description": "Stats regarding collection scans",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CollectionScans"
-              }
-            ]
-          }
-        }
-      },
-      "CollectionScans": {
-        "description": "Query collection scan stats",
-        "type": "object",
-        "required": [
-          "nonTailable",
-          "total"
-        ],
-        "properties": {
-          "total": {
-            "description": "Number of total collection scans",
-            "type": "integer",
-            "format": "int64"
-          },
-          "nonTailable": {
-            "description": "Number of total collection scans not using a tailable cursor",
-            "type": "integer",
-            "format": "int64"
           }
         }
       },
@@ -9272,6 +7746,12 @@
           }
         ]
       },
+      "ISO8601 Timestamp": {
+        "description": "ISO8601 formatted timestamp",
+        "type": "string",
+        "format": "date-time",
+        "example": "1970-01-01T00:00:00Z"
+      },
       "Embed": {
         "description": "Embed",
         "oneOf": [
@@ -9934,8 +8414,7 @@
         }
       },
       "BulkMessageResponse": {
-        "title": "Bulk Message Response",
-        "description": "Response used when multiple messages are fetched",
+        "description": "Bulk Message Response",
         "anyOf": [
           {
             "type": "array",
@@ -9977,7 +8456,7 @@
         ]
       },
       "Member": {
-        "description": "Representation of a member of a server on Revolt",
+        "description": "Server Member",
         "type": "object",
         "required": [
           "_id",
@@ -10051,8 +8530,7 @@
         }
       },
       "MessageSort": {
-        "title": "Message Sort",
-        "description": "Sort used for retrieving messages",
+        "description": "Message Sort\n\nSort used for retrieving messages",
         "type": "string",
         "enum": [
           "Relevance",
@@ -10060,8 +8538,8 @@
           "Oldest"
         ]
       },
-      "OptionsMessageSearch": {
-        "title": "Search Parameters",
+      "DataMessageSearch": {
+        "description": "Options for searching for messages",
         "type": "object",
         "required": [
           "query"
@@ -12552,83 +11030,6 @@
           "user": {
             "description": "User Id",
             "type": "string"
-          }
-        }
-      },
-      "DataEditWebhook": {
-        "description": "New webhook information",
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Webhook name",
-            "type": "string",
-            "maxLength": 32,
-            "minLength": 1,
-            "nullable": true
-          },
-          "avatar": {
-            "description": "Avatar ID",
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "nullable": true
-          },
-          "permissions": {
-            "description": "Webhook permissions",
-            "type": "integer",
-            "format": "uint64",
-            "minimum": 0.0,
-            "nullable": true
-          },
-          "remove": {
-            "description": "Fields to remove from webhook",
-            "default": [],
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FieldsWebhook"
-            }
-          }
-        }
-      },
-      "FieldsWebhook": {
-        "description": "Optional fields on webhook object",
-        "type": "string",
-        "enum": [
-          "Avatar"
-        ]
-      },
-      "ResponseWebhook": {
-        "description": "Webhook information",
-        "type": "object",
-        "required": [
-          "channel_id",
-          "id",
-          "name",
-          "permissions"
-        ],
-        "properties": {
-          "id": {
-            "description": "Webhook Id",
-            "type": "string"
-          },
-          "name": {
-            "description": "Webhook name",
-            "type": "string"
-          },
-          "avatar": {
-            "description": "Avatar ID",
-            "type": "string",
-            "nullable": true
-          },
-          "channel_id": {
-            "description": "The channel this webhook belongs to",
-            "type": "string"
-          },
-          "permissions": {
-            "description": "The permissions for the webhook",
-            "type": "integer",
-            "format": "uint64",
-            "minimum": 0.0
           }
         }
       }
