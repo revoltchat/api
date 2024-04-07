@@ -2,7 +2,7 @@ name: Build and Publish API
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:
