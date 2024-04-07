@@ -8,10 +8,6 @@ export interface paths {
     /** Fetch the server configuration for this Revolt instance. */
     get: operations["root_root"];
   };
-  "/admin/stats": {
-    /** Fetch various technical statistics. */
-    get: operations["stats_stats"];
-  };
   "/users/@me": {
     /** Retrieve your user information. */
     get: operations["fetch_self_fetch"];
@@ -128,13 +124,13 @@ export interface paths {
   };
   "/channels/{target}/messages": {
     /** Fetch multiple messages. */
-    get: operations["message_query_req"];
+    get: operations["message_query_query"];
     /** Sends a message to the given channel. */
     post: operations["message_send_message_send"];
   };
   "/channels/{target}/search": {
     /** This route searches for messages within the given parameters. */
-    post: operations["message_search_req"];
+    post: operations["message_search_search"];
   };
   "/channels/{target}/messages/{msg}": {
     /** Retrieves a message by its id. */
@@ -432,28 +428,6 @@ export interface paths {
     /** Fetch information about unread state on channels. */
     get: operations["get_unreads_unreads"];
   };
-  "/webhooks/{webhook_id}/{token}": {
-    /** Gets a webhook with a token */
-    get: operations["webhook_fetch_token_webhook_fetch_token"];
-    /** Executes a webhook and sends a message */
-    post: operations["webhook_execute_webhook_execute"];
-    /** Deletes a webhook with a token */
-    delete: operations["webhook_delete_token_webhook_delete_token"];
-    /** Edits a webhook with a token */
-    patch: operations["webhook_edit_token_webhook_edit_token"];
-  };
-  "/webhooks/{webhook_id}": {
-    /** Gets a webhook */
-    get: operations["webhook_fetch_webhook_fetch"];
-    /** Deletes a webhook */
-    delete: operations["webhook_delete_webhook_delete"];
-    /** Edits a webhook */
-    patch: operations["webhook_edit_webhook_edit"];
-  };
-  "/webhooks/{webhook_id}/{token}/github": {
-    /** Executes a webhook specific to github and sends a message containing the relevant info about the event */
-    post: operations["webhook_execute_github_webhook_execute_github"];
-  };
 }
 
 export interface components {
@@ -525,301 +499,14 @@ export interface components {
       timestamp: string;
     };
     /**
-     * @description Permission value on Revolt
-     *
-     * This should be restricted to the lower 52 bits to prevent any potential issues with Javascript. Also leave empty spaces for future permission flags to be added.
-     * @enum {string}
-     */
-    Permission:
-      | "ManageChannel"
-      | "ManageServer"
-      | "ManagePermissions"
-      | "ManageRole"
-      | "ManageCustomisation"
-      | "KickMembers"
-      | "BanMembers"
-      | "TimeoutMembers"
-      | "AssignRoles"
-      | "ChangeNickname"
-      | "ManageNicknames"
-      | "ChangeAvatar"
-      | "RemoveAvatars"
-      | "ViewChannel"
-      | "ReadMessageHistory"
-      | "SendMessage"
-      | "ManageMessages"
-      | "ManageWebhooks"
-      | "InviteOthers"
-      | "SendEmbeds"
-      | "UploadFiles"
-      | "Masquerade"
-      | "React"
-      | "Connect"
-      | "Speak"
-      | "Video"
-      | "MuteMembers"
-      | "DeafenMembers"
-      | "MoveMembers"
-      | "GrantAllSafe"
-      | "GrantAll";
-    /**
-     * @description User permission definitions
-     * @enum {string}
-     */
-    UserPermission: "Access" | "ViewProfile" | "SendMessage" | "Invite";
-    /**
      * Error
-     * @description Possible API Errors
+     * @description Error information
      */
-    Error:
+    Error: (
       | {
           /** @enum {string} */
           type: "LabelMe";
         }
-      | ((
-          | {
-              /** @enum {string} */
-              type: "LabelMe";
-            }
-          | {
-              /** @enum {string} */
-              type: "AlreadyOnboarded";
-            }
-          | {
-              /** @enum {string} */
-              type: "UsernameTaken";
-            }
-          | {
-              /** @enum {string} */
-              type: "InvalidUsername";
-            }
-          | {
-              /** @enum {string} */
-              type: "DiscriminatorChangeRatelimited";
-            }
-          | {
-              /** @enum {string} */
-              type: "UnknownUser";
-            }
-          | {
-              /** @enum {string} */
-              type: "AlreadyFriends";
-            }
-          | {
-              /** @enum {string} */
-              type: "AlreadySentRequest";
-            }
-          | {
-              /** @enum {string} */
-              type: "Blocked";
-            }
-          | {
-              /** @enum {string} */
-              type: "BlockedByOther";
-            }
-          | {
-              /** @enum {string} */
-              type: "NotFriends";
-            }
-          | {
-              /** @enum {string} */
-              type: "UnknownChannel";
-            }
-          | {
-              /** @enum {string} */
-              type: "UnknownAttachment";
-            }
-          | {
-              /** @enum {string} */
-              type: "UnknownMessage";
-            }
-          | {
-              /** @enum {string} */
-              type: "CannotEditMessage";
-            }
-          | {
-              /** @enum {string} */
-              type: "CannotJoinCall";
-            }
-          | {
-              /** @enum {string} */
-              type: "TooManyAttachments";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "TooManyEmbeds";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "TooManyReplies";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "TooManyChannels";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "EmptyMessage";
-            }
-          | {
-              /** @enum {string} */
-              type: "PayloadTooLarge";
-            }
-          | {
-              /** @enum {string} */
-              type: "CannotRemoveYourself";
-            }
-          | {
-              /** @enum {string} */
-              type: "GroupTooLarge";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "AlreadyInGroup";
-            }
-          | {
-              /** @enum {string} */
-              type: "NotInGroup";
-            }
-          | {
-              /** @enum {string} */
-              type: "UnknownServer";
-            }
-          | {
-              /** @enum {string} */
-              type: "InvalidRole";
-            }
-          | {
-              /** @enum {string} */
-              type: "Banned";
-            }
-          | {
-              /** @enum {string} */
-              type: "TooManyServers";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "TooManyEmoji";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "TooManyRoles";
-              /** Format: uint */
-              max: number;
-            }
-          | {
-              /** @enum {string} */
-              type: "AlreadyInServer";
-            }
-          | {
-              /** @enum {string} */
-              type: "ReachedMaximumBots";
-            }
-          | {
-              /** @enum {string} */
-              type: "IsBot";
-            }
-          | {
-              /** @enum {string} */
-              type: "BotIsPrivate";
-            }
-          | {
-              /** @enum {string} */
-              type: "CannotReportYourself";
-            }
-          | {
-              /** @enum {string} */
-              type: "MissingPermission";
-              permission: string;
-            }
-          | {
-              /** @enum {string} */
-              type: "MissingUserPermission";
-              permission: string;
-            }
-          | {
-              /** @enum {string} */
-              type: "NotElevated";
-            }
-          | {
-              /** @enum {string} */
-              type: "NotPrivileged";
-            }
-          | {
-              /** @enum {string} */
-              type: "CannotGiveMissingPermissions";
-            }
-          | {
-              /** @enum {string} */
-              type: "NotOwner";
-            }
-          | {
-              /** @enum {string} */
-              type: "DatabaseError";
-              operation: string;
-              collection: string;
-            }
-          | {
-              /** @enum {string} */
-              type: "InternalError";
-            }
-          | {
-              /** @enum {string} */
-              type: "InvalidOperation";
-            }
-          | {
-              /** @enum {string} */
-              type: "InvalidCredentials";
-            }
-          | {
-              /** @enum {string} */
-              type: "InvalidProperty";
-            }
-          | {
-              /** @enum {string} */
-              type: "InvalidSession";
-            }
-          | {
-              /** @enum {string} */
-              type: "DuplicateNonce";
-            }
-          | {
-              /** @enum {string} */
-              type: "NotFound";
-            }
-          | {
-              /** @enum {string} */
-              type: "NoEffect";
-            }
-          | {
-              /** @enum {string} */
-              type: "FailedValidation";
-              error: string;
-            }
-          | {
-              /** @enum {string} */
-              type: "VosoUnavailable";
-            }
-        ) & {
-          /** @enum {string} */
-          type: "Core";
-          /** @description Where this error occurred */
-          location: string;
-        })
       | {
           /** @enum {string} */
           type: "AlreadyOnboarded";
@@ -888,6 +575,12 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "TooManyEmbeds";
+          /** Format: uint */
+          max: number;
+        }
+      | {
+          /** @enum {string} */
           type: "TooManyReplies";
           /** Format: uint */
           max: number;
@@ -895,12 +588,6 @@ export interface components {
       | {
           /** @enum {string} */
           type: "TooManyChannels";
-          /** Format: uint */
-          max: number;
-        }
-      | {
-          /** @enum {string} */
-          type: "TooManyEmbeds";
           /** Format: uint */
           max: number;
         }
@@ -962,6 +649,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "AlreadyInServer";
+        }
+      | {
+          /** @enum {string} */
           type: "ReachedMaximumBots";
         }
       | {
@@ -979,12 +670,12 @@ export interface components {
       | {
           /** @enum {string} */
           type: "MissingPermission";
-          permission: components["schemas"]["Permission"];
+          permission: string;
         }
       | {
           /** @enum {string} */
           type: "MissingUserPermission";
-          permission: components["schemas"]["UserPermission"];
+          permission: string;
         }
       | {
           /** @enum {string} */
@@ -1006,7 +697,7 @@ export interface components {
           /** @enum {string} */
           type: "DatabaseError";
           operation: string;
-          with: string;
+          collection: string;
         }
       | {
           /** @enum {string} */
@@ -1034,10 +725,6 @@ export interface components {
         }
       | {
           /** @enum {string} */
-          type: "VosoUnavailable";
-        }
-      | {
-          /** @enum {string} */
           type: "NotFound";
         }
       | {
@@ -1047,98 +734,15 @@ export interface components {
       | {
           /** @enum {string} */
           type: "FailedValidation";
-        };
-    /** @description Server Stats */
-    Stats: {
-      /** @description Index usage information */
-      indices: { [key: string]: components["schemas"]["Index"][] };
-      /** @description Collection stats */
-      coll_stats: { [key: string]: components["schemas"]["CollectionStats"] };
-    };
-    /** @description Collection index */
-    Index: {
-      /** @description Index name */
-      name: string;
-      /** @description Access information */
-      accesses: components["schemas"]["IndexAccess"];
-    };
-    /** @description Index access information */
-    IndexAccess: {
-      /**
-       * Format: int32
-       * @description Operations since timestamp
-       */
-      ops: number;
-      /** @description Timestamp at which data keeping begun */
-      since: components["schemas"]["ISO8601 Timestamp"];
-    };
-    /**
-     * Format: date-time
-     * @description ISO8601 formatted timestamp
-     * @example 1970-01-01T00:00:00Z
-     */
-    "ISO8601 Timestamp": string;
-    /** @description Collection stats */
-    CollectionStats: {
-      /** @description Namespace */
-      ns: string;
-      /** @description Local time */
-      localTime: components["schemas"]["ISO8601 Timestamp"];
-      /** @description Latency stats */
-      latencyStats: { [key: string]: components["schemas"]["LatencyStats"] };
-      /** @description Query exec stats */
-      queryExecStats: components["schemas"]["QueryExecStats"];
-      /**
-       * Format: uint64
-       * @description Number of documents in collection
-       */
-      count: number;
-    };
-    /** @description Collection latency stats */
-    LatencyStats: {
-      /**
-       * Format: int64
-       * @description Total operations
-       */
-      ops: number;
-      /**
-       * Format: int64
-       * @description Timestamp at which data keeping begun
-       */
-      latency: number;
-      /** @description Histogram representation of latency data */
-      histogram: components["schemas"]["LatencyHistogramEntry"][];
-    };
-    /** @description Histogram entry */
-    LatencyHistogramEntry: {
-      /**
-       * Format: int64
-       * @description Time
-       */
-      micros: number;
-      /**
-       * Format: int64
-       * @description Count
-       */
-      count: number;
-    };
-    /** @description Collection query execution stats */
-    QueryExecStats: {
-      /** @description Stats regarding collection scans */
-      collectionScans: components["schemas"]["CollectionScans"];
-    };
-    /** @description Query collection scan stats */
-    CollectionScans: {
-      /**
-       * Format: int64
-       * @description Number of total collection scans
-       */
-      total: number;
-      /**
-       * Format: int64
-       * @description Number of total collection scans not using a tailable cursor
-       */
-      nonTailable: number;
+          error: string;
+        }
+      | {
+          /** @enum {string} */
+          type: "VosoUnavailable";
+        }
+    ) & {
+      /** @description Where this error occurred */
+      location: string;
     };
     /** @description User */
     User: {
@@ -1698,6 +1302,12 @@ export interface components {
           from: string;
           to: string;
         };
+    /**
+     * Format: date-time
+     * @description ISO8601 formatted timestamp
+     * @example 1970-01-01T00:00:00Z
+     */
+    "ISO8601 Timestamp": string;
     /** @description Embed */
     Embed:
       | {
@@ -1944,10 +1554,7 @@ export interface components {
       media?: string | null;
       colour?: string | null;
     };
-    /**
-     * Bulk Message Response
-     * @description Response used when multiple messages are fetched
-     */
+    /** @description Bulk Message Response */
     BulkMessageResponse:
       | components["schemas"]["Message"][]
       | {
@@ -1958,7 +1565,7 @@ export interface components {
           /** @description List of members */
           members?: components["schemas"]["Member"][] | null;
         };
-    /** @description Representation of a member of a server on Revolt */
+    /** @description Server Member */
     Member: {
       /** @description Unique member id */
       _id: components["schemas"]["MemberCompositeKey"];
@@ -1981,13 +1588,14 @@ export interface components {
       user: string;
     };
     /**
-     * Message Sort
-     * @description Sort used for retrieving messages
+     * @description Message Sort
+     *
+     * Sort used for retrieving messages
      * @enum {string}
      */
     MessageSort: "Relevance" | "Latest" | "Oldest";
-    /** Search Parameters */
-    OptionsMessageSearch: {
+    /** @description Options for searching for messages */
+    DataMessageSearch: {
       /**
        * @description Full-text search query
        *
@@ -2888,44 +2496,6 @@ export interface components {
       /** @description User Id */
       user: string;
     };
-    /** @description New webhook information */
-    DataEditWebhook: {
-      /** @description Webhook name */
-      name?: string | null;
-      /** @description Avatar ID */
-      avatar?: string | null;
-      /**
-       * Format: uint64
-       * @description Webhook permissions
-       */
-      permissions?: number | null;
-      /**
-       * @description Fields to remove from webhook
-       * @default
-       */
-      remove?: components["schemas"]["FieldsWebhook"][];
-    };
-    /**
-     * @description Optional fields on webhook object
-     * @enum {string}
-     */
-    FieldsWebhook: "Avatar";
-    /** @description Webhook information */
-    ResponseWebhook: {
-      /** @description Webhook Id */
-      id: string;
-      /** @description Webhook name */
-      name: string;
-      /** @description Avatar ID */
-      avatar?: string | null;
-      /** @description The channel this webhook belongs to */
-      channel_id: string;
-      /**
-       * Format: uint64
-       * @description The permissions for the webhook
-       */
-      permissions: number;
-    };
   };
 }
 
@@ -2936,22 +2506,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["RevoltConfig"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Fetch various technical statistics. */
-  stats_stats: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Stats"];
         };
       };
       /** An error occurred. */
@@ -3560,7 +3114,7 @@ export interface operations {
     };
   };
   /** Fetch multiple messages. */
-  message_query_req: {
+  message_query_query: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3633,7 +3187,7 @@ export interface operations {
     };
   };
   /** This route searches for messages within the given parameters. */
-  message_search_req: {
+  message_search_search: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3654,7 +3208,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["OptionsMessageSearch"];
+        "application/json": components["schemas"]["DataMessageSearch"];
       };
     };
   };
@@ -5204,197 +4758,6 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Error"];
         };
-      };
-    };
-  };
-  /** Gets a webhook with a token */
-  webhook_fetch_token_webhook_fetch_token: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-        token: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Webhook"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Executes a webhook and sends a message */
-  webhook_execute_webhook_execute: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-        token: string;
-      };
-      header: {
-        /** Unique key to prevent duplicate requests */
-        "Idempotency-Key"?: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Message"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataMessageSend"];
-      };
-    };
-  };
-  /** Deletes a webhook with a token */
-  webhook_delete_token_webhook_delete_token: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-        token: string;
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edits a webhook with a token */
-  webhook_edit_token_webhook_edit_token: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-        token: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Webhook"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditWebhook"];
-      };
-    };
-  };
-  /** Gets a webhook */
-  webhook_fetch_webhook_fetch: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["ResponseWebhook"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Deletes a webhook */
-  webhook_delete_webhook_delete: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      /** Success */
-      204: never;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-  };
-  /** Edits a webhook */
-  webhook_edit_webhook_edit: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["Webhook"];
-        };
-      };
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DataEditWebhook"];
-      };
-    };
-  };
-  /** Executes a webhook specific to github and sends a message containing the relevant info about the event */
-  webhook_execute_github_webhook_execute_github: {
-    parameters: {
-      path: {
-        webhook_id: components["schemas"]["Id"];
-        token: string;
-      };
-      header: {
-        /** The name of the github event */
-        "X-Github-Event": unknown;
-      };
-    };
-    responses: {
-      200: unknown;
-      /** An error occurred. */
-      default: {
-        content: {
-          "application/json": components["schemas"]["Error"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/octet-stream": string;
       };
     };
   };

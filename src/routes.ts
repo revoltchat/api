@@ -2,7 +2,6 @@
 import { paths } from './schema';
 export type APIRoutes =
 | { method: 'get', path: `/`, parts: 1, params: undefined, response: paths['/']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/admin/stats`, parts: 2, params: undefined, response: paths['/admin/stats']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/@me`, parts: 2, params: undefined, response: paths['/users/@me']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: `/users/${string}`, parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/users/{target}', parts: 2, params: undefined, response: paths['/users/{target}']['get']['responses']['200']['content']['application/json'] }
@@ -178,20 +177,4 @@ export type APIRoutes =
 | { method: 'post', path: `/push/unsubscribe`, parts: 2, params: undefined, response: undefined }
 | { method: 'post', path: `/sync/settings/fetch`, parts: 3, params: paths['/sync/settings/fetch']['post']['requestBody']['content']['application/json'], response: paths['/sync/settings/fetch']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/sync/settings/set`, parts: 3, params: paths['/sync/settings/set']['post']['parameters']['query']|paths['/sync/settings/set']['post']['requestBody']['content']['application/json'], response: undefined }
-| { method: 'get', path: `/sync/unreads`, parts: 2, params: undefined, response: paths['/sync/unreads']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/webhooks/${string}/${string}`, parts: 3, params: undefined, response: paths['/webhooks/{webhook_id}/{token}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: '-/webhooks/{webhook_id}/{token}', parts: 3, params: undefined, response: paths['/webhooks/{webhook_id}/{token}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'post', path: `/webhooks/${string}/${string}`, parts: 3, params: paths['/webhooks/{webhook_id}/{token}']['post']['requestBody']['content']['application/json'], response: paths['/webhooks/{webhook_id}/{token}']['post']['responses']['200']['content']['application/json'] }
-| { method: 'post', path: '-/webhooks/{webhook_id}/{token}', parts: 3, params: paths['/webhooks/{webhook_id}/{token}']['post']['requestBody']['content']['application/json'], response: paths['/webhooks/{webhook_id}/{token}']['post']['responses']['200']['content']['application/json'] }
-| { method: 'delete', path: `/webhooks/${string}/${string}`, parts: 3, params: undefined, response: undefined }
-| { method: 'delete', path: '-/webhooks/{webhook_id}/{token}', parts: 3, params: undefined, response: undefined }
-| { method: 'patch', path: `/webhooks/${string}/${string}`, parts: 3, params: paths['/webhooks/{webhook_id}/{token}']['patch']['requestBody']['content']['application/json'], response: paths['/webhooks/{webhook_id}/{token}']['patch']['responses']['200']['content']['application/json'] }
-| { method: 'patch', path: '-/webhooks/{webhook_id}/{token}', parts: 3, params: paths['/webhooks/{webhook_id}/{token}']['patch']['requestBody']['content']['application/json'], response: paths['/webhooks/{webhook_id}/{token}']['patch']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: `/webhooks/${string}`, parts: 2, params: undefined, response: paths['/webhooks/{webhook_id}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'get', path: '-/webhooks/{webhook_id}', parts: 2, params: undefined, response: paths['/webhooks/{webhook_id}']['get']['responses']['200']['content']['application/json'] }
-| { method: 'delete', path: `/webhooks/${string}`, parts: 2, params: undefined, response: undefined }
-| { method: 'delete', path: '-/webhooks/{webhook_id}', parts: 2, params: undefined, response: undefined }
-| { method: 'patch', path: `/webhooks/${string}`, parts: 2, params: paths['/webhooks/{webhook_id}']['patch']['requestBody']['content']['application/json'], response: paths['/webhooks/{webhook_id}']['patch']['responses']['200']['content']['application/json'] }
-| { method: 'patch', path: '-/webhooks/{webhook_id}', parts: 2, params: paths['/webhooks/{webhook_id}']['patch']['requestBody']['content']['application/json'], response: paths['/webhooks/{webhook_id}']['patch']['responses']['200']['content']['application/json'] }
-| { method: 'post', path: `/webhooks/${string}/${string}/github`, parts: 4, params: undefined, response: undefined }
-| { method: 'post', path: '-/webhooks/{webhook_id}/{token}/github', parts: 4, params: undefined, response: undefined };
+| { method: 'get', path: `/sync/unreads`, parts: 2, params: undefined, response: paths['/sync/unreads']['get']['responses']['200']['content']['application/json'] };
