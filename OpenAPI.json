@@ -101,7 +101,7 @@
         ],
         "summary": "Fetch Self",
         "description": "Retrieve your user information.",
-        "operationId": "fetch_self_req",
+        "operationId": "fetch_self_fetch",
         "responses": {
           "default": {
             "description": "An error occurred.",
@@ -138,7 +138,7 @@
         ],
         "summary": "Fetch User",
         "description": "Retrieve a user's information.",
-        "operationId": "fetch_user_req",
+        "operationId": "fetch_user_fetch",
         "parameters": [
           {
             "name": "target",
@@ -183,7 +183,7 @@
         ],
         "summary": "Edit User",
         "description": "Edit currently authenticated user.",
-        "operationId": "edit_user_req",
+        "operationId": "edit_user_edit",
         "parameters": [
           {
             "name": "target",
@@ -282,7 +282,7 @@
         ],
         "summary": "Change Username",
         "description": "Change your username.",
-        "operationId": "change_username_req",
+        "operationId": "change_username_change_username",
         "requestBody": {
           "content": {
             "application/json": {
@@ -332,7 +332,7 @@
         ],
         "summary": "Fetch Default Avatar",
         "description": "This returns a default avatar based on the given id.",
-        "operationId": "get_default_avatar_req",
+        "operationId": "get_default_avatar_default_avatar",
         "parameters": [
           {
             "name": "target",
@@ -365,7 +365,7 @@
         ],
         "summary": "Fetch User Profile",
         "description": "Retrieve a user's profile data.\n\nWill fail if you do not have permission to access the other user's profile.",
-        "operationId": "fetch_profile_req",
+        "operationId": "fetch_profile_profile",
         "parameters": [
           {
             "name": "target",
@@ -412,7 +412,7 @@
         ],
         "summary": "Fetch Direct Message Channels",
         "description": "This fetches your direct messages, including any DM and group DM conversations.",
-        "operationId": "fetch_dms_req",
+        "operationId": "fetch_dms_direct_messages",
         "responses": {
           "default": {
             "description": "An error occurred.",
@@ -452,7 +452,7 @@
         ],
         "summary": "Open Direct Message",
         "description": "Open a DM with another user.\n\nIf the target is oneself, a saved messages channel is returned.",
-        "operationId": "open_dm_req",
+        "operationId": "open_dm_open_dm",
         "parameters": [
           {
             "name": "target",
@@ -499,7 +499,7 @@
         ],
         "summary": "Fetch Mutual Friends And Servers",
         "description": "Retrieve a list of mutual friends and servers with another user.",
-        "operationId": "find_mutual_req",
+        "operationId": "find_mutual_mutual",
         "parameters": [
           {
             "name": "target",
@@ -546,7 +546,7 @@
         ],
         "summary": "Accept Friend Request",
         "description": "Accept another user's friend request.",
-        "operationId": "add_friend_req",
+        "operationId": "add_friend_add",
         "parameters": [
           {
             "name": "target",
@@ -591,14 +591,14 @@
         ],
         "summary": "Deny Friend Request / Remove Friend",
         "description": "Denies another user's friend request or removes an existing friend.",
-        "operationId": "remove_friend_req",
+        "operationId": "remove_friend_remove",
         "parameters": [
           {
             "name": "target",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           }
         ],
@@ -638,14 +638,14 @@
         ],
         "summary": "Block User",
         "description": "Block another user by their id.",
-        "operationId": "block_user_req",
+        "operationId": "block_user_block",
         "parameters": [
           {
             "name": "target",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           }
         ],
@@ -683,14 +683,14 @@
         ],
         "summary": "Unblock User",
         "description": "Unblock another user by their id.",
-        "operationId": "unblock_user_req",
+        "operationId": "unblock_user_unblock",
         "parameters": [
           {
             "name": "target",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/Id"
             }
           }
         ],
@@ -730,7 +730,7 @@
         ],
         "summary": "Send Friend Request",
         "description": "Send a friend request to another user.",
-        "operationId": "send_friend_request_req",
+        "operationId": "send_friend_request_send_friend_request",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1098,7 +1098,7 @@
         ],
         "summary": "Acknowledge Message",
         "description": "Lets the server and all other clients know that we've seen this message id in this channel.",
-        "operationId": "channel_ack_req",
+        "operationId": "channel_ack_ack",
         "parameters": [
           {
             "name": "target",
@@ -1146,7 +1146,7 @@
         ],
         "summary": "Fetch Channel",
         "description": "Fetch channel by its id.",
-        "operationId": "channel_fetch_fetch_channel",
+        "operationId": "channel_fetch_fetch",
         "parameters": [
           {
             "name": "target",
@@ -1191,7 +1191,7 @@
         ],
         "summary": "Close Channel",
         "description": "Deletes a server channel, leaves a group or closes a group.",
-        "operationId": "channel_delete_req",
+        "operationId": "channel_delete_delete",
         "parameters": [
           {
             "name": "target",
@@ -1239,7 +1239,7 @@
         ],
         "summary": "Edit Channel",
         "description": "Edit a channel object by its id.",
-        "operationId": "channel_edit_req",
+        "operationId": "channel_edit_edit",
         "parameters": [
           {
             "name": "target",
@@ -1295,8 +1295,8 @@
           "Groups"
         ],
         "summary": "Fetch Group Members",
-        "description": "Retrieves all users who are part of this group.",
-        "operationId": "members_fetch_req",
+        "description": "Retrieves all users who are part of this group.\n\nThis may not return full user information if users are not friends but have mutual connections.",
+        "operationId": "members_fetch_fetch_members",
         "parameters": [
           {
             "name": "target",
@@ -1346,7 +1346,7 @@
         ],
         "summary": "Create Invite",
         "description": "Creates an invite to this channel.\n\nChannel must be a `TextChannel`.",
-        "operationId": "invite_create_req",
+        "operationId": "invite_create_create_invite",
         "parameters": [
           {
             "name": "target",
@@ -1629,7 +1629,7 @@
         ],
         "summary": "Fetch Message",
         "description": "Retrieves a message by its id.",
-        "operationId": "message_fetch_req",
+        "operationId": "message_fetch_fetch",
         "parameters": [
           {
             "name": "target",
@@ -1682,7 +1682,7 @@
         ],
         "summary": "Delete Message",
         "description": "Delete a message you've sent or one you have permission to delete.",
-        "operationId": "message_delete_req",
+        "operationId": "message_delete_delete",
         "parameters": [
           {
             "name": "target",
@@ -1728,7 +1728,7 @@
         ],
         "summary": "Edit Message",
         "description": "Edits a message that you've previously sent.",
-        "operationId": "message_edit_req",
+        "operationId": "message_edit_edit",
         "parameters": [
           {
             "name": "target",
@@ -1793,7 +1793,7 @@
         ],
         "summary": "Bulk Delete Messages",
         "description": "Delete multiple messages you've sent or one you have permission to delete.\n\nThis will always require `ManageMessages` permission regardless of whether you own the message or not.\n\nMessages must have been sent within the past 1 week.",
-        "operationId": "message_bulk_delete_req",
+        "operationId": "message_bulk_delete_bulk_delete_messages",
         "parameters": [
           {
             "name": "target",
@@ -1890,7 +1890,7 @@
         ],
         "summary": "Add Member to Group",
         "description": "Adds another user to the group.",
-        "operationId": "group_add_member_req",
+        "operationId": "group_add_member_add_member",
         "parameters": [
           {
             "name": "group_id",
@@ -1938,7 +1938,7 @@
         ],
         "summary": "Remove Member from Group",
         "description": "Removes a user from the group.",
-        "operationId": "group_remove_member_req",
+        "operationId": "group_remove_member_remove_member",
         "parameters": [
           {
             "name": "target",
@@ -1986,7 +1986,7 @@
         ],
         "summary": "Join Call",
         "description": "Asks the voice server for a token to join the call.",
-        "operationId": "voice_join_req",
+        "operationId": "voice_join_call",
         "parameters": [
           {
             "name": "target",
@@ -2013,7 +2013,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateVoiceUserResponse"
+                  "$ref": "#/components/schemas/LegacyCreateVoiceUserResponse"
                 }
               }
             }
@@ -2033,7 +2033,7 @@
         ],
         "summary": "Set Role Permission",
         "description": "Sets permissions for the specified role in this channel.\n\nChannel must be a `TextChannel` or `VoiceChannel`.",
-        "operationId": "permissions_set_req",
+        "operationId": "permissions_set_set_role_permissions",
         "parameters": [
           {
             "name": "target",
@@ -2056,7 +2056,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Data"
+                "$ref": "#/components/schemas/DataSetRolePermissions"
               }
             }
           },
@@ -2098,7 +2098,7 @@
         ],
         "summary": "Set Default Permission",
         "description": "Sets permissions for the default role in this channel.\n\nChannel must be a `Group`, `TextChannel` or `VoiceChannel`.",
-        "operationId": "permissions_set_default_req",
+        "operationId": "permissions_set_default_set_default_permissions",
         "parameters": [
           {
             "name": "target",
@@ -2333,7 +2333,7 @@
         ],
         "summary": "Creates a webhook",
         "description": "Creates a webhook which 3rd party platforms can use to send messages",
-        "operationId": "webhook_create_req",
+        "operationId": "webhook_create_create_webhook",
         "parameters": [
           {
             "name": "target",
@@ -2390,7 +2390,7 @@
         ],
         "summary": "Gets all webhooks",
         "description": "Gets all webhooks inside the channel",
-        "operationId": "webhook_fetch_all_req",
+        "operationId": "webhook_fetch_all_fetch_webhooks",
         "parameters": [
           {
             "name": "channel_id",
@@ -2487,7 +2487,7 @@
         ],
         "summary": "Fetch Server",
         "description": "Fetch a server by its id.",
-        "operationId": "server_fetch_req",
+        "operationId": "server_fetch_fetch",
         "parameters": [
           {
             "name": "target",
@@ -2542,7 +2542,7 @@
         ],
         "summary": "Delete / Leave Server",
         "description": "Deletes a server if owner otherwise leaves.",
-        "operationId": "server_delete_req",
+        "operationId": "server_delete_delete",
         "parameters": [
           {
             "name": "target",
@@ -2590,7 +2590,7 @@
         ],
         "summary": "Edit Server",
         "description": "Edit a server by its id.",
-        "operationId": "server_edit_req",
+        "operationId": "server_edit_edit",
         "parameters": [
           {
             "name": "target",
@@ -2647,7 +2647,7 @@
         ],
         "summary": "Mark Server As Read",
         "description": "Mark all channels in a server as read.",
-        "operationId": "server_ack_req",
+        "operationId": "server_ack_ack",
         "parameters": [
           {
             "name": "target",
@@ -2744,7 +2744,7 @@
         ],
         "summary": "Fetch Members",
         "description": "Fetch all server members.",
-        "operationId": "member_fetch_all_req",
+        "operationId": "member_fetch_all_fetch_all",
         "parameters": [
           {
             "name": "target",
@@ -2801,7 +2801,7 @@
         ],
         "summary": "Fetch Member",
         "description": "Retrieve a member.",
-        "operationId": "member_fetch_req",
+        "operationId": "member_fetch_fetch",
         "parameters": [
           {
             "name": "target",
@@ -2862,7 +2862,7 @@
         ],
         "summary": "Kick Member",
         "description": "Removes a member from the server.",
-        "operationId": "member_remove_req",
+        "operationId": "member_remove_kick",
         "parameters": [
           {
             "name": "target",
@@ -2910,7 +2910,7 @@
         ],
         "summary": "Edit Member",
         "description": "Edit a member by their id.",
-        "operationId": "member_edit_req",
+        "operationId": "member_edit_edit",
         "parameters": [
           {
             "name": "server",
@@ -3042,7 +3042,7 @@
         ],
         "summary": "Ban User",
         "description": "Ban a user by their id.",
-        "operationId": "ban_create_req",
+        "operationId": "ban_create_ban",
         "parameters": [
           {
             "name": "server",
@@ -3105,7 +3105,7 @@
         ],
         "summary": "Unban user",
         "description": "Remove a user's ban.",
-        "operationId": "ban_remove_req",
+        "operationId": "ban_remove_unban",
         "parameters": [
           {
             "name": "server",
@@ -3153,7 +3153,7 @@
         ],
         "summary": "Fetch Bans",
         "description": "Fetch all bans on a server.",
-        "operationId": "ban_list_req",
+        "operationId": "ban_list_list",
         "parameters": [
           {
             "name": "target",
@@ -3200,7 +3200,7 @@
         ],
         "summary": "Fetch Invites",
         "description": "Fetch all server invites.",
-        "operationId": "invites_fetch_req",
+        "operationId": "invites_fetch_invites",
         "parameters": [
           {
             "name": "target",
@@ -3250,7 +3250,7 @@
         ],
         "summary": "Create Role",
         "description": "Creates a new server role.",
-        "operationId": "roles_create_req",
+        "operationId": "roles_create_create",
         "parameters": [
           {
             "name": "target",
@@ -3307,7 +3307,7 @@
         ],
         "summary": "Fetch Role",
         "description": "Fetch a role by its id.",
-        "operationId": "roles_fetch_req",
+        "operationId": "roles_fetch_fetch",
         "parameters": [
           {
             "name": "target",
@@ -3355,7 +3355,7 @@
         ],
         "summary": "Delete Role",
         "description": "Delete a server role by its id.",
-        "operationId": "roles_delete_req",
+        "operationId": "roles_delete_delete",
         "parameters": [
           {
             "name": "target",
@@ -3401,7 +3401,7 @@
         ],
         "summary": "Edit Role",
         "description": "Edit a role by its id.",
-        "operationId": "roles_edit_req",
+        "operationId": "roles_edit_edit",
         "parameters": [
           {
             "name": "target",
@@ -3466,7 +3466,7 @@
         ],
         "summary": "Set Role Permission",
         "description": "Sets permissions for the specified role in the server.",
-        "operationId": "permissions_set_req",
+        "operationId": "permissions_set_set_role_permission",
         "parameters": [
           {
             "name": "target",
@@ -3531,7 +3531,7 @@
         ],
         "summary": "Set Default Permission",
         "description": "Sets permissions for the default role in this server.",
-        "operationId": "permissions_set_default_req",
+        "operationId": "permissions_set_default_set_default_permissions",
         "parameters": [
           {
             "name": "target",
@@ -3638,7 +3638,7 @@
         ],
         "summary": "Fetch Invite",
         "description": "Fetch an invite by its id.",
-        "operationId": "invite_fetch_req",
+        "operationId": "invite_fetch_fetch",
         "parameters": [
           {
             "name": "target",
@@ -3677,8 +3677,8 @@
           "Invites"
         ],
         "summary": "Join Invite",
-        "description": "Join an invite by its ID.",
-        "operationId": "invite_join_req",
+        "description": "Join an invite by its ID",
+        "operationId": "invite_join_join",
         "parameters": [
           {
             "name": "target",
@@ -3723,7 +3723,7 @@
         ],
         "summary": "Delete Invite",
         "description": "Delete an invite by its id.",
-        "operationId": "invite_delete_req",
+        "operationId": "invite_delete_delete",
         "parameters": [
           {
             "name": "target",
@@ -4894,7 +4894,7 @@
         ],
         "summary": "Check Onboarding Status",
         "description": "This will tell you whether the current account requires onboarding or whether you can continue to send requests as usual. You may skip calling this if you're restoring an existing session.",
-        "operationId": "hello_req",
+        "operationId": "hello_hello",
         "responses": {
           "200": {
             "description": "",
@@ -4924,7 +4924,7 @@
         ],
         "summary": "Complete Onboarding",
         "description": "This sets a new username, completes onboarding and allows a user to start using Revolt.",
-        "operationId": "complete_req",
+        "operationId": "complete_complete",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4974,7 +4974,7 @@
         ],
         "summary": "Push Subscribe",
         "description": "Create a new Web Push subscription.\n\nIf an existing subscription exists on this session, it will be removed.",
-        "operationId": "subscribe_req",
+        "operationId": "subscribe_subscribe",
         "requestBody": {
           "content": {
             "application/json": {
@@ -5014,7 +5014,7 @@
         ],
         "summary": "Unsubscribe",
         "description": "Remove the Web Push subscription associated with the current session.",
-        "operationId": "unsubscribe_req",
+        "operationId": "unsubscribe_unsubscribe",
         "responses": {
           "default": {
             "description": "An error occurred.",
@@ -5044,7 +5044,7 @@
         ],
         "summary": "Fetch Settings",
         "description": "Fetch settings from server filtered by keys.\n\nThis will return an object with the requested keys, each value is a tuple of `(timestamp, value)`, the value is the previously uploaded data.",
-        "operationId": "get_settings_req",
+        "operationId": "get_settings_fetch",
         "requestBody": {
           "content": {
             "application/json": {
@@ -5105,7 +5105,7 @@
         ],
         "summary": "Set Settings",
         "description": "Upload data to save to settings.",
-        "operationId": "set_settings_req",
+        "operationId": "set_settings_set",
         "parameters": [
           {
             "name": "timestamp",
@@ -5161,7 +5161,7 @@
         ],
         "summary": "Fetch Unreads",
         "description": "Fetch information about unread state on channels.",
-        "operationId": "get_unreads_req",
+        "operationId": "get_unreads_unreads",
         "responses": {
           "default": {
             "description": "An error occurred.",
@@ -7725,11 +7725,13 @@
         }
       },
       "User": {
-        "description": "Representiation of a User on Revolt.",
+        "description": "User",
         "type": "object",
         "required": [
           "_id",
           "discriminator",
+          "online",
+          "relationship",
           "username"
         ],
         "properties": {
@@ -7764,14 +7766,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Relationship"
-            },
-            "nullable": true
+            }
           },
           "badges": {
             "description": "Bitfield of user badges",
             "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "format": "uint32",
+            "minimum": 0.0
           },
           "status": {
             "description": "User's current status",
@@ -7794,8 +7795,8 @@
           "flags": {
             "description": "Enum of user flags",
             "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "format": "uint32",
+            "minimum": 0.0
           },
           "privileged": {
             "description": "Whether this user is privileged",
@@ -7816,18 +7817,16 @@
               {
                 "$ref": "#/components/schemas/RelationshipStatus"
               }
-            ],
-            "nullable": true
+            ]
           },
           "online": {
             "description": "Whether this user is currently online",
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           }
         }
       },
       "File": {
-        "description": "Representation of a File on Revolt Generated by Autumn",
+        "description": "File",
         "type": "object",
         "required": [
           "_id",
@@ -7897,7 +7896,7 @@
         }
       },
       "Metadata": {
-        "description": "Metadata associated with file",
+        "description": "Metadata associated with a file",
         "oneOf": [
           {
             "description": "File is just a generic uncategorised file",
@@ -7946,11 +7945,13 @@
               },
               "width": {
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               },
               "height": {
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               }
             }
           },
@@ -7971,11 +7972,13 @@
               },
               "width": {
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               },
               "height": {
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               }
             }
           },
@@ -8005,10 +8008,16 @@
         ],
         "properties": {
           "_id": {
+            "description": "Other user's Id",
             "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/RelationshipStatus"
+            "description": "Relationship status with them",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RelationshipStatus"
+              }
+            ]
           }
         }
       },
@@ -8033,7 +8042,7 @@
             "description": "Custom status text",
             "type": "string",
             "maxLength": 128,
-            "minLength": 1,
+            "minLength": 0,
             "nullable": true
           },
           "presence": {
@@ -8065,6 +8074,8 @@
           "content": {
             "description": "Text content on user's profile",
             "type": "string",
+            "maxLength": 2000,
+            "minLength": 0,
             "nullable": true
           },
           "background": {
@@ -8095,7 +8106,7 @@
         "type": "string"
       },
       "FlagResponse": {
-        "title": "Flag Response",
+        "description": "User flag reponse",
         "type": "object",
         "required": [
           "flags"
@@ -8109,7 +8120,7 @@
         }
       },
       "DataEditUser": {
-        "title": "User Data",
+        "description": "New user information",
         "type": "object",
         "properties": {
           "display_name": {
@@ -8140,7 +8151,7 @@
             "description": "New user profile data\n\nThis is applied as a partial.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/UserProfileData"
+                "$ref": "#/components/schemas/DataUserProfile"
               }
             ],
             "nullable": true
@@ -8168,8 +8179,8 @@
           }
         }
       },
-      "UserProfileData": {
-        "title": "Profile Data",
+      "DataUserProfile": {
+        "description": "New user profile data",
         "type": "object",
         "properties": {
           "content": {
@@ -8196,8 +8207,7 @@
           "StatusText",
           "StatusPresence",
           "ProfileContent",
-          "ProfileBackground",
-          "DisplayName"
+          "ProfileBackground"
         ]
       },
       "DataChangeUsername": {
@@ -8224,7 +8234,7 @@
         }
       },
       "Channel": {
-        "description": "Representation of a channel on Revolt",
+        "description": "Channel",
         "oneOf": [
           {
             "description": "Personal \"Saved Notes\" channel which allows users to save messages",
@@ -8512,7 +8522,7 @@
         }
       },
       "MutualResponse": {
-        "title": "Mutual Friends and Servers Response",
+        "description": "Mutual friends and servers response",
         "type": "object",
         "required": [
           "servers",
@@ -8536,7 +8546,7 @@
         }
       },
       "DataSendFriendRequest": {
-        "title": "User Lookup Information",
+        "description": "User lookup information",
         "type": "object",
         "required": [
           "username"
@@ -8774,7 +8784,7 @@
         ]
       },
       "DataEditChannel": {
-        "title": "Channel Details",
+        "description": "New webhook information",
         "type": "object",
         "properties": {
           "name": {
@@ -8814,11 +8824,12 @@
             "nullable": true
           },
           "remove": {
+            "description": "Fields to remove from channel",
+            "default": null,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FieldsChannel"
             },
-            "minItems": 1,
             "nullable": true
           }
         }
@@ -8833,72 +8844,76 @@
         ]
       },
       "Invite": {
-        "description": "Representation of an invite to a channel on Revolt",
+        "description": "Invite",
         "oneOf": [
           {
             "description": "Invite to a specific server channel",
             "type": "object",
             "required": [
-              "_id",
-              "channel",
-              "creator",
-              "server",
-              "type"
+              "Server"
             ],
             "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "Server"
-                ]
-              },
-              "_id": {
-                "description": "Invite code",
-                "type": "string"
-              },
-              "server": {
-                "description": "Id of the server this invite points to",
-                "type": "string"
-              },
-              "creator": {
-                "description": "Id of user who created this invite",
-                "type": "string"
-              },
-              "channel": {
-                "description": "Id of the server channel this invite points to",
-                "type": "string"
+              "Server": {
+                "type": "object",
+                "required": [
+                  "_id",
+                  "channel",
+                  "creator",
+                  "server"
+                ],
+                "properties": {
+                  "_id": {
+                    "description": "Invite code",
+                    "type": "string"
+                  },
+                  "server": {
+                    "description": "Id of the server this invite points to",
+                    "type": "string"
+                  },
+                  "creator": {
+                    "description": "Id of user who created this invite",
+                    "type": "string"
+                  },
+                  "channel": {
+                    "description": "Id of the server channel this invite points to",
+                    "type": "string"
+                  }
+                }
               }
-            }
+            },
+            "additionalProperties": false
           },
           {
             "description": "Invite to a group channel",
             "type": "object",
             "required": [
-              "_id",
-              "channel",
-              "creator",
-              "type"
+              "Group"
             ],
             "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "Group"
-                ]
-              },
-              "_id": {
-                "description": "Invite code",
-                "type": "string"
-              },
-              "creator": {
-                "description": "Id of user who created this invite",
-                "type": "string"
-              },
-              "channel": {
-                "description": "Id of the group channel this invite points to",
-                "type": "string"
+              "Group": {
+                "type": "object",
+                "required": [
+                  "_id",
+                  "channel",
+                  "creator"
+                ],
+                "properties": {
+                  "_id": {
+                    "description": "Invite code",
+                    "type": "string"
+                  },
+                  "creator": {
+                    "description": "Id of user who created this invite",
+                    "type": "string"
+                  },
+                  "channel": {
+                    "description": "Id of the group channel this invite points to",
+                    "type": "string"
+                  }
+                }
               }
-            }
+            },
+            "additionalProperties": false
           }
         ]
       },
@@ -10097,7 +10112,7 @@
         }
       },
       "DataEditMessage": {
-        "title": "Message Details",
+        "description": "Changes to make to message",
         "type": "object",
         "properties": {
           "content": {
@@ -10120,7 +10135,7 @@
         }
       },
       "OptionsBulkDelete": {
-        "title": "Search Parameters",
+        "description": "Options for bulk deleting messages",
         "type": "object",
         "required": [
           "ids"
@@ -10182,8 +10197,8 @@
           }
         }
       },
-      "CreateVoiceUserResponse": {
-        "title": "Voice Server Token Response",
+      "LegacyCreateVoiceUserResponse": {
+        "description": "Voice server token response",
         "type": "object",
         "required": [
           "token"
@@ -10195,8 +10210,8 @@
           }
         }
       },
-      "Data": {
-        "title": "Permission Value",
+      "DataSetRolePermissions": {
+        "description": "New role permissions",
         "type": "object",
         "required": [
           "permissions"
@@ -10235,7 +10250,7 @@
         }
       },
       "DataDefaultChannelPermissions": {
-        "title": "Permission Value",
+        "description": "New default permissions",
         "anyOf": [
           {
             "type": "object",
@@ -10471,11 +10486,15 @@
         "properties": {
           "id": {
             "description": "Unique ID for this category",
-            "type": "string"
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1
           },
           "title": {
             "description": "Title for this category",
-            "type": "string"
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1
           },
           "channels": {
             "description": "Channels in this category",
@@ -10577,13 +10596,13 @@
         }
       },
       "FetchServerResponse": {
-        "title": "Fetch server route response",
+        "description": "Fetch server information",
         "anyOf": [
           {
             "$ref": "#/components/schemas/Server"
           },
           {
-            "description": "Representation of a server on Revolt",
+            "description": "Server",
             "type": "object",
             "required": [
               "_id",
@@ -10667,8 +10686,8 @@
               "flags": {
                 "description": "Bitfield of server flags",
                 "type": "integer",
-                "format": "int32",
-                "nullable": true
+                "format": "uint32",
+                "minimum": 0.0
               },
               "nsfw": {
                 "description": "Whether this server is flagged as not safe for work",
@@ -10687,7 +10706,7 @@
         ]
       },
       "DataEditServer": {
-        "title": "Server Data",
+        "description": "New server information",
         "type": "object",
         "properties": {
           "name": {
@@ -10814,8 +10833,7 @@
         ]
       },
       "AllMemberResponse": {
-        "title": "Member List",
-        "description": "Both lists are sorted by ID.",
+        "description": "Response with all members",
         "type": "object",
         "required": [
           "members",
@@ -10839,36 +10857,33 @@
         }
       },
       "MemberResponse": {
+        "description": "Member response",
         "anyOf": [
           {
             "$ref": "#/components/schemas/Member"
           },
           {
-            "$ref": "#/components/schemas/MemberWithRoles"
+            "type": "object",
+            "required": [
+              "member",
+              "roles"
+            ],
+            "properties": {
+              "member": {
+                "$ref": "#/components/schemas/Member"
+              },
+              "roles": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/Role"
+                }
+              }
+            }
           }
         ]
       },
-      "MemberWithRoles": {
-        "description": "Representation of a member of a server on Revolt With Role Data",
-        "type": "object",
-        "required": [
-          "member",
-          "roles"
-        ],
-        "properties": {
-          "member": {
-            "$ref": "#/components/schemas/Member"
-          },
-          "roles": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/Role"
-            }
-          }
-        }
-      },
       "DataMemberEdit": {
-        "title": "Member Data",
+        "description": "New member information",
         "type": "object",
         "properties": {
           "nickname": {
@@ -10946,7 +10961,7 @@
         }
       },
       "ServerBan": {
-        "description": "Representation of a server ban on Revolt",
+        "description": "Server Ban",
         "type": "object",
         "required": [
           "_id"
@@ -10968,20 +10983,20 @@
         }
       },
       "DataBanCreate": {
-        "title": "Ban Information",
+        "description": "Information for new server ban",
         "type": "object",
         "properties": {
           "reason": {
             "description": "Ban reason",
             "type": "string",
             "maxLength": 1024,
-            "minLength": 1,
+            "minLength": 0,
             "nullable": true
           }
         }
       },
       "BanListResult": {
-        "title": "Ban List Result",
+        "description": "Ban list result",
         "type": "object",
         "required": [
           "bans",
@@ -11005,8 +11020,7 @@
         }
       },
       "BannedUser": {
-        "title": "Banned User",
-        "description": "Just enoguh user information to list bans.",
+        "description": "Just enough information to list a ban",
         "type": "object",
         "required": [
           "_id",
@@ -11038,7 +11052,7 @@
         }
       },
       "NewRoleResponse": {
-        "title": "New Role Response",
+        "description": "Response after creating new role",
         "type": "object",
         "required": [
           "id",
@@ -11060,7 +11074,7 @@
         }
       },
       "DataCreateRole": {
-        "title": "Role Data",
+        "description": "Information about new role to create",
         "type": "object",
         "required": [
           "name"
@@ -11081,7 +11095,7 @@
         }
       },
       "DataEditRole": {
-        "title": "Role Data",
+        "description": "New role information",
         "type": "object",
         "properties": {
           "name": {
@@ -11129,7 +11143,7 @@
         ]
       },
       "DataSetServerRolePermission": {
-        "title": "Permission Value",
+        "description": "New role permissions",
         "type": "object",
         "required": [
           "permissions"
@@ -11160,7 +11174,7 @@
         }
       },
       "Emoji": {
-        "description": "Representation of an Emoji on Revolt",
+        "description": "Emoji",
         "type": "object",
         "required": [
           "_id",
@@ -11200,7 +11214,7 @@
         }
       },
       "EmojiParent": {
-        "description": "Information about what owns this emoji",
+        "description": "Parent Id of the emoji",
         "oneOf": [
           {
             "type": "object",
@@ -11237,7 +11251,7 @@
         ]
       },
       "InviteResponse": {
-        "title": "Invite",
+        "description": "Public invite response",
         "oneOf": [
           {
             "description": "Server channel invite",
@@ -11380,7 +11394,7 @@
         ]
       },
       "InviteJoinResponse": {
-        "title": "Join Response",
+        "description": "Invite join response",
         "oneOf": [
           {
             "type": "object",
@@ -11410,6 +11424,37 @@
                     "$ref": "#/components/schemas/Server"
                   }
                 ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "channel",
+              "type",
+              "users"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Group"
+                ]
+              },
+              "channel": {
+                "description": "Group channel we are joining",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Channel"
+                  }
+                ]
+              },
+              "users": {
+                "description": "Members of this group",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
               }
             }
           }
@@ -12448,7 +12493,7 @@
         }
       },
       "OptionsFetchSettings": {
-        "title": "Fetch Options",
+        "description": "Options for fetching settings",
         "type": "object",
         "required": [
           "keys"
@@ -12464,7 +12509,7 @@
         }
       },
       "ChannelUnread": {
-        "description": "Representation of the state of a channel from the perspective of a user",
+        "description": "Channel Unread",
         "type": "object",
         "required": [
           "_id"
@@ -12488,8 +12533,7 @@
             "type": "array",
             "items": {
               "type": "string"
-            },
-            "nullable": true
+            }
           }
         }
       },
