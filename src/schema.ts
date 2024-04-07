@@ -14,13 +14,13 @@ export interface paths {
   };
   "/users/@me": {
     /** Retrieve your user information. */
-    get: operations["fetch_self_req"];
+    get: operations["fetch_self_fetch"];
   };
   "/users/{target}": {
     /** Retrieve a user's information. */
-    get: operations["fetch_user_req"];
+    get: operations["fetch_user_fetch"];
     /** Edit currently authenticated user. */
-    patch: operations["edit_user_req"];
+    patch: operations["edit_user_edit"];
   };
   "/users/{target}/flags": {
     /** Retrieve a user's flags. */
@@ -28,11 +28,11 @@ export interface paths {
   };
   "/users/@me/username": {
     /** Change your username. */
-    patch: operations["change_username_req"];
+    patch: operations["change_username_change_username"];
   };
   "/users/{target}/default_avatar": {
     /** This returns a default avatar based on the given id. */
-    get: operations["get_default_avatar_req"];
+    get: operations["get_default_avatar_default_avatar"];
   };
   "/users/{target}/profile": {
     /**
@@ -40,11 +40,11 @@ export interface paths {
      *
      * Will fail if you do not have permission to access the other user's profile.
      */
-    get: operations["fetch_profile_req"];
+    get: operations["fetch_profile_profile"];
   };
   "/users/dms": {
     /** This fetches your direct messages, including any DM and group DM conversations. */
-    get: operations["fetch_dms_req"];
+    get: operations["fetch_dms_direct_messages"];
   };
   "/users/{target}/dm": {
     /**
@@ -52,27 +52,27 @@ export interface paths {
      *
      * If the target is oneself, a saved messages channel is returned.
      */
-    get: operations["open_dm_req"];
+    get: operations["open_dm_open_dm"];
   };
   "/users/{target}/mutual": {
     /** Retrieve a list of mutual friends and servers with another user. */
-    get: operations["find_mutual_req"];
+    get: operations["find_mutual_mutual"];
   };
   "/users/{target}/friend": {
     /** Accept another user's friend request. */
-    put: operations["add_friend_req"];
+    put: operations["add_friend_add"];
     /** Denies another user's friend request or removes an existing friend. */
-    delete: operations["remove_friend_req"];
+    delete: operations["remove_friend_remove"];
   };
   "/users/{target}/block": {
     /** Block another user by their id. */
-    put: operations["block_user_req"];
+    put: operations["block_user_block"];
     /** Unblock another user by their id. */
-    delete: operations["unblock_user_req"];
+    delete: operations["unblock_user_unblock"];
   };
   "/users/friend": {
     /** Send a friend request to another user. */
-    post: operations["send_friend_request_req"];
+    post: operations["send_friend_request_send_friend_request"];
   };
   "/bots/create": {
     /** Create a new Revolt bot. */
@@ -100,19 +100,23 @@ export interface paths {
   };
   "/channels/{target}/ack/{message}": {
     /** Lets the server and all other clients know that we've seen this message id in this channel. */
-    put: operations["channel_ack_req"];
+    put: operations["channel_ack_ack"];
   };
   "/channels/{target}": {
     /** Fetch channel by its id. */
-    get: operations["channel_fetch_fetch_channel"];
+    get: operations["channel_fetch_fetch"];
     /** Deletes a server channel, leaves a group or closes a group. */
-    delete: operations["channel_delete_req"];
+    delete: operations["channel_delete_delete"];
     /** Edit a channel object by its id. */
-    patch: operations["channel_edit_req"];
+    patch: operations["channel_edit_edit"];
   };
   "/channels/{target}/members": {
-    /** Retrieves all users who are part of this group. */
-    get: operations["members_fetch_req"];
+    /**
+     * Retrieves all users who are part of this group.
+     *
+     * This may not return full user information if users are not friends but have mutual connections.
+     */
+    get: operations["members_fetch_fetch_members"];
   };
   "/channels/{target}/invites": {
     /**
@@ -120,7 +124,7 @@ export interface paths {
      *
      * Channel must be a `TextChannel`.
      */
-    post: operations["invite_create_req"];
+    post: operations["invite_create_create_invite"];
   };
   "/channels/{target}/messages": {
     /** Fetch multiple messages. */
@@ -134,11 +138,11 @@ export interface paths {
   };
   "/channels/{target}/messages/{msg}": {
     /** Retrieves a message by its id. */
-    get: operations["message_fetch_req"];
+    get: operations["message_fetch_fetch"];
     /** Delete a message you've sent or one you have permission to delete. */
-    delete: operations["message_delete_req"];
+    delete: operations["message_delete_delete"];
     /** Edits a message that you've previously sent. */
-    patch: operations["message_edit_req"];
+    patch: operations["message_edit_edit"];
   };
   "/channels/{target}/messages/bulk": {
     /**
@@ -148,7 +152,7 @@ export interface paths {
      *
      * Messages must have been sent within the past 1 week.
      */
-    delete: operations["message_bulk_delete_req"];
+    delete: operations["message_bulk_delete_bulk_delete_messages"];
   };
   "/channels/create": {
     /** Create a new group channel. */
@@ -156,15 +160,15 @@ export interface paths {
   };
   "/channels/{group_id}/recipients/{member_id}": {
     /** Adds another user to the group. */
-    put: operations["group_add_member_req"];
+    put: operations["group_add_member_add_member"];
   };
   "/channels/{target}/recipients/{member}": {
     /** Removes a user from the group. */
-    delete: operations["group_remove_member_req"];
+    delete: operations["group_remove_member_remove_member"];
   };
   "/channels/{target}/join_call": {
     /** Asks the voice server for a token to join the call. */
-    post: operations["voice_join_req"];
+    post: operations["voice_join_call"];
   };
   "/channels/{target}/permissions/{role_id}": {
     /**
@@ -172,7 +176,7 @@ export interface paths {
      *
      * Channel must be a `TextChannel` or `VoiceChannel`.
      */
-    put: operations["permissions_set_req"];
+    put: operations["permissions_set_set_role_permissions"];
   };
   "/channels/{target}/permissions/default": {
     /**
@@ -180,7 +184,7 @@ export interface paths {
      *
      * Channel must be a `Group`, `TextChannel` or `VoiceChannel`.
      */
-    put: operations["permissions_set_default_req"];
+    put: operations["permissions_set_default_set_default_permissions"];
   };
   "/channels/{target}/messages/{msg}/reactions/{emoji}": {
     /** React to a given message. */
@@ -202,11 +206,11 @@ export interface paths {
   };
   "/channels/{target}/webhooks": {
     /** Creates a webhook which 3rd party platforms can use to send messages */
-    post: operations["webhook_create_req"];
+    post: operations["webhook_create_create_webhook"];
   };
   "/channels/{channel_id}/webhooks": {
     /** Gets all webhooks inside the channel */
-    get: operations["webhook_fetch_all_req"];
+    get: operations["webhook_fetch_all_fetch_webhooks"];
   };
   "/servers/create": {
     /** Create a new server. */
@@ -214,15 +218,15 @@ export interface paths {
   };
   "/servers/{target}": {
     /** Fetch a server by its id. */
-    get: operations["server_fetch_req"];
+    get: operations["server_fetch_fetch"];
     /** Deletes a server if owner otherwise leaves. */
-    delete: operations["server_delete_req"];
+    delete: operations["server_delete_delete"];
     /** Edit a server by its id. */
-    patch: operations["server_edit_req"];
+    patch: operations["server_edit_edit"];
   };
   "/servers/{target}/ack": {
     /** Mark all channels in a server as read. */
-    put: operations["server_ack_req"];
+    put: operations["server_ack_ack"];
   };
   "/servers/{server}/channels": {
     /** Create a new Text or Voice channel. */
@@ -230,17 +234,17 @@ export interface paths {
   };
   "/servers/{target}/members": {
     /** Fetch all server members. */
-    get: operations["member_fetch_all_req"];
+    get: operations["member_fetch_all_fetch_all"];
   };
   "/servers/{target}/members/{member}": {
     /** Retrieve a member. */
-    get: operations["member_fetch_req"];
+    get: operations["member_fetch_fetch"];
     /** Removes a member from the server. */
-    delete: operations["member_remove_req"];
+    delete: operations["member_remove_kick"];
   };
   "/servers/{server}/members/{target}": {
     /** Edit a member by their id. */
-    patch: operations["member_edit_req"];
+    patch: operations["member_edit_edit"];
   };
   "/servers/{target}/members_experimental_query": {
     /** Query members by a given name, this API is not stable and will be removed in the future. */
@@ -248,37 +252,37 @@ export interface paths {
   };
   "/servers/{server}/bans/{target}": {
     /** Ban a user by their id. */
-    put: operations["ban_create_req"];
+    put: operations["ban_create_ban"];
     /** Remove a user's ban. */
-    delete: operations["ban_remove_req"];
+    delete: operations["ban_remove_unban"];
   };
   "/servers/{target}/bans": {
     /** Fetch all bans on a server. */
-    get: operations["ban_list_req"];
+    get: operations["ban_list_list"];
   };
   "/servers/{target}/invites": {
     /** Fetch all server invites. */
-    get: operations["invites_fetch_req"];
+    get: operations["invites_fetch_invites"];
   };
   "/servers/{target}/roles": {
     /** Creates a new server role. */
-    post: operations["roles_create_req"];
+    post: operations["roles_create_create"];
   };
   "/servers/{target}/roles/{role_id}": {
     /** Fetch a role by its id. */
-    get: operations["roles_fetch_req"];
+    get: operations["roles_fetch_fetch"];
     /** Delete a server role by its id. */
-    delete: operations["roles_delete_req"];
+    delete: operations["roles_delete_delete"];
     /** Edit a role by its id. */
-    patch: operations["roles_edit_req"];
+    patch: operations["roles_edit_edit"];
   };
   "/servers/{target}/permissions/{role_id}": {
     /** Sets permissions for the specified role in the server. */
-    put: operations["permissions_set_req"];
+    put: operations["permissions_set_set_role_permission"];
   };
   "/servers/{target}/permissions/default": {
     /** Sets permissions for the default role in this server. */
-    put: operations["permissions_set_default_req"];
+    put: operations["permissions_set_default_set_default_permissions"];
   };
   "/servers/{target}/emojis": {
     /** Fetch all emoji on a server. */
@@ -286,11 +290,11 @@ export interface paths {
   };
   "/invites/{target}": {
     /** Fetch an invite by its id. */
-    get: operations["invite_fetch_req"];
-    /** Join an invite by its ID. */
-    post: operations["invite_join_req"];
+    get: operations["invite_fetch_fetch"];
+    /** Join an invite by its ID */
+    post: operations["invite_join_join"];
     /** Delete an invite by its id. */
-    delete: operations["invite_delete_req"];
+    delete: operations["invite_delete_delete"];
   };
   "/custom/emoji/{id}": {
     /** Create an emoji by its Autumn upload id. */
@@ -394,11 +398,11 @@ export interface paths {
   };
   "/onboard/hello": {
     /** This will tell you whether the current account requires onboarding or whether you can continue to send requests as usual. You may skip calling this if you're restoring an existing session. */
-    get: operations["hello_req"];
+    get: operations["hello_hello"];
   };
   "/onboard/complete": {
     /** This sets a new username, completes onboarding and allows a user to start using Revolt. */
-    post: operations["complete_req"];
+    post: operations["complete_complete"];
   };
   "/push/subscribe": {
     /**
@@ -406,11 +410,11 @@ export interface paths {
      *
      * If an existing subscription exists on this session, it will be removed.
      */
-    post: operations["subscribe_req"];
+    post: operations["subscribe_subscribe"];
   };
   "/push/unsubscribe": {
     /** Remove the Web Push subscription associated with the current session. */
-    post: operations["unsubscribe_req"];
+    post: operations["unsubscribe_unsubscribe"];
   };
   "/sync/settings/fetch": {
     /**
@@ -418,15 +422,15 @@ export interface paths {
      *
      * This will return an object with the requested keys, each value is a tuple of `(timestamp, value)`, the value is the previously uploaded data.
      */
-    post: operations["get_settings_req"];
+    post: operations["get_settings_fetch"];
   };
   "/sync/settings/set": {
     /** Upload data to save to settings. */
-    post: operations["set_settings_req"];
+    post: operations["set_settings_set"];
   };
   "/sync/unreads": {
     /** Fetch information about unread state on channels. */
-    get: operations["get_unreads_req"];
+    get: operations["get_unreads_unreads"];
   };
   "/webhooks/{webhook_id}/{token}": {
     /** Gets a webhook with a token */
@@ -1136,7 +1140,7 @@ export interface components {
        */
       nonTailable: number;
     };
-    /** @description Representiation of a User on Revolt. */
+    /** @description User */
     User: {
       /** @description Unique Id */
       _id: string;
@@ -1149,31 +1153,31 @@ export interface components {
       /** @description Avatar attachment */
       avatar?: components["schemas"]["File"] | null;
       /** @description Relationships with other users */
-      relations?: components["schemas"]["Relationship"][] | null;
+      relations?: components["schemas"]["Relationship"][];
       /**
-       * Format: int32
+       * Format: uint32
        * @description Bitfield of user badges
        */
-      badges?: number | null;
+      badges?: number;
       /** @description User's current status */
       status?: components["schemas"]["UserStatus"] | null;
       /** @description User's profile page */
       profile?: components["schemas"]["UserProfile"] | null;
       /**
-       * Format: int32
+       * Format: uint32
        * @description Enum of user flags
        */
-      flags?: number | null;
+      flags?: number;
       /** @description Whether this user is privileged */
       privileged?: boolean;
       /** @description Bot information */
       bot?: components["schemas"]["BotInformation"] | null;
       /** @description Current session user's relationship with this user */
-      relationship?: components["schemas"]["RelationshipStatus"] | null;
+      relationship: components["schemas"]["RelationshipStatus"];
       /** @description Whether this user is currently online */
-      online?: boolean | null;
+      online: boolean;
     };
-    /** @description Representation of a File on Revolt Generated by Autumn */
+    /** @description File */
     File: {
       /** @description Unique Id */
       _id: string;
@@ -1200,7 +1204,7 @@ export interface components {
       /** @description Id of the object this file is associated with */
       object_id?: string | null;
     };
-    /** @description Metadata associated with file */
+    /** @description Metadata associated with a file */
     Metadata:
       | {
           /** @enum {string} */
@@ -1213,17 +1217,17 @@ export interface components {
       | {
           /** @enum {string} */
           type: "Image";
-          /** Format: int */
+          /** Format: uint */
           width: number;
-          /** Format: int */
+          /** Format: uint */
           height: number;
         }
       | {
           /** @enum {string} */
           type: "Video";
-          /** Format: int */
+          /** Format: uint */
           width: number;
-          /** Format: int */
+          /** Format: uint */
           height: number;
         }
       | {
@@ -1232,7 +1236,9 @@ export interface components {
         };
     /** @description Relationship entry indicating current status with other user */
     Relationship: {
+      /** @description Other user's Id */
       _id: string;
+      /** @description Relationship status with them */
       status: components["schemas"]["RelationshipStatus"];
     };
     /**
@@ -1272,7 +1278,7 @@ export interface components {
       owner: string;
     };
     Id: string;
-    /** Flag Response */
+    /** @description User flag reponse */
     FlagResponse: {
       /**
        * Format: int32
@@ -1280,7 +1286,7 @@ export interface components {
        */
       flags: number;
     };
-    /** User Data */
+    /** @description New user information */
     DataEditUser: {
       /** @description New display name */
       display_name?: string | null;
@@ -1293,7 +1299,7 @@ export interface components {
        *
        * This is applied as a partial.
        */
-      profile?: components["schemas"]["UserProfileData"] | null;
+      profile?: components["schemas"]["DataUserProfile"] | null;
       /**
        * Format: int32
        * @description Bitfield of user badges
@@ -1307,8 +1313,8 @@ export interface components {
       /** @description Fields to remove from user object */
       remove?: components["schemas"]["FieldsUser"][] | null;
     };
-    /** Profile Data */
-    UserProfileData: {
+    /** @description New user profile data */
+    DataUserProfile: {
       /** @description Text to set as user profile description */
       content?: string | null;
       /** @description Attachment Id for background */
@@ -1323,8 +1329,7 @@ export interface components {
       | "StatusText"
       | "StatusPresence"
       | "ProfileContent"
-      | "ProfileBackground"
-      | "DisplayName";
+      | "ProfileBackground";
     /** Username Information */
     DataChangeUsername: {
       /** @description New username */
@@ -1332,7 +1337,7 @@ export interface components {
       /** @description Current account password */
       password: string;
     };
-    /** @description Representation of a channel on Revolt */
+    /** @description Channel */
     Channel:
       | {
           /** @enum {string} */
@@ -1438,14 +1443,14 @@ export interface components {
        */
       d: number;
     };
-    /** Mutual Friends and Servers Response */
+    /** @description Mutual friends and servers response */
     MutualResponse: {
       /** @description Array of mutual user IDs that both users are friends with */
       users: string[];
       /** @description Array of mutual server IDs that both users are in */
       servers: string[];
     };
-    /** User Lookup Information */
+    /** @description User lookup information */
     DataSendFriendRequest: {
       /** @description Username and discriminator combo separated by # */
       username: string;
@@ -1544,7 +1549,7 @@ export interface components {
      * @enum {string}
      */
     FieldsBot: "Token" | "InteractionsURL";
-    /** Channel Details */
+    /** @description New webhook information */
     DataEditChannel: {
       /** @description Channel name */
       name?: string | null;
@@ -1562,6 +1567,7 @@ export interface components {
       nsfw?: boolean | null;
       /** @description Whether this channel is archived */
       archived?: boolean | null;
+      /** @description Fields to remove from channel */
       remove?: components["schemas"]["FieldsChannel"][] | null;
     };
     /**
@@ -1569,29 +1575,29 @@ export interface components {
      * @enum {string}
      */
     FieldsChannel: "Description" | "Icon" | "DefaultPermissions";
-    /** @description Representation of an invite to a channel on Revolt */
+    /** @description Invite */
     Invite:
       | {
-          /** @enum {string} */
-          type: "Server";
-          /** @description Invite code */
-          _id: string;
-          /** @description Id of the server this invite points to */
-          server: string;
-          /** @description Id of user who created this invite */
-          creator: string;
-          /** @description Id of the server channel this invite points to */
-          channel: string;
+          Server: {
+            /** @description Invite code */
+            _id: string;
+            /** @description Id of the server this invite points to */
+            server: string;
+            /** @description Id of user who created this invite */
+            creator: string;
+            /** @description Id of the server channel this invite points to */
+            channel: string;
+          };
         }
       | {
-          /** @enum {string} */
-          type: "Group";
-          /** @description Invite code */
-          _id: string;
-          /** @description Id of user who created this invite */
-          creator: string;
-          /** @description Id of the group channel this invite points to */
-          channel: string;
+          Group: {
+            /** @description Invite code */
+            _id: string;
+            /** @description Id of user who created this invite */
+            creator: string;
+            /** @description Id of the group channel this invite points to */
+            channel: string;
+          };
         };
     /** @description Message */
     Message: {
@@ -2007,14 +2013,14 @@ export interface components {
       /** @description Whether to include user (and member, if server channel) objects */
       include_users?: boolean | null;
     };
-    /** Message Details */
+    /** @description Changes to make to message */
     DataEditMessage: {
       /** @description New message content */
       content?: string | null;
       /** @description Embeds to include in the message */
       embeds?: components["schemas"]["SendableEmbed"][] | null;
     };
-    /** Search Parameters */
+    /** @description Options for bulk deleting messages */
     OptionsBulkDelete: {
       /** @description Message IDs */
       ids: string[];
@@ -2037,13 +2043,13 @@ export interface components {
       /** @description Whether this group is age-restricted */
       nsfw?: boolean | null;
     };
-    /** Voice Server Token Response */
-    CreateVoiceUserResponse: {
+    /** @description Voice server token response */
+    LegacyCreateVoiceUserResponse: {
       /** @description Token for authenticating with the voice server */
       token: string;
     };
-    /** Permission Value */
-    Data: {
+    /** @description New role permissions */
+    DataSetRolePermissions: {
       /** @description Allow / deny values to set for this role */
       permissions: components["schemas"]["Override"];
     };
@@ -2060,7 +2066,7 @@ export interface components {
        */
       deny: number;
     };
-    /** Permission Value */
+    /** @description New default permissions */
     DataDefaultChannelPermissions:
       | {
           /**
@@ -2191,7 +2197,7 @@ export interface components {
       /** @description Whether this server is age-restricted */
       nsfw?: boolean | null;
     };
-    /** Fetch server route response */
+    /** @description Fetch server information */
     FetchServerResponse:
       | components["schemas"]["Server"]
       | {
@@ -2223,10 +2229,10 @@ export interface components {
           /** @description Banner attachment */
           banner?: components["schemas"]["File"] | null;
           /**
-           * Format: int32
+           * Format: uint32
            * @description Bitfield of server flags
            */
-          flags?: number | null;
+          flags?: number;
           /** @description Whether this server is flagged as not safe for work */
           nsfw?: boolean;
           /** @description Whether to enable analytics */
@@ -2234,7 +2240,7 @@ export interface components {
           /** @description Whether this server should be publicly discoverable */
           discoverable?: boolean;
         };
-    /** Server Data */
+    /** @description New server information */
     DataEditServer: {
       /** @description Server name */
       name?: string | null;
@@ -2293,25 +2299,21 @@ export interface components {
      * @enum {string}
      */
     LegacyServerChannelType: "Text" | "Voice";
-    /**
-     * Member List
-     * @description Both lists are sorted by ID.
-     */
+    /** @description Response with all members */
     AllMemberResponse: {
       /** @description List of members */
       members: components["schemas"]["Member"][];
       /** @description List of users */
       users: components["schemas"]["User"][];
     };
+    /** @description Member response */
     MemberResponse:
       | components["schemas"]["Member"]
-      | components["schemas"]["MemberWithRoles"];
-    /** @description Representation of a member of a server on Revolt With Role Data */
-    MemberWithRoles: {
-      member: components["schemas"]["Member"];
-      roles: { [key: string]: components["schemas"]["Role"] };
-    };
-    /** Member Data */
+      | {
+          member: components["schemas"]["Member"];
+          roles: { [key: string]: components["schemas"]["Role"] };
+        };
+    /** @description New member information */
     DataMemberEdit: {
       /** @description Member nickname */
       nickname?: string | null;
@@ -2336,29 +2338,26 @@ export interface components {
       /** @description List of users */
       users: components["schemas"]["User"][];
     };
-    /** @description Representation of a server ban on Revolt */
+    /** @description Server Ban */
     ServerBan: {
       /** @description Unique member id */
       _id: components["schemas"]["MemberCompositeKey"];
       /** @description Reason for ban creation */
       reason?: string | null;
     };
-    /** Ban Information */
+    /** @description Information for new server ban */
     DataBanCreate: {
       /** @description Ban reason */
       reason?: string | null;
     };
-    /** Ban List Result */
+    /** @description Ban list result */
     BanListResult: {
       /** @description Users objects */
       users: components["schemas"]["BannedUser"][];
       /** @description Ban objects */
       bans: components["schemas"]["ServerBan"][];
     };
-    /**
-     * Banned User
-     * @description Just enoguh user information to list bans.
-     */
+    /** @description Just enough information to list a ban */
     BannedUser: {
       /** @description Id of the banned user */
       _id: string;
@@ -2369,14 +2368,14 @@ export interface components {
       /** @description Avatar of the banned user */
       avatar?: components["schemas"]["File"] | null;
     };
-    /** New Role Response */
+    /** @description Response after creating new role */
     NewRoleResponse: {
       /** @description Id of the role */
       id: string;
       /** @description New role */
       role: components["schemas"]["Role"];
     };
-    /** Role Data */
+    /** @description Information about new role to create */
     DataCreateRole: {
       /** @description Role name */
       name: string;
@@ -2388,7 +2387,7 @@ export interface components {
        */
       rank?: number | null;
     };
-    /** Role Data */
+    /** @description New role information */
     DataEditRole: {
       /** @description Role name */
       name?: string | null;
@@ -2411,7 +2410,7 @@ export interface components {
      * @enum {string}
      */
     FieldsRole: "Colour";
-    /** Permission Value */
+    /** @description New role permissions */
     DataSetServerRolePermission: {
       /** @description Allow / deny values for the role in this server. */
       permissions: components["schemas"]["Override"];
@@ -2421,7 +2420,7 @@ export interface components {
       /** Format: uint64 */
       permissions: number;
     };
-    /** @description Representation of an Emoji on Revolt */
+    /** @description Emoji */
     Emoji: {
       /** @description Unique Id */
       _id: string;
@@ -2436,7 +2435,7 @@ export interface components {
       /** @description Whether the emoji is marked as nsfw */
       nsfw?: boolean;
     };
-    /** @description Information about what owns this emoji */
+    /** @description Parent Id of the emoji */
     EmojiParent:
       | {
           /** @enum {string} */
@@ -2447,7 +2446,7 @@ export interface components {
           /** @enum {string} */
           type: "Detached";
         };
-    /** Invite */
+    /** @description Public invite response */
     InviteResponse:
       | {
           /** @enum {string} */
@@ -2499,15 +2498,24 @@ export interface components {
           /** @description Avatar of the user who created the invite */
           user_avatar?: components["schemas"]["File"] | null;
         };
-    /** Join Response */
-    InviteJoinResponse: {
-      /** @enum {string} */
-      type: "Server";
-      /** @description Channels in the server */
-      channels: components["schemas"]["Channel"][];
-      /** @description Server we are joining */
-      server: components["schemas"]["Server"];
-    };
+    /** @description Invite join response */
+    InviteJoinResponse:
+      | {
+          /** @enum {string} */
+          type: "Server";
+          /** @description Channels in the server */
+          channels: components["schemas"]["Channel"][];
+          /** @description Server we are joining */
+          server: components["schemas"]["Server"];
+        }
+      | {
+          /** @enum {string} */
+          type: "Group";
+          /** @description Group channel we are joining */
+          channel: components["schemas"]["Channel"];
+          /** @description Members of this group */
+          users: components["schemas"]["User"][];
+        };
     /** @description Create a new emoji */
     DataCreateEmoji: {
       /** @description Server name */
@@ -2859,19 +2867,19 @@ export interface components {
       /** @description New username which will be used to identify the user on the platform */
       username: string;
     };
-    /** Fetch Options */
+    /** @description Options for fetching settings */
     OptionsFetchSettings: {
       /** @description Keys to fetch */
       keys: string[];
     };
-    /** @description Representation of the state of a channel from the perspective of a user */
+    /** @description Channel Unread */
     ChannelUnread: {
       /** @description Composite key pointing to a user's view of a channel */
       _id: components["schemas"]["ChannelCompositeKey"];
       /** @description Id of the last message read in this channel by a user */
       last_id?: string | null;
       /** @description Array of message ids that mention the user */
-      mentions?: string[] | null;
+      mentions?: string[];
     };
     /** @description Composite primary key consisting of channel and user id */
     ChannelCompositeKey: {
@@ -2955,7 +2963,7 @@ export interface operations {
     };
   };
   /** Retrieve your user information. */
-  fetch_self_req: {
+  fetch_self_fetch: {
     responses: {
       200: {
         content: {
@@ -2971,7 +2979,7 @@ export interface operations {
     };
   };
   /** Retrieve a user's information. */
-  fetch_user_req: {
+  fetch_user_fetch: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -2992,7 +3000,7 @@ export interface operations {
     };
   };
   /** Edit currently authenticated user. */
-  edit_user_req: {
+  edit_user_edit: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3039,7 +3047,7 @@ export interface operations {
     };
   };
   /** Change your username. */
-  change_username_req: {
+  change_username_change_username: {
     responses: {
       200: {
         content: {
@@ -3060,7 +3068,7 @@ export interface operations {
     };
   };
   /** This returns a default avatar based on the given id. */
-  get_default_avatar_req: {
+  get_default_avatar_default_avatar: {
     parameters: {
       path: {
         target: string;
@@ -3080,7 +3088,7 @@ export interface operations {
    *
    * Will fail if you do not have permission to access the other user's profile.
    */
-  fetch_profile_req: {
+  fetch_profile_profile: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3101,7 +3109,7 @@ export interface operations {
     };
   };
   /** This fetches your direct messages, including any DM and group DM conversations. */
-  fetch_dms_req: {
+  fetch_dms_direct_messages: {
     responses: {
       200: {
         content: {
@@ -3121,7 +3129,7 @@ export interface operations {
    *
    * If the target is oneself, a saved messages channel is returned.
    */
-  open_dm_req: {
+  open_dm_open_dm: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3142,7 +3150,7 @@ export interface operations {
     };
   };
   /** Retrieve a list of mutual friends and servers with another user. */
-  find_mutual_req: {
+  find_mutual_mutual: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3163,7 +3171,7 @@ export interface operations {
     };
   };
   /** Accept another user's friend request. */
-  add_friend_req: {
+  add_friend_add: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3184,10 +3192,10 @@ export interface operations {
     };
   };
   /** Denies another user's friend request or removes an existing friend. */
-  remove_friend_req: {
+  remove_friend_remove: {
     parameters: {
       path: {
-        target: string;
+        target: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -3205,10 +3213,10 @@ export interface operations {
     };
   };
   /** Block another user by their id. */
-  block_user_req: {
+  block_user_block: {
     parameters: {
       path: {
-        target: string;
+        target: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -3226,10 +3234,10 @@ export interface operations {
     };
   };
   /** Unblock another user by their id. */
-  unblock_user_req: {
+  unblock_user_unblock: {
     parameters: {
       path: {
-        target: string;
+        target: components["schemas"]["Id"];
       };
     };
     responses: {
@@ -3247,7 +3255,7 @@ export interface operations {
     };
   };
   /** Send a friend request to another user. */
-  send_friend_request_req: {
+  send_friend_request_send_friend_request: {
     responses: {
       200: {
         content: {
@@ -3414,7 +3422,7 @@ export interface operations {
     };
   };
   /** Lets the server and all other clients know that we've seen this message id in this channel. */
-  channel_ack_req: {
+  channel_ack_ack: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3433,7 +3441,7 @@ export interface operations {
     };
   };
   /** Fetch channel by its id. */
-  channel_fetch_fetch_channel: {
+  channel_fetch_fetch: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3454,7 +3462,7 @@ export interface operations {
     };
   };
   /** Deletes a server channel, leaves a group or closes a group. */
-  channel_delete_req: {
+  channel_delete_delete: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3476,7 +3484,7 @@ export interface operations {
     };
   };
   /** Edit a channel object by its id. */
-  channel_edit_req: {
+  channel_edit_edit: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3501,8 +3509,12 @@ export interface operations {
       };
     };
   };
-  /** Retrieves all users who are part of this group. */
-  members_fetch_req: {
+  /**
+   * Retrieves all users who are part of this group.
+   *
+   * This may not return full user information if users are not friends but have mutual connections.
+   */
+  members_fetch_fetch_members: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3527,7 +3539,7 @@ export interface operations {
    *
    * Channel must be a `TextChannel`.
    */
-  invite_create_req: {
+  invite_create_create_invite: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3647,7 +3659,7 @@ export interface operations {
     };
   };
   /** Retrieves a message by its id. */
-  message_fetch_req: {
+  message_fetch_fetch: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3669,7 +3681,7 @@ export interface operations {
     };
   };
   /** Delete a message you've sent or one you have permission to delete. */
-  message_delete_req: {
+  message_delete_delete: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3688,7 +3700,7 @@ export interface operations {
     };
   };
   /** Edits a message that you've previously sent. */
-  message_edit_req: {
+  message_edit_edit: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3721,7 +3733,7 @@ export interface operations {
    *
    * Messages must have been sent within the past 1 week.
    */
-  message_bulk_delete_req: {
+  message_bulk_delete_bulk_delete_messages: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3765,7 +3777,7 @@ export interface operations {
     };
   };
   /** Adds another user to the group. */
-  group_add_member_req: {
+  group_add_member_add_member: {
     parameters: {
       path: {
         group_id: components["schemas"]["Id"];
@@ -3784,7 +3796,7 @@ export interface operations {
     };
   };
   /** Removes a user from the group. */
-  group_remove_member_req: {
+  group_remove_member_remove_member: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3803,7 +3815,7 @@ export interface operations {
     };
   };
   /** Asks the voice server for a token to join the call. */
-  voice_join_req: {
+  voice_join_call: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3812,7 +3824,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["CreateVoiceUserResponse"];
+          "application/json": components["schemas"]["LegacyCreateVoiceUserResponse"];
         };
       };
       /** An error occurred. */
@@ -3823,8 +3835,12 @@ export interface operations {
       };
     };
   };
-  /** Sets permissions for the specified role in the server. */
-  permissions_set_req: {
+  /**
+   * Sets permissions for the specified role in this channel.
+   *
+   * Channel must be a `TextChannel` or `VoiceChannel`.
+   */
+  permissions_set_set_role_permissions: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3834,7 +3850,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Server"];
+          "application/json": components["schemas"]["Channel"];
         };
       };
       /** An error occurred. */
@@ -3846,12 +3862,12 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["DataSetServerRolePermission"];
+        "application/json": components["schemas"]["DataSetRolePermissions"];
       };
     };
   };
   /** Sets permissions for the default role in this server. */
-  permissions_set_default_req: {
+  permissions_set_default_set_default_permissions: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3950,7 +3966,7 @@ export interface operations {
     };
   };
   /** Creates a webhook which 3rd party platforms can use to send messages */
-  webhook_create_req: {
+  webhook_create_create_webhook: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3976,7 +3992,7 @@ export interface operations {
     };
   };
   /** Gets all webhooks inside the channel */
-  webhook_fetch_all_req: {
+  webhook_fetch_all_fetch_webhooks: {
     parameters: {
       path: {
         channel_id: components["schemas"]["Id"];
@@ -4018,7 +4034,7 @@ export interface operations {
     };
   };
   /** Fetch a server by its id. */
-  server_fetch_req: {
+  server_fetch_fetch: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4043,7 +4059,7 @@ export interface operations {
     };
   };
   /** Deletes a server if owner otherwise leaves. */
-  server_delete_req: {
+  server_delete_delete: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4065,7 +4081,7 @@ export interface operations {
     };
   };
   /** Edit a server by its id. */
-  server_edit_req: {
+  server_edit_edit: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4091,7 +4107,7 @@ export interface operations {
     };
   };
   /** Mark all channels in a server as read. */
-  server_ack_req: {
+  server_ack_ack: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4135,7 +4151,7 @@ export interface operations {
     };
   };
   /** Fetch all server members. */
-  member_fetch_all_req: {
+  member_fetch_all_fetch_all: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4160,7 +4176,7 @@ export interface operations {
     };
   };
   /** Retrieve a member. */
-  member_fetch_req: {
+  member_fetch_fetch: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4185,7 +4201,7 @@ export interface operations {
     };
   };
   /** Removes a member from the server. */
-  member_remove_req: {
+  member_remove_kick: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4204,7 +4220,7 @@ export interface operations {
     };
   };
   /** Edit a member by their id. */
-  member_edit_req: {
+  member_edit_edit: {
     parameters: {
       path: {
         server: components["schemas"]["Id"];
@@ -4258,7 +4274,7 @@ export interface operations {
     };
   };
   /** Ban a user by their id. */
-  ban_create_req: {
+  ban_create_ban: {
     parameters: {
       path: {
         server: components["schemas"]["Id"];
@@ -4285,7 +4301,7 @@ export interface operations {
     };
   };
   /** Remove a user's ban. */
-  ban_remove_req: {
+  ban_remove_unban: {
     parameters: {
       path: {
         server: components["schemas"]["Id"];
@@ -4304,7 +4320,7 @@ export interface operations {
     };
   };
   /** Fetch all bans on a server. */
-  ban_list_req: {
+  ban_list_list: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4325,7 +4341,7 @@ export interface operations {
     };
   };
   /** Fetch all server invites. */
-  invites_fetch_req: {
+  invites_fetch_invites: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4346,7 +4362,7 @@ export interface operations {
     };
   };
   /** Creates a new server role. */
-  roles_create_req: {
+  roles_create_create: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4372,7 +4388,7 @@ export interface operations {
     };
   };
   /** Fetch a role by its id. */
-  roles_fetch_req: {
+  roles_fetch_fetch: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4394,7 +4410,7 @@ export interface operations {
     };
   };
   /** Delete a server role by its id. */
-  roles_delete_req: {
+  roles_delete_delete: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4413,7 +4429,7 @@ export interface operations {
     };
   };
   /** Edit a role by its id. */
-  roles_edit_req: {
+  roles_edit_edit: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4439,6 +4455,33 @@ export interface operations {
       };
     };
   };
+  /** Sets permissions for the specified role in the server. */
+  permissions_set_set_role_permission: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+        role_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Server"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataSetServerRolePermission"];
+      };
+    };
+  };
   /** Fetch all emoji on a server. */
   emoji_list_list_emoji: {
     parameters: {
@@ -4461,7 +4504,7 @@ export interface operations {
     };
   };
   /** Fetch an invite by its id. */
-  invite_fetch_req: {
+  invite_fetch_fetch: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4481,8 +4524,8 @@ export interface operations {
       };
     };
   };
-  /** Join an invite by its ID. */
-  invite_join_req: {
+  /** Join an invite by its ID */
+  invite_join_join: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -4503,7 +4546,7 @@ export interface operations {
     };
   };
   /** Delete an invite by its id. */
-  invite_delete_req: {
+  invite_delete_delete: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -5030,7 +5073,7 @@ export interface operations {
     };
   };
   /** This will tell you whether the current account requires onboarding or whether you can continue to send requests as usual. You may skip calling this if you're restoring an existing session. */
-  hello_req: {
+  hello_hello: {
     responses: {
       200: {
         content: {
@@ -5040,7 +5083,7 @@ export interface operations {
     };
   };
   /** This sets a new username, completes onboarding and allows a user to start using Revolt. */
-  complete_req: {
+  complete_complete: {
     responses: {
       200: {
         content: {
@@ -5065,7 +5108,7 @@ export interface operations {
    *
    * If an existing subscription exists on this session, it will be removed.
    */
-  subscribe_req: {
+  subscribe_subscribe: {
     responses: {
       /** Success */
       204: never;
@@ -5083,7 +5126,7 @@ export interface operations {
     };
   };
   /** Remove the Web Push subscription associated with the current session. */
-  unsubscribe_req: {
+  unsubscribe_unsubscribe: {
     responses: {
       /** Success */
       204: never;
@@ -5100,7 +5143,7 @@ export interface operations {
    *
    * This will return an object with the requested keys, each value is a tuple of `(timestamp, value)`, the value is the previously uploaded data.
    */
-  get_settings_req: {
+  get_settings_fetch: {
     responses: {
       200: {
         content: {
@@ -5121,7 +5164,7 @@ export interface operations {
     };
   };
   /** Upload data to save to settings. */
-  set_settings_req: {
+  set_settings_set: {
     parameters: {
       query: {
         /**
@@ -5149,7 +5192,7 @@ export interface operations {
     };
   };
   /** Fetch information about unread state on channels. */
-  get_unreads_req: {
+  get_unreads_unreads: {
     responses: {
       200: {
         content: {
