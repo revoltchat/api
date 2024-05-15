@@ -7324,70 +7324,66 @@
             "description": "Invite to a specific server channel",
             "type": "object",
             "required": [
-              "Server"
+              "_id",
+              "channel",
+              "creator",
+              "server",
+              "type"
             ],
             "properties": {
-              "Server": {
-                "type": "object",
-                "required": [
-                  "_id",
-                  "channel",
-                  "creator",
-                  "server"
-                ],
-                "properties": {
-                  "_id": {
-                    "description": "Invite code",
-                    "type": "string"
-                  },
-                  "server": {
-                    "description": "Id of the server this invite points to",
-                    "type": "string"
-                  },
-                  "creator": {
-                    "description": "Id of user who created this invite",
-                    "type": "string"
-                  },
-                  "channel": {
-                    "description": "Id of the server channel this invite points to",
-                    "type": "string"
-                  }
-                }
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Server"
+                ]
+              },
+              "_id": {
+                "description": "Invite code",
+                "type": "string"
+              },
+              "server": {
+                "description": "Id of the server this invite points to",
+                "type": "string"
+              },
+              "creator": {
+                "description": "Id of user who created this invite",
+                "type": "string"
+              },
+              "channel": {
+                "description": "Id of the server channel this invite points to",
+                "type": "string"
               }
-            },
-            "additionalProperties": false
+            }
           },
           {
             "description": "Invite to a group channel",
             "type": "object",
             "required": [
-              "Group"
+              "_id",
+              "channel",
+              "creator",
+              "type"
             ],
             "properties": {
-              "Group": {
-                "type": "object",
-                "required": [
-                  "_id",
-                  "channel",
-                  "creator"
-                ],
-                "properties": {
-                  "_id": {
-                    "description": "Invite code",
-                    "type": "string"
-                  },
-                  "creator": {
-                    "description": "Id of user who created this invite",
-                    "type": "string"
-                  },
-                  "channel": {
-                    "description": "Id of the group channel this invite points to",
-                    "type": "string"
-                  }
-                }
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Group"
+                ]
+              },
+              "_id": {
+                "description": "Invite code",
+                "type": "string"
+              },
+              "creator": {
+                "description": "Id of user who created this invite",
+                "type": "string"
+              },
+              "channel": {
+                "description": "Id of the group channel this invite points to",
+                "type": "string"
               }
-            },
-            "additionalProperties": false
+            }
           }
         ]
       },
