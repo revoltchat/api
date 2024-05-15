@@ -1182,26 +1182,26 @@ export interface components {
     /** @description Invite */
     Invite:
       | {
-          Server: {
-            /** @description Invite code */
-            _id: string;
-            /** @description Id of the server this invite points to */
-            server: string;
-            /** @description Id of user who created this invite */
-            creator: string;
-            /** @description Id of the server channel this invite points to */
-            channel: string;
-          };
+          /** @enum {string} */
+          type: "Server";
+          /** @description Invite code */
+          _id: string;
+          /** @description Id of the server this invite points to */
+          server: string;
+          /** @description Id of user who created this invite */
+          creator: string;
+          /** @description Id of the server channel this invite points to */
+          channel: string;
         }
       | {
-          Group: {
-            /** @description Invite code */
-            _id: string;
-            /** @description Id of user who created this invite */
-            creator: string;
-            /** @description Id of the group channel this invite points to */
-            channel: string;
-          };
+          /** @enum {string} */
+          type: "Group";
+          /** @description Invite code */
+          _id: string;
+          /** @description Id of user who created this invite */
+          creator: string;
+          /** @description Id of the group channel this invite points to */
+          channel: string;
         };
     /** @description Message */
     Message: {
