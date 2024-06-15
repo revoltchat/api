@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.7.4"
+    "version": "0.7.5"
   },
   "servers": [
     {
@@ -6257,15 +6257,6 @@
             ],
             "nullable": true
           },
-          "profile": {
-            "description": "User's profile page",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserProfile"
-              }
-            ],
-            "nullable": true
-          },
           "flags": {
             "description": "Enum of user flags",
             "type": "integer",
@@ -6541,28 +6532,6 @@
           "Invisible"
         ]
       },
-      "UserProfile": {
-        "description": "User's profile",
-        "type": "object",
-        "properties": {
-          "content": {
-            "description": "Text content on user's profile",
-            "type": "string",
-            "maxLength": 2000,
-            "minLength": 0,
-            "nullable": true
-          },
-          "background": {
-            "description": "Background visible on user's profile",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/File"
-              }
-            ],
-            "nullable": true
-          }
-        }
-      },
       "BotInformation": {
         "description": "Bot information for if the user is a bot",
         "type": "object",
@@ -6704,6 +6673,28 @@
             "type": "string",
             "maxLength": 1024,
             "minLength": 8
+          }
+        }
+      },
+      "UserProfile": {
+        "description": "User's profile",
+        "type": "object",
+        "properties": {
+          "content": {
+            "description": "Text content on user's profile",
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0,
+            "nullable": true
+          },
+          "background": {
+            "description": "Background visible on user's profile",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/File"
+              }
+            ],
+            "nullable": true
           }
         }
       },
