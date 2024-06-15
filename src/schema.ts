@@ -765,8 +765,6 @@ export interface components {
       badges?: number;
       /** @description User's current status */
       status?: components["schemas"]["UserStatus"] | null;
-      /** @description User's profile page */
-      profile?: components["schemas"]["UserProfile"] | null;
       /**
        * Format: uint32
        * @description Enum of user flags
@@ -869,13 +867,6 @@ export interface components {
      * @enum {string}
      */
     Presence: "Online" | "Idle" | "Focus" | "Busy" | "Invisible";
-    /** @description User's profile */
-    UserProfile: {
-      /** @description Text content on user's profile */
-      content?: string | null;
-      /** @description Background visible on user's profile */
-      background?: components["schemas"]["File"] | null;
-    };
     /** @description Bot information for if the user is a bot */
     BotInformation: {
       /** @description Id of the owner of this bot */
@@ -940,6 +931,13 @@ export interface components {
       username: string;
       /** @description Current account password */
       password: string;
+    };
+    /** @description User's profile */
+    UserProfile: {
+      /** @description Text content on user's profile */
+      content?: string | null;
+      /** @description Background visible on user's profile */
+      background?: components["schemas"]["File"] | null;
     };
     /** @description Channel */
     Channel:
