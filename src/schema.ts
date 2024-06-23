@@ -549,6 +549,12 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "TooManyPendingFriendRequests";
+          /** Format: uint */
+          max: number;
+        }
+      | {
+          /** @enum {string} */
           type: "UnknownChannel";
         }
       | {
