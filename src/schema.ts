@@ -1217,6 +1217,10 @@ export interface components {
       channel: string;
       /** @description Id of the user or webhook that sent this message */
       author: string;
+      /** @description The user that sent this message */
+      user?: components["schemas"]["User"] | null;
+      /** @description The member that sent this message */
+      member?: components["schemas"]["Member"] | null;
       /** @description The webhook that sent this message */
       webhook?: components["schemas"]["MessageWebhook"] | null;
       /** @description Message content */
@@ -1240,6 +1244,34 @@ export interface components {
       /** @description Name and / or avatar overrides for this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
     };
+    /** @description Server Member */
+    Member: {
+      /** @description Unique member id */
+      _id: components["schemas"]["MemberCompositeKey"];
+      /** @description Time at which this user joined the server */
+      joined_at: components["schemas"]["ISO8601 Timestamp"];
+      /** @description Member's nickname */
+      nickname?: string | null;
+      /** @description Avatar attachment */
+      avatar?: components["schemas"]["File"] | null;
+      /** @description Member's roles */
+      roles?: string[];
+      /** @description Timestamp this member is timed out until */
+      timeout?: components["schemas"]["ISO8601 Timestamp"] | null;
+    };
+    /** @description Composite primary key consisting of server and user id */
+    MemberCompositeKey: {
+      /** @description Server Id */
+      server: string;
+      /** @description User Id */
+      user: string;
+    };
+    /**
+     * Format: date-time
+     * @description ISO8601 formatted timestamp
+     * @example 1970-01-01T00:00:00Z
+     */
+    "ISO8601 Timestamp": string;
     /** @description Information about the webhook bundled with Message */
     MessageWebhook: {
       name: string;
@@ -1306,12 +1338,6 @@ export interface components {
           from: string;
           to: string;
         };
-    /**
-     * Format: date-time
-     * @description ISO8601 formatted timestamp
-     * @example 1970-01-01T00:00:00Z
-     */
-    "ISO8601 Timestamp": string;
     /** @description Embed */
     Embed:
       | {
@@ -1569,28 +1595,6 @@ export interface components {
           /** @description List of members */
           members?: components["schemas"]["Member"][] | null;
         };
-    /** @description Server Member */
-    Member: {
-      /** @description Unique member id */
-      _id: components["schemas"]["MemberCompositeKey"];
-      /** @description Time at which this user joined the server */
-      joined_at: components["schemas"]["ISO8601 Timestamp"];
-      /** @description Member's nickname */
-      nickname?: string | null;
-      /** @description Avatar attachment */
-      avatar?: components["schemas"]["File"] | null;
-      /** @description Member's roles */
-      roles?: string[];
-      /** @description Timestamp this member is timed out until */
-      timeout?: components["schemas"]["ISO8601 Timestamp"] | null;
-    };
-    /** @description Composite primary key consisting of server and user id */
-    MemberCompositeKey: {
-      /** @description Server Id */
-      server: string;
-      /** @description User Id */
-      user: string;
-    };
     /**
      * @description Message Sort
      *
