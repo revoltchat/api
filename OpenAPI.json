@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.7.11"
+    "version": "0.7.12"
   },
   "servers": [
     {
@@ -6263,7 +6263,7 @@
             }
           },
           "badges": {
-            "description": "Bitfield of user badges",
+            "description": "Bitfield of user badges\n\nhttps://docs.rs/revolt-models/latest/revolt_models/v0/enum.UserBadges.html",
             "type": "integer",
             "format": "uint32",
             "minimum": 0.0
@@ -6278,7 +6278,7 @@
             "nullable": true
           },
           "flags": {
-            "description": "Enum of user flags",
+            "description": "Enum of user flags\n\nhttps://docs.rs/revolt-models/latest/revolt_models/v0/enum.UserFlags.html",
             "type": "integer",
             "format": "uint32",
             "minimum": 0.0
@@ -7534,6 +7534,12 @@
               }
             ],
             "nullable": true
+          },
+          "flags": {
+            "description": "Bitfield of message flags\n\nhttps://docs.rs/revolt-models/latest/revolt_models/v0/enum.MessageFlags.html",
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0.0
           }
         }
       },
@@ -8450,6 +8456,13 @@
                 "$ref": "#/components/schemas/Interactions"
               }
             ],
+            "nullable": true
+          },
+          "flags": {
+            "description": "Bitfield of message flags\n\nhttps://docs.rs/revolt-models/latest/revolt_models/v0/enum.MessageFlags.html",
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0.0,
             "nullable": true
           }
         }
