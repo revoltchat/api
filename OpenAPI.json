@@ -6670,7 +6670,8 @@
           "StatusText",
           "StatusPresence",
           "ProfileContent",
-          "ProfileBackground"
+          "ProfileBackground",
+          "DisplayName"
         ]
       },
       "DataChangeUsername": {
