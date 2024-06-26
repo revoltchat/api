@@ -767,6 +767,8 @@ export interface components {
       /**
        * Format: uint32
        * @description Bitfield of user badges
+       *
+       * https://docs.rs/revolt-models/latest/revolt_models/v0/enum.UserBadges.html
        */
       badges?: number;
       /** @description User's current status */
@@ -774,6 +776,8 @@ export interface components {
       /**
        * Format: uint32
        * @description Enum of user flags
+       *
+       * https://docs.rs/revolt-models/latest/revolt_models/v0/enum.UserFlags.html
        */
       flags?: number;
       /** @description Whether this user is privileged */
@@ -1244,6 +1248,13 @@ export interface components {
       interactions?: components["schemas"]["Interactions"];
       /** @description Name and / or avatar overrides for this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
+      /**
+       * Format: uint32
+       * @description Bitfield of message flags
+       *
+       * https://docs.rs/revolt-models/latest/revolt_models/v0/enum.MessageFlags.html
+       */
+      flags?: number;
     };
     /** @description Server Member */
     Member: {
@@ -1568,6 +1579,13 @@ export interface components {
       masquerade?: components["schemas"]["Masquerade"] | null;
       /** @description Information about how this message should be interacted with */
       interactions?: components["schemas"]["Interactions"] | null;
+      /**
+       * Format: uint32
+       * @description Bitfield of message flags
+       *
+       * https://docs.rs/revolt-models/latest/revolt_models/v0/enum.MessageFlags.html
+       */
+      flags?: number | null;
     };
     /** @description What this message should reply to and how */
     ReplyIntent: {
