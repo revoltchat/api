@@ -930,7 +930,8 @@ export interface components {
       | "StatusText"
       | "StatusPresence"
       | "ProfileContent"
-      | "ProfileBackground";
+      | "ProfileBackground"
+      | "DisplayName";
     /** Username Information */
     DataChangeUsername: {
       /** @description New username */
