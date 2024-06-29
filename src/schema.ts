@@ -1068,8 +1068,9 @@ export interface components {
       /** @description Username and discriminator combo separated by # */
       username: string;
     };
-    /** @description Bot */
-    Bot: {
+    /** @description Bot with user response */
+    BotWithUserResponse: {
+      user: components["schemas"]["User"];
       /** @description Bot Id */
       _id: string;
       /** @description User Id of the bot owner */
@@ -1126,6 +1127,32 @@ export interface components {
       bot: components["schemas"]["Bot"];
       /** @description User object */
       user: components["schemas"]["User"];
+    };
+    /** @description Bot */
+    Bot: {
+      /** @description Bot Id */
+      _id: string;
+      /** @description User Id of the bot owner */
+      owner: string;
+      /** @description Token used to authenticate requests for this bot */
+      token: string;
+      /** @description Whether the bot is public (may be invited by anyone) */
+      public: boolean;
+      /** @description Whether to enable analytics */
+      analytics?: boolean;
+      /** @description Whether this bot should be publicly discoverable */
+      discoverable?: boolean;
+      /** @description Reserved; URL for handling interactions */
+      interactions_url?: string;
+      /** @description URL for terms of service */
+      terms_of_service_url?: string;
+      /** @description URL for privacy policy */
+      privacy_policy_url?: string;
+      /**
+       * Format: uint32
+       * @description Enum of bot flags
+       */
+      flags?: number;
     };
     /**
      * @description Owned Bots Response
@@ -2861,7 +2888,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Bot"];
+          "application/json": components["schemas"]["BotWithUserResponse"];
         };
       };
       /** An error occurred. */
@@ -2986,7 +3013,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Bot"];
+          "application/json": components["schemas"]["BotWithUserResponse"];
         };
       };
       /** An error occurred. */
