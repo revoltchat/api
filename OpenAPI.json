@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.7.12"
+    "version": "0.7.13"
   },
   "servers": [
     {
@@ -772,7 +772,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Bot"
+                  "$ref": "#/components/schemas/BotWithUserResponse"
                 }
               }
             }
@@ -1046,7 +1046,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Bot"
+                  "$ref": "#/components/schemas/BotWithUserResponse"
                 }
               }
             }
@@ -7044,16 +7044,20 @@
           }
         }
       },
-      "Bot": {
-        "description": "Bot",
+      "BotWithUserResponse": {
+        "description": "Bot with user response",
         "type": "object",
         "required": [
           "_id",
           "owner",
           "public",
-          "token"
+          "token",
+          "user"
         ],
         "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
           "_id": {
             "description": "Bot Id",
             "type": "string"
@@ -7194,6 +7198,60 @@
                 "$ref": "#/components/schemas/User"
               }
             ]
+          }
+        }
+      },
+      "Bot": {
+        "description": "Bot",
+        "type": "object",
+        "required": [
+          "_id",
+          "owner",
+          "public",
+          "token"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Bot Id",
+            "type": "string"
+          },
+          "owner": {
+            "description": "User Id of the bot owner",
+            "type": "string"
+          },
+          "token": {
+            "description": "Token used to authenticate requests for this bot",
+            "type": "string"
+          },
+          "public": {
+            "description": "Whether the bot is public (may be invited by anyone)",
+            "type": "boolean"
+          },
+          "analytics": {
+            "description": "Whether to enable analytics",
+            "type": "boolean"
+          },
+          "discoverable": {
+            "description": "Whether this bot should be publicly discoverable",
+            "type": "boolean"
+          },
+          "interactions_url": {
+            "description": "Reserved; URL for handling interactions",
+            "type": "string"
+          },
+          "terms_of_service_url": {
+            "description": "URL for terms of service",
+            "type": "string"
+          },
+          "privacy_policy_url": {
+            "description": "URL for privacy policy",
+            "type": "string"
+          },
+          "flags": {
+            "description": "Enum of bot flags",
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0.0
           }
         }
       },
