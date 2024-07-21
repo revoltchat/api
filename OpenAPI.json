@@ -1590,6 +1590,100 @@
         ]
       }
     },
+    "/channels/{target}/messages/{msg}/pin": {
+      "post": {
+        "tags": [
+          "Messaging"
+        ],
+        "summary": "Pins a message",
+        "description": "Pins a message by its id.",
+        "operationId": "message_pin_message_pin",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "msg",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Messaging"
+        ],
+        "summary": "Unpins a message",
+        "description": "Unpins a message by its id.",
+        "operationId": "message_unpin_message_unpin",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          },
+          {
+            "name": "msg",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
     "/channels/{target}/messages/{msg}": {
       "get": {
         "tags": [
@@ -5786,6 +5880,34 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "AlreadyPinned"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "NotPinned"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "UnknownServer"
                 ]
               }
@@ -7593,6 +7715,11 @@
             ],
             "nullable": true
           },
+          "pinned": {
+            "description": "Whether or not the message in pinned",
+            "type": "boolean",
+            "nullable": true
+          },
           "flags": {
             "description": "Bitfield of message flags\n\nhttps://docs.rs/revolt-models/latest/revolt_models/v0/enum.MessageFlags.html",
             "type": "integer",
@@ -7910,6 +8037,50 @@
                 "type": "string"
               },
               "to": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "by",
+              "id",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "message_pinned"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "by": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "by",
+              "id",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "message_unpinned"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "by": {
                 "type": "string"
               }
             }
@@ -8638,15 +8809,18 @@
       "DataMessageSearch": {
         "description": "Options for searching for messages",
         "type": "object",
-        "required": [
-          "query"
-        ],
         "properties": {
           "query": {
             "description": "Full-text search query\n\nSee [MongoDB documentation](https://docs.mongodb.com/manual/text-search/#-text-operator) for more information.",
             "type": "string",
             "maxLength": 64,
-            "minLength": 1
+            "minLength": 1,
+            "nullable": true
+          },
+          "pinned": {
+            "description": "Whether to only search for pinned messages, cannot be sent with `query`.",
+            "type": "boolean",
+            "nullable": true
           },
           "limit": {
             "description": "Maximum number of messages to fetch",
