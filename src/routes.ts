@@ -58,6 +58,10 @@ export type APIRoutes =
 | { method: 'post', path: '-/channels/{target}/messages', parts: 3, params: paths['/channels/{target}/messages']['post']['requestBody']['content']['application/json'], response: paths['/channels/{target}/messages']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/channels/${string}/search`, parts: 3, params: paths['/channels/{target}/search']['post']['requestBody']['content']['application/json'], response: paths['/channels/{target}/search']['post']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: '-/channels/{target}/search', parts: 3, params: paths['/channels/{target}/search']['post']['requestBody']['content']['application/json'], response: paths['/channels/{target}/search']['post']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: `/channels/${string}/messages/${string}/pin`, parts: 5, params: undefined, response: undefined }
+| { method: 'post', path: '-/channels/{target}/messages/{msg}/pin', parts: 5, params: undefined, response: undefined }
+| { method: 'delete', path: `/channels/${string}/messages/${string}/pin`, parts: 5, params: undefined, response: undefined }
+| { method: 'delete', path: '-/channels/{target}/messages/{msg}/pin', parts: 5, params: undefined, response: undefined }
 | { method: 'get', path: `/channels/${string}/messages/${string}`, parts: 4, params: undefined, response: paths['/channels/{target}/messages/{msg}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'get', path: '-/channels/{target}/messages/{msg}', parts: 4, params: undefined, response: paths['/channels/{target}/messages/{msg}']['get']['responses']['200']['content']['application/json'] }
 | { method: 'delete', path: `/channels/${string}/messages/${string}`, parts: 4, params: undefined, response: undefined }

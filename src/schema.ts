@@ -132,6 +132,12 @@ export interface paths {
     /** This route searches for messages within the given parameters. */
     post: operations["message_search_search"];
   };
+  "/channels/{target}/messages/{msg}/pin": {
+    /** Pins a message by its id. */
+    post: operations["message_pin_message_pin"];
+    /** Unpins a message by its id. */
+    delete: operations["message_unpin_message_unpin"];
+  };
   "/channels/{target}/messages/{msg}": {
     /** Retrieves a message by its id. */
     get: operations["message_fetch_fetch"];
@@ -622,6 +628,14 @@ export interface components {
       | {
           /** @enum {string} */
           type: "NotInGroup";
+        }
+      | {
+          /** @enum {string} */
+          type: "AlreadyPinned";
+        }
+      | {
+          /** @enum {string} */
+          type: "NotPinned";
         }
       | {
           /** @enum {string} */
@@ -1275,6 +1289,8 @@ export interface components {
       interactions?: components["schemas"]["Interactions"];
       /** @description Name and / or avatar overrides for this message */
       masquerade?: components["schemas"]["Masquerade"] | null;
+      /** @description Whether or not the message in pinned */
+      pinned?: boolean | null;
       /**
        * Format: uint32
        * @description Bitfield of message flags
@@ -1376,6 +1392,18 @@ export interface components {
           type: "channel_ownership_changed";
           from: string;
           to: string;
+        }
+      | {
+          /** @enum {string} */
+          type: "message_pinned";
+          id: string;
+          by: string;
+        }
+      | {
+          /** @enum {string} */
+          type: "message_unpinned";
+          id: string;
+          by: string;
         };
     /** @description Embed */
     Embed:
@@ -1655,7 +1683,9 @@ export interface components {
        *
        * See [MongoDB documentation](https://docs.mongodb.com/manual/text-search/#-text-operator) for more information.
        */
-      query: string;
+      query?: string | null;
+      /** @description Whether to only search for pinned messages, cannot be sent with `query`. */
+      pinned?: boolean | null;
       /**
        * Format: int64
        * @description Maximum number of messages to fetch
@@ -3263,6 +3293,44 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataMessageSearch"];
+      };
+    };
+  };
+  /** Pins a message by its id. */
+  message_pin_message_pin: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+        msg: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+  };
+  /** Unpins a message by its id. */
+  message_unpin_message_unpin: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+        msg: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      /** Success */
+      204: never;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
       };
     };
   };
