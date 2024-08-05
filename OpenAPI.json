@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.7.14"
+    "version": "0.7.15"
   },
   "servers": [
     {
@@ -3409,7 +3409,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -8465,6 +8470,28 @@
               },
               "id": {
                 "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "album_id",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "AppleMusic"
+                ]
+              },
+              "album_id": {
+                "type": "string"
+              },
+              "track_id": {
+                "type": "string",
+                "nullable": true
               }
             }
           },
