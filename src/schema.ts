@@ -1531,6 +1531,12 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "AppleMusic";
+          album_id: string;
+          track_id?: string | null;
+        }
+      | {
+          /** @enum {string} */
           type: "Streamable";
           id: string;
         };
