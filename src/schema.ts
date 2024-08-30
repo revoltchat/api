@@ -758,6 +758,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "ProxyError";
+        }
+      | {
+          /** @enum {string} */
           type: "VosoUnavailable";
         }
     ) & {
