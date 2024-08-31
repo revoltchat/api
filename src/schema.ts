@@ -953,7 +953,8 @@ export interface components {
       | "StatusPresence"
       | "ProfileContent"
       | "ProfileBackground"
-      | "DisplayName";
+      | "DisplayName"
+      | "Internal";
     /** Username Information */
     DataChangeUsername: {
       /** @description New username */
