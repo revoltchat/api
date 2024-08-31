@@ -6812,7 +6812,8 @@
           "StatusPresence",
           "ProfileContent",
           "ProfileBackground",
-          "DisplayName"
+          "DisplayName",
+          "Internal"
         ]
       },
       "DataChangeUsername": {
