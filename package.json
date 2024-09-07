@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.7.16",
+  "version": "0.7.16-next.1",
   "description": "Revolt API Library",
   "main": "dist/index.js",
   "module": "esm/index.js",
@@ -9,24 +9,25 @@
   "author": "Paul Makles <insrt.uk>",
   "license": "MIT",
   "scripts": {
-    "build": "REWRITE_ANYOF=1 oapilib && tsc && tsc -p tsconfig.esm.json",
+    "gen": "REWRITE_ANYOF=1 openapi-typescript ./OpenAPI.json -o ./src/api.d.ts && node codegen.js",
+    "build": "yarn gen && rimraf dist esm && tsc && tsc -p tsconfig.esm.json",
+    "typecheck": "tsc --noEmit",
     "prepublish": "in-publish && yarn build || echo Skipping build."
   },
   "devDependencies": {
-    "@insertish/oapi": "0.1.18",
-    "@types/lodash.defaultsdeep": "^4.6.6",
     "in-publish": "^2.0.1",
-    "openapi-typescript": "^5.2.0",
-    "typescript": "^4.6.2"
+    "openapi-typescript": "^7.4.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "axios": "^0.26.1",
-    "lodash.defaultsdeep": "^4.6.1"
+    "openapi-fetch": "^0.12.0"
   },
   "files": [
     "src",
     "dist",
     "esm",
+    "codegen.js",
     "OpenAPI.json",
     "LICENSE",
     "README.md"
