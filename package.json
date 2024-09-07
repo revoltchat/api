@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.7.16-next.1",
+  "version": "0.7.16-next.2",
   "description": "Revolt API Library",
   "main": "dist/index.js",
   "module": "esm/index.js",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "gen": "REWRITE_ANYOF=1 openapi-typescript ./OpenAPI.json -o ./src/api.d.ts && node codegen.js",
-    "build": "yarn gen && rimraf dist esm && tsc && tsc -p tsconfig.esm.json",
+    "build": "yarn gen && rimraf dist esm && tsc && tsc -p tsconfig.esm.json && cp src/api.d.ts src/types.d.ts dist && cp src/api.d.ts src/types.d.ts esm",
     "typecheck": "tsc --noEmit",
     "prepublish": "in-publish && yarn build || echo Skipping build."
   },
