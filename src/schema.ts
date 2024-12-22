@@ -741,6 +741,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "NotAuthenticated";
+        }
+      | {
+          /** @enum {string} */
           type: "DuplicateNonce";
         }
       | {
@@ -759,6 +763,28 @@ export interface components {
       | {
           /** @enum {string} */
           type: "ProxyError";
+        }
+      | {
+          /** @enum {string} */
+          type: "FileTooSmall";
+        }
+      | {
+          /** @enum {string} */
+          type: "FileTooLarge";
+          /** Format: uint */
+          max: number;
+        }
+      | {
+          /** @enum {string} */
+          type: "FileTypeNotAllowed";
+        }
+      | {
+          /** @enum {string} */
+          type: "ImageProcessingFailed";
+        }
+      | {
+          /** @enum {string} */
+          type: "NoEmbedData";
         }
       | {
           /** @enum {string} */
@@ -1442,12 +1468,12 @@ export interface components {
           /** @description URL to the original image */
           url: string;
           /**
-           * Format: int
+           * Format: uint
            * @description Width of the image
            */
           width: number;
           /**
-           * Format: int
+           * Format: uint
            * @description Height of the image
            */
           height: number;
@@ -1460,12 +1486,12 @@ export interface components {
           /** @description URL to the original video */
           url: string;
           /**
-           * Format: int
+           * Format: uint
            * @description Width of the video
            */
           width: number;
           /**
-           * Format: int
+           * Format: uint
            * @description Height of the video
            */
           height: number;
@@ -1565,12 +1591,12 @@ export interface components {
       /** @description URL to the original image */
       url: string;
       /**
-       * Format: int
+       * Format: uint
        * @description Width of the image
        */
       width: number;
       /**
-       * Format: int
+       * Format: uint
        * @description Height of the image
        */
       height: number;
@@ -1587,12 +1613,12 @@ export interface components {
       /** @description URL to the original video */
       url: string;
       /**
-       * Format: int
+       * Format: uint
        * @description Width of the video
        */
       width: number;
       /**
-       * Format: int
+       * Format: uint
        * @description Height of the video
        */
       height: number;
@@ -1790,6 +1816,8 @@ export interface components {
       name: string;
       /** @description The avatar of the webhook */
       avatar?: components["schemas"]["File"] | null;
+      /** @description User that created this webhook */
+      creator_id: string;
       /** @description The channel this webhook belongs to */
       channel_id: string;
       /**
