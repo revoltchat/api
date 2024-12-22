@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.7.16"
+    "version": "0.8.0"
   },
   "servers": [
     {
@@ -6269,6 +6269,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "NotAuthenticated"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "DuplicateNonce"
                 ]
               }
@@ -6330,6 +6344,82 @@
                 "type": "string",
                 "enum": [
                   "ProxyError"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "FileTooSmall"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "max",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "FileTooLarge"
+                ]
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint",
+                "minimum": 0.0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "FileTypeNotAllowed"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ImageProcessingFailed"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "NoEmbedData"
                 ]
               }
             }
@@ -8211,12 +8301,14 @@
               "width": {
                 "description": "Width of the image",
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               },
               "height": {
                 "description": "Height of the image",
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               },
               "size": {
                 "description": "Positioning and size",
@@ -8251,12 +8343,14 @@
               "width": {
                 "description": "Width of the video",
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               },
               "height": {
                 "description": "Height of the video",
                 "type": "integer",
-                "format": "int"
+                "format": "uint",
+                "minimum": 0.0
               }
             }
           },
@@ -8572,12 +8666,14 @@
           "width": {
             "description": "Width of the image",
             "type": "integer",
-            "format": "int"
+            "format": "uint",
+            "minimum": 0.0
           },
           "height": {
             "description": "Height of the image",
             "type": "integer",
-            "format": "int"
+            "format": "uint",
+            "minimum": 0.0
           },
           "size": {
             "description": "Positioning and size",
@@ -8613,12 +8709,14 @@
           "width": {
             "description": "Width of the video",
             "type": "integer",
-            "format": "int"
+            "format": "uint",
+            "minimum": 0.0
           },
           "height": {
             "description": "Height of the video",
             "type": "integer",
-            "format": "int"
+            "format": "uint",
+            "minimum": 0.0
           }
         }
       },
@@ -9080,6 +9178,7 @@
         "type": "object",
         "required": [
           "channel_id",
+          "creator_id",
           "id",
           "name",
           "permissions"
@@ -9101,6 +9200,10 @@
               }
             ],
             "nullable": true
+          },
+          "creator_id": {
+            "description": "User that created this webhook",
+            "type": "string"
           },
           "channel_id": {
             "description": "The channel this webhook belongs to",
