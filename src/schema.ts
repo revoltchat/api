@@ -244,7 +244,7 @@ export interface paths {
     /** Removes a member from the server. */
     delete: operations["member_remove_kick"];
   };
-  "/servers/{server}/members/{target}": {
+  "/servers/{server}/members/{member}": {
     /** Edit a member by their id. */
     patch: operations["member_edit_edit"];
   };
@@ -670,6 +670,10 @@ export interface components {
       | {
           /** @enum {string} */
           type: "AlreadyInServer";
+        }
+      | {
+          /** @enum {string} */
+          type: "CannotTimeoutYourself";
         }
       | {
           /** @enum {string} */
@@ -3246,7 +3250,7 @@ export interface operations {
         /**
          * Maximum number of messages to fetch
          *
-         * For fetching nearby messages, this is \`(limit + 1)\`.
+         * For fetching nearby messages, this is \`(limit + 2)\`.
          */
         limit?: number | null;
         /** Message id before which messages should be fetched */
@@ -3939,7 +3943,7 @@ export interface operations {
     parameters: {
       path: {
         server: components["schemas"]["Id"];
-        target: components["schemas"]["Id"];
+        member: components["schemas"]["Id"];
       };
     };
     responses: {
