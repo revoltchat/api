@@ -2,14 +2,13 @@
 # yarn lockfile v1
 
 
-"@insertish/oapi@0.1.18":
-  version "0.1.18"
-  resolved "https://registry.yarnpkg.com/@insertish/oapi/-/oapi-0.1.18.tgz#3544d021fbfe8cbe8ad4080860f1bcc97f21d0c1"
-  integrity sha512-LZLUk3WmzUjCM0quensexvQx/Kk1MpFBtCLJRnRrPOiaFT37JpOmWUFlrdu0sPS6B9wi2edEBeLcsnIiq85WMA==
+"@insertish/oapi@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@insertish/oapi/-/oapi-0.2.0.tgz#2a7eda4e51370984a53706067df47db281ccac4e"
+  integrity sha512-pV+D4YvlixA7MhhsJ1BW1ATk3r5hI1xC42y+QpZ9MLzlK8fDfhpbgLDIjh3c+9J8ETw9MJmwNI3aollx/PUMkQ==
   dependencies:
     typescript "^4.6.2"
   optionalDependencies:
-    axios "^0.26.1"
     openapi-typescript "^5.2.0"
 
 "@types/lodash.defaultsdeep@^4.6.6":

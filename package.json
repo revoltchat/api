@@ -13,7 +13,7 @@
     "prepublish": "in-publish && yarn build || echo Skipping build."
   },
   "devDependencies": {
-    "@insertish/oapi": "0.1.18",
+    "@insertish/oapi": "0.2.0",
     "@types/lodash.defaultsdeep": "^4.6.6",
     "in-publish": "^2.0.1",
     "openapi-typescript": "^5.2.0",
