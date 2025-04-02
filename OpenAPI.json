@@ -8869,6 +8869,11 @@
           "mention": {
             "description": "Whether this reply should mention the message's author",
             "type": "boolean"
+          },
+          "fail_if_not_exists": {
+            "description": "Whether to error if the referenced message doesn't exist. Otherwise, send a message without this reply. Default is true.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
