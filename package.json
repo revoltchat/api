@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.8.4-rc.4",
+  "version": "0.8.4",
   "description": "Revolt API Library",
   "type": "module",
   "module": "lib/index.js",
