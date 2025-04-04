@@ -106,34 +106,28 @@ export class API {
   /**
    * Generate authentication options.
    */
-  get auth(): RequestOptions {
+  get auth(): Record<string, string> {
     if (this.authentication.rauth) {
       if (typeof this.authentication.rauth === "string") {
         return {
-          headers: {
-            "X-Session-Token": this.authentication.rauth,
-          },
+          "X-Session-Token": this.authentication.rauth,
         };
       }
     } else if (this.authentication.revolt) {
       switch (typeof this.authentication.revolt) {
         case "string": {
           return {
-            headers: {
-              "X-Bot-Token": this.authentication.revolt,
-            },
+            "X-Bot-Token": this.authentication.revolt,
           };
         }
         case "object": {
           return {
-            headers: {
-              "X-Session-Token": this.authentication.revolt.token,
-            },
+            "X-Session-Token": this.authentication.revolt.token,
           };
         }
       }
     } else if (this.authentication.headers) {
-      return { headers: this.authentication.headers };
+      return this.authentication.headers;
     }
 
     return {};
@@ -145,8 +139,10 @@ export class API {
   get config(): RequestOptions {
     return {
       baseURL: this.baseURL,
-      ...this.auth,
-      headers: this.headers,
+      headers: {
+        ...this.auth,
+        ...this.headers,
+      },
     };
   }
 
