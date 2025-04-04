@@ -197,7 +197,7 @@ export class API {
     }
 
     const fetchdata = await fetch(new URL(fetchpath).toString(), {
-      method,
+      method: method.toUpperCase(),
       headers: {
         ...(config?.headers || {}),
         ...(this.config.headers || {}),
