@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.8.4",
+  "version": "0.8.4-rc.3",
   "description": "Revolt API Library",
   "type": "module",
   "module": "lib/index.js",
@@ -21,8 +21,7 @@
   },
   "files": [
     "src",
-    "dist",
-    "esm",
+    "lib",
     "OpenAPI.json",
     "LICENSE",
     "README.md"
