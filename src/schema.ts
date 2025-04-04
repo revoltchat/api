@@ -1278,7 +1278,10 @@ export interface components {
       nsfw?: boolean | null;
       /** @description Whether this channel is archived */
       archived?: boolean | null;
-      /** @description Fields to remove from channel */
+      /**
+       * @description Fields to remove from channel
+       * @default null
+       */
       remove?: components["schemas"]["FieldsChannel"][] | null;
     };
     /**
@@ -1794,7 +1797,7 @@ export interface components {
        * @description Array of user IDs to add to the group
        *
        * Must be friends with these users.
-       * @default
+       * @default []
        */
       users?: string[];
       /** @description Whether this group is age-restricted */
@@ -1944,6 +1947,7 @@ export interface components {
       /**
        * Format: int64
        * @description Ranking of this role
+       * @default 0
        */
       rank?: number;
     };
@@ -2281,14 +2285,20 @@ export interface components {
       name: string;
       /** @description Parent information */
       parent: components["schemas"]["EmojiParent"];
-      /** @description Whether the emoji is mature */
+      /**
+       * @description Whether the emoji is mature
+       * @default false
+       */
       nsfw?: boolean;
     };
     /** Report Data */
     DataReportContent: {
       /** @description Content being reported */
       content: components["schemas"]["ReportedContent"];
-      /** @description Additional report description */
+      /**
+       * @description Additional report description
+       * @default
+       */
       additional_context?: string;
     };
     /** @description The content being reported */
@@ -2511,7 +2521,10 @@ export interface components {
       token: string;
       /** @description New password */
       password: string;
-      /** @description Whether to logout all sessions */
+      /**
+       * @description Whether to logout all sessions
+       * @default false
+       */
       remove_sessions?: boolean;
     };
     /** Reset Information */
@@ -2660,7 +2673,7 @@ export interface components {
       permissions?: number | null;
       /**
        * @description Fields to remove from webhook
-       * @default
+       * @default []
        */
       remove?: components["schemas"]["FieldsWebhook"][];
     };
