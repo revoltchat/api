@@ -1,6 +1,6 @@
 {
   "name": "revolt-api",
-  "version": "0.8.4",
+  "version": "0.8.4-rc.6",
   "description": "Revolt API Library",
   "type": "module",
   "module": "lib/index.js",
@@ -14,7 +14,7 @@
     "prepublish": "in-publish && pnpm build || echo Skipping build."
   },
   "devDependencies": {
-    "@insertish/oapi": "0.2.2",
+    "@insertish/oapi": "0.2.3",
     "in-publish": "^2.0.1",
     "openapi-typescript": "^5.4.2",
     "typescript": "^5.8.2"

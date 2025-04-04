@@ -177,10 +177,13 @@ export class API {
       ];
       // Map each parameter to the correct object.
       for (const parameter of Object.keys(params)) {
-        if (allowed_query?.includes(parameter)) {
-          query.append(parameter, (params as Record<any, any>)[parameter]);
-        } else {
-          body[parameter] = (params as Record<any, any>)[parameter];
+        // omit undefined values
+        if (typeof (params as Record<any, any>)[parameter] !== "undefined") {
+          if (allowed_query?.includes(parameter)) {
+            query.append(parameter, (params as Record<any, any>)[parameter]);
+          } else {
+            body[parameter] = (params as Record<any, any>)[parameter];
+          }
         }
       }
     }
