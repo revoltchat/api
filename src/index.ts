@@ -191,20 +191,20 @@ export class API {
     const passbody = ["head", "get"].includes(method)
       ? undefined
       : JSON.stringify(body);
-    const fetchdata = await fetch(
-      new URL(
-        `${path}?${query.toString()}`,
-        config?.baseURL || this.baseURL
-      ).toString(),
-      {
-        method,
-        headers: {
-          ...(config?.headers || {}),
-          ...(this.config.headers || {}),
-        } as HeadersInit,
-        body: passbody,
-      }
-    );
+
+    let fetchpath = `${path}?${query.toString()}`;
+    if (fetchpath.startsWith("/")) {
+      fetchpath = (config?.baseURL || this.baseURL) + fetchpath;
+    }
+
+    const fetchdata = await fetch(new URL(fetchpath).toString(), {
+      method,
+      headers: {
+        ...(config?.headers || {}),
+        ...(this.config.headers || {}),
+      } as HeadersInit,
+      body: passbody,
+    });
     return await fetchdata[config?.responseType || "json"]();
   }
 

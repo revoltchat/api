@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@insertish/oapi':
-    specifier: 0.2.0
-    version: 0.2.0
+    specifier: 0.2.1
+    version: 0.2.1
   in-publish:
     specifier: ^2.0.1
     version: 2.0.1
@@ -25,8 +25,8 @@ packages:
     engines: {node: '>=14'}
     dev: true
 
-  /@insertish/oapi@0.2.0:
-    resolution: {integrity: sha512-pV+D4YvlixA7MhhsJ1BW1ATk3r5hI1xC42y+QpZ9MLzlK8fDfhpbgLDIjh3c+9J8ETw9MJmwNI3aollx/PUMkQ==}
+  /@insertish/oapi@0.2.1:
+    resolution: {integrity: sha512-Y60oVDHvXv9CHVZNhx0YdlErPpUohOLjc3UvrTZkV4lwE+qdw/bJDuebunwAOBS3cAersG7ZAu3LCLROuqctkA==}
     hasBin: true
     dependencies:
       typescript: 4.9.5
