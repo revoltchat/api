@@ -707,6 +707,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "IsNotBot";
+        }
+      | {
+          /** @enum {string} */
           type: "BotIsPrivate";
         }
       | {
@@ -767,6 +771,10 @@ export interface components {
         }
       | {
           /** @enum {string} */
+          type: "InvalidFlagValue";
+        }
+      | {
+          /** @enum {string} */
           type: "NotAuthenticated";
         }
       | {
@@ -815,6 +823,11 @@ export interface components {
       | {
           /** @enum {string} */
           type: "VosoUnavailable";
+        }
+      | {
+          /** @enum {string} */
+          type: "FeatureDisabled";
+          feature: string;
         }
     ) & {
       /** @description Where this error occurred */
@@ -923,10 +936,7 @@ export interface components {
       /** @description Relationship status with them */
       status: components["schemas"]["RelationshipStatus"];
     };
-    /**
-     * @description User's relationship with another user (or themselves)
-     * @enum {string}
-     */
+    /** @description User's relationship with another user (or themselves) */
     RelationshipStatus:
       | "None"
       | "User"
@@ -942,10 +952,7 @@ export interface components {
       /** @description Current presence option */
       presence?: components["schemas"]["Presence"] | null;
     };
-    /**
-     * @description Presence status
-     * @enum {string}
-     */
+    /** @description Presence status */
     Presence: "Online" | "Idle" | "Focus" | "Busy" | "Invisible";
     /** @description Bot information for if the user is a bot */
     BotInformation: {
@@ -995,17 +1002,16 @@ export interface components {
       /** @description Attachment Id for background */
       background?: string | null;
     };
-    /**
-     * @description Optional fields on user object
-     * @enum {string}
-     */
+    /** @description Optional fields on user object */
     FieldsUser:
-      | "Avatar"
-      | "StatusText"
-      | "StatusPresence"
-      | "ProfileContent"
-      | "ProfileBackground"
-      | "DisplayName"
+      | (
+          | "Avatar"
+          | "StatusText"
+          | "StatusPresence"
+          | "ProfileContent"
+          | "ProfileBackground"
+          | "DisplayName"
+        )
       | "Internal";
     /** Username Information */
     DataChangeUsername: {
@@ -1341,6 +1347,8 @@ export interface components {
       embeds?: components["schemas"]["Embed"][] | null;
       /** @description Array of user ids mentioned in this message */
       mentions?: string[] | null;
+      /** @description Array of role ids mentioned in this message */
+      role_mentions?: string[] | null;
       /** @description Array of message ids this message is replying to */
       replies?: string[] | null;
       /** @description Hashmap of emoji IDs to array of user IDs */
@@ -1632,10 +1640,7 @@ export interface components {
       /** @description Positioning and size */
       size: components["schemas"]["ImageSize"];
     };
-    /**
-     * @description Image positioning and size
-     * @enum {string}
-     */
+    /** @description Image positioning and size */
     ImageSize: "Large" | "Preview";
     /** @description Video */
     Video: {
@@ -1741,7 +1746,6 @@ export interface components {
      * @description Message Sort
      *
      * Sort used for retrieving messages
-     * @enum {string}
      */
     MessageSort: "Relevance" | "Latest" | "Oldest";
     /** @description Options for searching for messages */
@@ -2057,10 +2061,7 @@ export interface components {
       /** @description Whether this channel is age restricted */
       nsfw?: boolean | null;
     };
-    /**
-     * @description Server Channel Type
-     * @enum {string}
-     */
+    /** @description Server Channel Type */
     LegacyServerChannelType: "Text" | "Voice";
     /** @description Response with all members */
     AllMemberResponse: {
@@ -2329,10 +2330,7 @@ export interface components {
           /** @description Message context */
           message_id?: string | null;
         };
-    /**
-     * @description Reason for reporting content (message or server)
-     * @enum {string}
-     */
+    /** @description Reason for reporting content (message or server) */
     ContentReportReason:
       | "NoneSpecified"
       | "Illegal"
@@ -2348,10 +2346,7 @@ export interface components {
       | "ScamsFraud"
       | "Malware"
       | "Harassment";
-    /**
-     * @description Reason for reporting a user
-     * @enum {string}
-     */
+    /** @description Reason for reporting a user */
     UserReportReason:
       | "NoneSpecified"
       | "UnsolicitedSpam"
