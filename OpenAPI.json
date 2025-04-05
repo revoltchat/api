@@ -6494,6 +6494,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "IsNotBot"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "BotIsPrivate"
                 ]
               }
@@ -6706,6 +6720,20 @@
               "type": {
                 "type": "string",
                 "enum": [
+                  "InvalidFlagValue"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
                   "NotAuthenticated"
                 ]
               }
@@ -6872,6 +6900,24 @@
                 "enum": [
                   "VosoUnavailable"
                 ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "feature",
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "FeatureDisabled"
+                ]
+              },
+              "feature": {
+                "type": "string"
               }
             }
           }
@@ -7176,15 +7222,56 @@
       },
       "RelationshipStatus": {
         "description": "User's relationship with another user (or themselves)",
-        "type": "string",
-        "enum": [
-          "None",
-          "User",
-          "Friend",
-          "Outgoing",
-          "Incoming",
-          "Blocked",
-          "BlockedOther"
+        "oneOf": [
+          {
+            "description": "No relationship with other user",
+            "type": "string",
+            "enum": [
+              "None"
+            ]
+          },
+          {
+            "description": "Other user is us",
+            "type": "string",
+            "enum": [
+              "User"
+            ]
+          },
+          {
+            "description": "Friends with the other user",
+            "type": "string",
+            "enum": [
+              "Friend"
+            ]
+          },
+          {
+            "description": "Pending friend request to user",
+            "type": "string",
+            "enum": [
+              "Outgoing"
+            ]
+          },
+          {
+            "description": "Incoming friend request from user",
+            "type": "string",
+            "enum": [
+              "Incoming"
+            ]
+          },
+          {
+            "description": "Blocked this user",
+            "type": "string",
+            "enum": [
+              "Blocked"
+            ]
+          },
+          {
+            "description": "Blocked by this user",
+            "type": "string",
+            "enum": [
+              "BlockedOther"
+            ]
+          }
         ]
       },
       "UserStatus": {
@@ -7211,13 +7298,42 @@
       },
       "Presence": {
         "description": "Presence status",
-        "type": "string",
-        "enum": [
-          "Online",
-          "Idle",
-          "Focus",
-          "Busy",
-          "Invisible"
+        "oneOf": [
+          {
+            "description": "User is online",
+            "type": "string",
+            "enum": [
+              "Online"
+            ]
+          },
+          {
+            "description": "User is not currently available",
+            "type": "string",
+            "enum": [
+              "Idle"
+            ]
+          },
+          {
+            "description": "User is focusing / will only receive mentions",
+            "type": "string",
+            "enum": [
+              "Focus"
+            ]
+          },
+          {
+            "description": "User is busy / will not receive any notifications",
+            "type": "string",
+            "enum": [
+              "Busy"
+            ]
+          },
+          {
+            "description": "User appears to be offline",
+            "type": "string",
+            "enum": [
+              "Invisible"
+            ]
+          }
         ]
       },
       "BotInformation": {
@@ -7332,15 +7448,25 @@
       },
       "FieldsUser": {
         "description": "Optional fields on user object",
-        "type": "string",
-        "enum": [
-          "Avatar",
-          "StatusText",
-          "StatusPresence",
-          "ProfileContent",
-          "ProfileBackground",
-          "DisplayName",
-          "Internal"
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "Avatar",
+              "StatusText",
+              "StatusPresence",
+              "ProfileContent",
+              "ProfileBackground",
+              "DisplayName"
+            ]
+          },
+          {
+            "description": "Internal field, ignore this.",
+            "type": "string",
+            "enum": [
+              "Internal"
+            ]
+          }
         ]
       },
       "DataChangeUsername": {
@@ -8220,6 +8346,14 @@
           },
           "mentions": {
             "description": "Array of user ids mentioned in this message",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "role_mentions": {
+            "description": "Array of role ids mentioned in this message",
             "type": "array",
             "items": {
               "type": "string"
@@ -9124,10 +9258,21 @@
       },
       "ImageSize": {
         "description": "Image positioning and size",
-        "type": "string",
-        "enum": [
-          "Large",
-          "Preview"
+        "oneOf": [
+          {
+            "description": "Show large preview at the bottom of the embed",
+            "type": "string",
+            "enum": [
+              "Large"
+            ]
+          },
+          {
+            "description": "Show small preview to the side of the embed",
+            "type": "string",
+            "enum": [
+              "Preview"
+            ]
+          }
         ]
       },
       "Video": {
@@ -9381,11 +9526,28 @@
       },
       "MessageSort": {
         "description": "Message Sort\n\nSort used for retrieving messages",
-        "type": "string",
-        "enum": [
-          "Relevance",
-          "Latest",
-          "Oldest"
+        "oneOf": [
+          {
+            "description": "Sort by the most relevant messages",
+            "type": "string",
+            "enum": [
+              "Relevance"
+            ]
+          },
+          {
+            "description": "Sort by the newest messages first",
+            "type": "string",
+            "enum": [
+              "Latest"
+            ]
+          },
+          {
+            "description": "Sort by the oldest messages first",
+            "type": "string",
+            "enum": [
+              "Oldest"
+            ]
+          }
         ]
       },
       "DataMessageSearch": {
@@ -10162,10 +10324,21 @@
       },
       "LegacyServerChannelType": {
         "description": "Server Channel Type",
-        "type": "string",
-        "enum": [
-          "Text",
-          "Voice"
+        "oneOf": [
+          {
+            "description": "Text Channel",
+            "type": "string",
+            "enum": [
+              "Text"
+            ]
+          },
+          {
+            "description": "Voice Channel",
+            "type": "string",
+            "enum": [
+              "Voice"
+            ]
+          }
         ]
       },
       "AllMemberResponse": {
@@ -10949,35 +11122,159 @@
       },
       "ContentReportReason": {
         "description": "Reason for reporting content (message or server)",
-        "type": "string",
-        "enum": [
-          "NoneSpecified",
-          "Illegal",
-          "IllegalGoods",
-          "IllegalExtortion",
-          "IllegalPornography",
-          "IllegalHacking",
-          "ExtremeViolence",
-          "PromotesHarm",
-          "UnsolicitedSpam",
-          "Raid",
-          "SpamAbuse",
-          "ScamsFraud",
-          "Malware",
-          "Harassment"
+        "oneOf": [
+          {
+            "description": "No reason has been specified",
+            "type": "string",
+            "enum": [
+              "NoneSpecified"
+            ]
+          },
+          {
+            "description": "Illegal content catch-all reason",
+            "type": "string",
+            "enum": [
+              "Illegal"
+            ]
+          },
+          {
+            "description": "Selling or facilitating use of drugs or other illegal goods",
+            "type": "string",
+            "enum": [
+              "IllegalGoods"
+            ]
+          },
+          {
+            "description": "Extortion or blackmail",
+            "type": "string",
+            "enum": [
+              "IllegalExtortion"
+            ]
+          },
+          {
+            "description": "Revenge or child pornography",
+            "type": "string",
+            "enum": [
+              "IllegalPornography"
+            ]
+          },
+          {
+            "description": "Illegal hacking activity",
+            "type": "string",
+            "enum": [
+              "IllegalHacking"
+            ]
+          },
+          {
+            "description": "Extreme violence, gore, or animal cruelty With exception to violence potrayed in media / creative arts",
+            "type": "string",
+            "enum": [
+              "ExtremeViolence"
+            ]
+          },
+          {
+            "description": "Content that promotes harm to others / self",
+            "type": "string",
+            "enum": [
+              "PromotesHarm"
+            ]
+          },
+          {
+            "description": "Unsolicited advertisements",
+            "type": "string",
+            "enum": [
+              "UnsolicitedSpam"
+            ]
+          },
+          {
+            "description": "This is a raid",
+            "type": "string",
+            "enum": [
+              "Raid"
+            ]
+          },
+          {
+            "description": "Spam or platform abuse",
+            "type": "string",
+            "enum": [
+              "SpamAbuse"
+            ]
+          },
+          {
+            "description": "Scams or fraud",
+            "type": "string",
+            "enum": [
+              "ScamsFraud"
+            ]
+          },
+          {
+            "description": "Distribution of malware or malicious links",
+            "type": "string",
+            "enum": [
+              "Malware"
+            ]
+          },
+          {
+            "description": "Harassment or abuse targeted at another user",
+            "type": "string",
+            "enum": [
+              "Harassment"
+            ]
+          }
         ]
       },
       "UserReportReason": {
         "description": "Reason for reporting a user",
-        "type": "string",
-        "enum": [
-          "NoneSpecified",
-          "UnsolicitedSpam",
-          "SpamAbuse",
-          "InappropriateProfile",
-          "Impersonation",
-          "BanEvasion",
-          "Underage"
+        "oneOf": [
+          {
+            "description": "No reason has been specified",
+            "type": "string",
+            "enum": [
+              "NoneSpecified"
+            ]
+          },
+          {
+            "description": "Unsolicited advertisements",
+            "type": "string",
+            "enum": [
+              "UnsolicitedSpam"
+            ]
+          },
+          {
+            "description": "User is sending spam or otherwise abusing the platform",
+            "type": "string",
+            "enum": [
+              "SpamAbuse"
+            ]
+          },
+          {
+            "description": "User's profile contains inappropriate content for a general audience",
+            "type": "string",
+            "enum": [
+              "InappropriateProfile"
+            ]
+          },
+          {
+            "description": "User is impersonating another user",
+            "type": "string",
+            "enum": [
+              "Impersonation"
+            ]
+          },
+          {
+            "description": "User is evading a ban",
+            "type": "string",
+            "enum": [
+              "BanEvasion"
+            ]
+          },
+          {
+            "description": "User is not of minimum age to use the platform",
+            "type": "string",
+            "enum": [
+              "Underage"
+            ]
+          }
         ]
       },
       "Authifier Error": {
