@@ -2541,6 +2541,10 @@ export interface components {
           token: string;
           /** @description Display name */
           name: string;
+          /** @description When the session was last logged in (iso8601 timestamp) */
+          last_seen: string;
+          /** @description What is the session origin? This could be used to differentiate sessions that come from staging/test vs prod, etc. Authifier will set this to None by default. The application must fill it in. */
+          origin?: string | null;
           /** @description Web Push subscription */
           subscription?: components["schemas"]["WebPushSubscription"] | null;
         }
