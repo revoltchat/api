@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.8.4"
+    "version": "0.8.5"
   },
   "servers": [
     {
@@ -11821,6 +11821,7 @@
             "type": "object",
             "required": [
               "_id",
+              "last_seen",
               "name",
               "result",
               "token",
@@ -11848,6 +11849,15 @@
               "name": {
                 "description": "Display name",
                 "type": "string"
+              },
+              "last_seen": {
+                "description": "When the session was last logged in (iso8601 timestamp)",
+                "type": "string"
+              },
+              "origin": {
+                "description": "What is the session origin? This could be used to differentiate sessions that come from staging/test vs prod, etc. Authifier will set this to None by default. The application must fill it in.",
+                "type": "string",
+                "nullable": true
               },
               "subscription": {
                 "description": "Web Push subscription",
