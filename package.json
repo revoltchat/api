@@ -1,9 +1,11 @@
 {
   "name": "revolt-api",
-  "version": "0.8.5",
+  "version": "0.8.5-1",
   "description": "Revolt API Library",
   "type": "module",
-  "module": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
   "types": "lib/index.d.ts",
   "homepage": "https://developers.revolt.chat",
   "repository": "https://github.com/revoltchat/api.git",
@@ -17,7 +19,7 @@
     "@insertish/oapi": "0.2.4",
     "in-publish": "^2.0.1",
     "openapi-typescript": "^5.4.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "files": [
     "src",
@@ -26,5 +28,5 @@
     "LICENSE",
     "README.md"
   ],
-  "packageManager": "pnpm@8.13.1+sha512.758bebc6989cb6462c5138129840193b10c258ddcdb0ab43ee0ef9dd87784bc218d6e41cb5beeac362b8ce33f1f8b08025b599933c0bce82050a9a36b8474d43"
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
