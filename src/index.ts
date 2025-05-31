@@ -33,7 +33,7 @@ export function getPathName(anyPath: string) {
 
   const list =
     (pathResolve as unknown as Record<string, (string | [string])[]>)[
-      (segments.length - 1).toString()
+    (segments.length - 1).toString()
     ] || [];
   for (const entry of list) {
     let i = 1;
@@ -204,7 +204,14 @@ export class API {
       } as HeadersInit,
       body: passbody,
     });
-    return await fetchdata[config?.responseType || "json"]();
+
+    const data = await fetchdata[config?.responseType || "json"]();
+
+    if (fetchdata.ok) {
+      return data;
+    } else {
+      throw data;
+    }
   }
 
   /**

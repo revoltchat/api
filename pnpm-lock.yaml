@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@insertish/oapi':
-        specifier: 0.2.4
-        version: 0.2.4
+        specifier: 0.2.5
+        version: 0.2.5
       in-publish:
         specifier: ^2.0.1
         version: 2.0.1
@@ -27,8 +27,8 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@insertish/oapi@0.2.4':
-    resolution: {integrity: sha512-PSomeEr02QbkH1DGBOr068bmz7rnZlyKclOyf9g6opGTSkEp04es51mfx7+etVfhUqxnyhCGrr4Nu5KENvDBnQ==}
+  '@insertish/oapi@0.2.5':
+    resolution: {integrity: sha512-qepXfQz/jrT2DhvzMYzNzQN9HsuEZkDCPJFbszBuftIahXosmkoxgBHIyxYMCo1yVvBnMnfwSqYJTm9GmJ0JNw==}
     hasBin: true
 
   argparse@2.0.1:
@@ -88,7 +88,7 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@insertish/oapi@0.2.4':
+  '@insertish/oapi@0.2.5':
     dependencies:
       typescript: 4.9.5
     optionalDependencies:
