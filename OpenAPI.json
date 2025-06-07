@@ -13,7 +13,7 @@
       "name": "AGPLv3",
       "url": "https://github.com/revoltchat/delta/blob/master/LICENSE"
     },
-    "version": "0.8.6"
+    "version": "0.8.7"
   },
   "servers": [
     {
@@ -5032,6 +5032,36 @@
           {
             "Session Token": []
           },
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
+    "/policy/acknowledge": {
+      "post": {
+        "tags": [
+          "Policy"
+        ],
+        "summary": "Acknowledge Policy Changes",
+        "description": "Accept/acknowledge changes to platform policy.",
+        "operationId": "acknowledge_policy_changes_acknowledge_policy_changes",
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
           {
             "Session Token": []
           }
