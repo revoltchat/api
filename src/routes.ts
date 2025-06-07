@@ -177,6 +177,7 @@ export type APIRoutes =
 | { method: 'delete', path: `/auth/mfa/totp`, parts: 3, params: undefined, response: undefined }
 | { method: 'get', path: `/onboard/hello`, parts: 2, params: undefined, response: paths['/onboard/hello']['get']['responses']['200']['content']['application/json'] }
 | { method: 'post', path: `/onboard/complete`, parts: 2, params: paths['/onboard/complete']['post']['requestBody']['content']['application/json'], response: paths['/onboard/complete']['post']['responses']['200']['content']['application/json'] }
+| { method: 'post', path: `/policy/acknowledge`, parts: 2, params: undefined, response: undefined }
 | { method: 'post', path: `/push/subscribe`, parts: 2, params: paths['/push/subscribe']['post']['requestBody']['content']['application/json'], response: undefined }
 | { method: 'post', path: `/push/unsubscribe`, parts: 2, params: undefined, response: undefined }
 | { method: 'post', path: `/sync/settings/fetch`, parts: 3, params: paths['/sync/settings/fetch']['post']['requestBody']['content']['application/json'], response: paths['/sync/settings/fetch']['post']['responses']['200']['content']['application/json'] }

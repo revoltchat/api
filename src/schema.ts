@@ -406,6 +406,10 @@ export interface paths {
     /** This sets a new username, completes onboarding and allows a user to start using Revolt. */
     post: operations["complete_complete"];
   };
+  "/policy/acknowledge": {
+    /** Accept/acknowledge changes to platform policy. */
+    post: operations["acknowledge_policy_changes_acknowledge_policy_changes"];
+  };
   "/push/subscribe": {
     /**
      * Create a new Web Push subscription.
@@ -4893,6 +4897,18 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataOnboard"];
+      };
+    };
+  };
+  /** Accept/acknowledge changes to platform policy. */
+  acknowledge_policy_changes_acknowledge_policy_changes: {
+    responses: {
+      200: unknown;
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
       };
     };
   };
