@@ -290,6 +290,10 @@ export interface paths {
     /** Fetch all emoji on a server. */
     get: operations["emoji_list_list_emoji"];
   };
+  "/servers/{target}/roles/ranks": {
+    /** Edit's server role's ranks. */
+    patch: operations["roles_edit_positions_edit_role_ranks"];
+  };
   "/invites/{target}": {
     /** Fetch an invite by its id. */
     get: operations["invite_fetch_fetch"];
@@ -2167,7 +2171,7 @@ export interface components {
        * Format: int64
        * @description Ranking position
        *
-       * Smaller values take priority.
+       * **Removed** - no effect, use the edit server role positions route
        */
       rank?: number | null;
       /** @description Fields to remove from role object */
@@ -2214,6 +2218,10 @@ export interface components {
           /** @enum {string} */
           type: "Detached";
         };
+    /** @description New role positions */
+    DataEditRoleRanks: {
+      ranks: string[];
+    };
     /** @description Public invite response */
     InviteResponse:
       | {
@@ -4297,6 +4305,32 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["Error"];
         };
+      };
+    };
+  };
+  /** Edit's server role's ranks. */
+  roles_edit_positions_edit_role_ranks: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Server"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataEditRoleRanks"];
       };
     };
   };

@@ -97,6 +97,7 @@ export type DataSetServerRolePermission = components['schemas']['DataSetServerRo
 export type DataPermissionsValue = components['schemas']['DataPermissionsValue'];
 export type Emoji = components['schemas']['Emoji'];
 export type EmojiParent = components['schemas']['EmojiParent'];
+export type DataEditRoleRanks = components['schemas']['DataEditRoleRanks'];
 export type InviteResponse = components['schemas']['InviteResponse'];
 export type InviteJoinResponse = components['schemas']['InviteJoinResponse'];
 export type DataCreateEmoji = components['schemas']['DataCreateEmoji'];
