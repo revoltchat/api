@@ -3702,6 +3702,63 @@
         ]
       }
     },
+    "/servers/{target}/roles/ranks": {
+      "patch": {
+        "tags": [
+          "Server Permissions"
+        ],
+        "summary": "Edits server roles ranks",
+        "description": "Edit's server role's ranks.",
+        "operationId": "roles_edit_positions_edit_role_ranks",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataEditRoleRanks"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Server"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Session Token": []
+          }
+        ]
+      }
+    },
     "/invites/{target}": {
       "get": {
         "tags": [
@@ -10658,7 +10715,7 @@
             "nullable": true
           },
           "rank": {
-            "description": "Ranking position\n\nSmaller values take priority.",
+            "description": "Ranking position\n\n**Removed** - no effect, use the edit server role positions route",
             "type": "integer",
             "format": "int64",
             "nullable": true
@@ -10788,6 +10845,21 @@
             }
           }
         ]
+      },
+      "DataEditRoleRanks": {
+        "description": "New role positions",
+        "type": "object",
+        "required": [
+          "ranks"
+        ],
+        "properties": {
+          "ranks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
       },
       "InviteResponse": {
         "description": "Public invite response",
