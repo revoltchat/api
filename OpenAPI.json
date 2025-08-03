@@ -9534,7 +9534,7 @@
         "properties": {
           "icon_url": {
             "type": "string",
-            "maxLength": 128,
+            "maxLength": 256,
             "minLength": 1,
             "nullable": true
           },
