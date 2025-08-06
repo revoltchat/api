@@ -186,7 +186,7 @@ export interface paths {
      *
      * Channel must be a `Group`, `TextChannel` or `VoiceChannel`.
      */
-    put: operations["permissions_set_default_set_default_permissions"];
+    put: operations["permissions_set_default_set_default_channel_permissions"];
   };
   "/channels/{target}/messages/{msg}/reactions/{emoji}": {
     /** React to a given message. */
@@ -284,7 +284,7 @@ export interface paths {
   };
   "/servers/{target}/permissions/default": {
     /** Sets permissions for the default role in this server. */
-    put: operations["permissions_set_default_set_default_permissions"];
+    put: operations["permissions_set_default_set_default_server_permissions"];
   };
   "/servers/{target}/emojis": {
     /** Fetch all emoji on a server. */
@@ -3671,8 +3671,12 @@ export interface operations {
       };
     };
   };
-  /** Sets permissions for the default role in this server. */
-  permissions_set_default_set_default_permissions: {
+  /**
+   * Sets permissions for the default role in this channel.
+   *
+   * Channel must be a `Group`, `TextChannel` or `VoiceChannel`.
+   */
+  permissions_set_default_set_default_channel_permissions: {
     parameters: {
       path: {
         target: components["schemas"]["Id"];
@@ -3681,7 +3685,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Server"];
+          "application/json": components["schemas"]["Channel"];
         };
       };
       /** An error occurred. */
@@ -3693,7 +3697,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["DataPermissionsValue"];
+        "application/json": components["schemas"]["DataDefaultChannelPermissions"];
       };
     };
   };
@@ -4284,6 +4288,32 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DataSetServerRolePermission"];
+      };
+    };
+  };
+  /** Sets permissions for the default role in this server. */
+  permissions_set_default_set_default_server_permissions: {
+    parameters: {
+      path: {
+        target: components["schemas"]["Id"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Server"];
+        };
+      };
+      /** An error occurred. */
+      default: {
+        content: {
+          "application/json": components["schemas"]["Error"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataPermissionsValue"];
       };
     };
   };
