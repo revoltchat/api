@@ -2164,7 +2164,7 @@
         ],
         "summary": "Set Default Permission",
         "description": "Sets permissions for the default role in this channel.\n\nChannel must be a `Group`, `TextChannel` or `VoiceChannel`.",
-        "operationId": "permissions_set_default_set_default_permissions",
+        "operationId": "permissions_set_default_set_default_channel_permissions",
         "parameters": [
           {
             "name": "target",
@@ -3602,7 +3602,7 @@
         ],
         "summary": "Set Default Permission",
         "description": "Sets permissions for the default role in this server.",
-        "operationId": "permissions_set_default_set_default_permissions",
+        "operationId": "permissions_set_default_set_default_server_permissions",
         "parameters": [
           {
             "name": "target",
