@@ -7504,12 +7504,11 @@
           },
           "remove": {
             "description": "Fields to remove from user object",
+            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FieldsUser"
-            },
-            "minItems": 1,
-            "nullable": true
+            }
           }
         }
       },
@@ -8192,12 +8191,11 @@
           },
           "remove": {
             "description": "Fields to remove from bot object",
+            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FieldsBot"
-            },
-            "minItems": 1,
-            "nullable": true
+            }
           }
         }
       },
@@ -8251,12 +8249,11 @@
           },
           "remove": {
             "description": "Fields to remove from channel",
-            "default": null,
+            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FieldsChannel"
-            },
-            "nullable": true
+            }
           }
         }
       },
@@ -10353,12 +10350,11 @@
           },
           "remove": {
             "description": "Fields to remove from server object",
+            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FieldsServer"
-            },
-            "minItems": 1,
-            "nullable": true
+            }
           }
         }
       },
@@ -10513,12 +10509,11 @@
           },
           "remove": {
             "description": "Fields to remove from channel object",
+            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FieldsMember"
-            },
-            "minItems": 1,
-            "nullable": true
+            }
           }
         }
       },
@@ -10683,7 +10678,7 @@
             "minLength": 1
           },
           "rank": {
-            "description": "Ranking position\n\nSmaller values take priority.",
+            "description": "Ranking position\n\nSmaller values take priority.\n\n**Removed** - no effect, use the edit server role positions route",
             "type": "integer",
             "format": "int64",
             "nullable": true
@@ -10722,12 +10717,11 @@
           },
           "remove": {
             "description": "Fields to remove from role object",
+            "default": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FieldsRole"
-            },
-            "minItems": 1,
-            "nullable": true
+            }
           }
         }
       },
