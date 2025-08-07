@@ -1000,8 +1000,11 @@ export interface components {
        * @description Enum of user flags
        */
       flags?: number | null;
-      /** @description Fields to remove from user object */
-      remove?: components["schemas"]["FieldsUser"][] | null;
+      /**
+       * @description Fields to remove from user object
+       * @default []
+       */
+      remove?: components["schemas"]["FieldsUser"][];
     };
     /** @description New user profile data */
     DataUserProfile: {
@@ -1266,8 +1269,11 @@ export interface components {
       analytics?: boolean | null;
       /** @description Interactions URL */
       interactions_url?: string | null;
-      /** @description Fields to remove from bot object */
-      remove?: components["schemas"]["FieldsBot"][] | null;
+      /**
+       * @description Fields to remove from bot object
+       * @default []
+       */
+      remove?: components["schemas"]["FieldsBot"][];
     };
     /**
      * @description Optional fields on bot object
@@ -1294,9 +1300,9 @@ export interface components {
       archived?: boolean | null;
       /**
        * @description Fields to remove from channel
-       * @default null
+       * @default []
        */
-      remove?: components["schemas"]["FieldsChannel"][] | null;
+      remove?: components["schemas"]["FieldsChannel"][];
     };
     /**
      * @description Optional fields on channel object
@@ -2042,8 +2048,11 @@ export interface components {
        * Must be enabled in order to show up on [Revolt Discover](https://rvlt.gg).
        */
       analytics?: boolean | null;
-      /** @description Fields to remove from server object */
-      remove?: components["schemas"]["FieldsServer"][] | null;
+      /**
+       * @description Fields to remove from server object
+       * @default []
+       */
+      remove?: components["schemas"]["FieldsServer"][];
     };
     /**
      * @description Optional fields on server object
@@ -2095,8 +2104,11 @@ export interface components {
       roles?: string[] | null;
       /** @description Timestamp this member is timed out until */
       timeout?: components["schemas"]["ISO8601 Timestamp"] | null;
-      /** @description Fields to remove from channel object */
-      remove?: components["schemas"]["FieldsMember"][] | null;
+      /**
+       * @description Fields to remove from channel object
+       * @default []
+       */
+      remove?: components["schemas"]["FieldsMember"][];
     };
     /**
      * @description Optional fields on server member object
@@ -2156,6 +2168,8 @@ export interface components {
        * @description Ranking position
        *
        * Smaller values take priority.
+       *
+       * **Removed** - no effect, use the edit server role positions route
        */
       rank?: number | null;
     };
@@ -2174,8 +2188,11 @@ export interface components {
        * **Removed** - no effect, use the edit server role positions route
        */
       rank?: number | null;
-      /** @description Fields to remove from role object */
-      remove?: components["schemas"]["FieldsRole"][] | null;
+      /**
+       * @description Fields to remove from role object
+       * @default []
+       */
+      remove?: components["schemas"]["FieldsRole"][];
     };
     /**
      * @description Optional fields on server object
