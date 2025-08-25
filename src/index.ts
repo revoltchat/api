@@ -205,7 +205,26 @@ export class API {
       body: passbody,
     });
 
-    const data = await fetchdata[config?.responseType || "json"]();
+    let data: any;
+    const text = await fetchdata.text();
+    if (text) {
+      switch (config?.responseType || "json") {
+        case "json":
+          data = JSON.parse(text);
+          break;
+        case "text":
+          data = text;
+          break;
+        case "blob":
+          data = new Blob([text]);
+          break;
+        case "arrayBuffer":
+          data = new TextEncoder().encode(text).buffer;
+          break;
+      }
+    } else {
+      data = null;
+    }
 
     if (fetchdata.ok) {
       return data;
