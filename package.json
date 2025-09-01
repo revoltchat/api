@@ -16,7 +16,7 @@
     "prepublish": "in-publish && pnpm build || echo Skipping build."
   },
   "devDependencies": {
-    "@insertish/oapi": "0.2.5",
+    "@insertish/oapi": "0.2.6",
     "in-publish": "^2.0.1",
     "openapi-typescript": "^5.4.2",
     "typescript": "^5.8.3"

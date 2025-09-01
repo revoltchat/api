@@ -205,7 +205,10 @@ export class API {
       body: passbody,
     });
 
-    const data = await fetchdata[config?.responseType || "json"]();
+    const data =
+      fetchdata.status === 204
+        ? null
+        : await fetchdata[config?.responseType || "json"]();
 
     if (fetchdata.ok) {
       return data;
