@@ -469,8 +469,8 @@
         "tags": [
           "Relationships"
         ],
-        "summary": "Fetch Mutual Friends And Servers",
-        "description": "Retrieve a list of mutual friends and servers with another user.",
+        "summary": "Fetch Mutual Friends, Servers, Groups and DMs",
+        "description": "Retrieve a list of mutual friends, servers, groups and DMs with another user.",
         "operationId": "find_mutual_mutual",
         "parameters": [
           {
@@ -7889,9 +7889,10 @@
         }
       },
       "MutualResponse": {
-        "description": "Mutual friends and servers response",
+        "description": "Mutual friends, servers, groups and DMs response",
         "type": "object",
         "required": [
+          "channels",
           "servers",
           "users"
         ],
@@ -7905,6 +7906,13 @@
           },
           "servers": {
             "description": "Array of mutual server IDs that both users are in",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "channels": {
+            "description": "Array of mutual group and dm IDs that both users are in",
             "type": "array",
             "items": {
               "type": "string"
