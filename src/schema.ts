@@ -51,7 +51,7 @@ export interface paths {
     get: operations["open_dm_open_dm"];
   };
   "/users/{target}/mutual": {
-    /** Retrieve a list of mutual friends and servers with another user. */
+    /** Retrieve a list of mutual friends, servers, groups and DMs with another user. */
     get: operations["find_mutual_mutual"];
   };
   "/users/{target}/friend": {
@@ -1144,12 +1144,14 @@ export interface components {
        */
       d: number;
     };
-    /** @description Mutual friends and servers response */
+    /** @description Mutual friends, servers, groups and DMs response */
     MutualResponse: {
       /** @description Array of mutual user IDs that both users are friends with */
       users: string[];
       /** @description Array of mutual server IDs that both users are in */
       servers: string[];
+      /** @description Array of mutual group and dm IDs that both users are in */
+      channels: string[];
     };
     /** @description User lookup information */
     DataSendFriendRequest: {
@@ -2933,7 +2935,7 @@ export interface operations {
       };
     };
   };
-  /** Retrieve a list of mutual friends and servers with another user. */
+  /** Retrieve a list of mutual friends, servers, groups and DMs with another user. */
   find_mutual_mutual: {
     parameters: {
       path: {
