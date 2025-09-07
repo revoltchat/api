@@ -2116,7 +2116,7 @@ export interface components {
      * @description Optional fields on server member object
      * @enum {string}
      */
-    FieldsMember: "Nickname" | "Avatar" | "Roles" | "Timeout";
+    FieldsMember: "Nickname" | "Avatar" | "Roles" | "Timeout" | "JoinedAt";
     /** Query members by name */
     MemberQueryResponse: {
       /** @description List of members */
