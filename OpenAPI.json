@@ -10532,7 +10532,8 @@
           "Nickname",
           "Avatar",
           "Roles",
-          "Timeout"
+          "Timeout",
+          "JoinedAt"
         ]
       },
       "MemberQueryResponse": {
